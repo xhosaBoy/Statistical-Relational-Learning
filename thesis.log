@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.27)  24 JUN 2019 11:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.27)  24 JUN 2019 18:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1271,20 +1271,18 @@ Package microtype Info: Loading generic protrusion settings for font family
 \PHD@Title=\box54
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 114.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 114.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 114.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 114.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 114.
 \PHD@crest=\box55
-<Figs/University_Crest.pdf, id=76, 59.22125pt x 69.25874pt>
-File: Figs/University_Crest.pdf Graphic file (type pdf)
-<use Figs/University_Crest.pdf>
-Package pdftex.def Info: Figs/University_Crest.pdf  used on input line 114.
-(pdftex.def)             Requested size: 87.49088pt x 102.32376pt.
+</Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University-logo
+.jpg, id=120, 167.4255pt x 97.5645pt>
+File: /Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University
+-logo.jpg Graphic file (type jpg)
+<use /Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University-
+logo.jpg>
+Package pdftex.def Info: /Users/luyolomagangane/Documents/Academics/Images/Stel
+lenbosch-University-logo.jpg  used on input line 114.
+(pdftex.def)             Requested size: 167.42508pt x 97.56424pt.
 \PHD@collegecrest=\box56
 \PHD@author=\box57
 \PHD@supervisor=\box58
@@ -1296,22 +1294,23 @@ Package pdftex.def Info: Figs/University_Crest.pdf  used on input line 114.
  [1
 
 
-{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./Figs/
-University_Crest.pdf>]
+{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} </Users/
+luyolomagangane/Documents/Academics/Images/Stellenbosch-University-logo.jpg>]
 \openout2 = `Dedication/dedication.aux'.
 
- (./Dedication/dedication.tex [2
+
+(./Dedication/dedication.tex [2
 
 
 ]) [3]
 \openout2 = `Declaration/declaration.aux'.
 
-
-(./Declaration/declaration.tex [4
-
+ (./Declaration/declaration.tex [4
 
 
-]) [5
+
+])
+[5
 
 ]
 \openout2 = `Acknowledgement/acknowledgement.aux'.
@@ -1319,13 +1318,14 @@ University_Crest.pdf>]
  (./Acknowledgement/acknowledgement.tex)
 \openout2 = `Abstract/abstract.aux'.
 
-(./Abstract/abstract.tex [6
+ (./Abstract/abstract.tex [6
 
 
 
 
 
-]) [7
+])
+[7
 
 ] [8
 
@@ -1333,22 +1333,22 @@ University_Crest.pdf>]
 ] (./thesis.toc
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 2.
+ [9
+
+]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 20.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 31.
 )
 \tf@toc=\write6
 \openout6 = `thesis.toc'.
 
- [9
-
-] [10
-
-] (./thesis.lof)
+ [10] (./thesis.lof)
 \tf@lof=\write7
 \openout7 = `thesis.lof'.
 
+ [11
 
-[11] [12
+] [12
 
 ] (./thesis.lot)
 \tf@lot=\write8
@@ -1363,50 +1363,60 @@ No file thesis.nls.
 
  (./Chapter1/chapter1.tex
 Chapter 1.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 16.
-
-Package natbib Warning: Citation `Aup91' on page 1 undefined on input line 19.
-
-
-Package natbib Warning: Citation `AAB95' on page 1 undefined on input line 26.
-
-
-Package natbib Warning: Citation `Con90' on page 1 undefined on input line 26.
-
-
-Package natbib Warning: Citation `LM65' on page 1 undefined on input line 26.
-
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 17.
 [1
 
 
-] [2]) [3]
+] [2]
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 63--64
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--67
+
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 68--69
+
+ []
+
+) [5]
 \openout2 = `Chapter2/chapter2.aux'.
 
- (./Chapter2/chapter2.tex [4
+ (./Chapter2/chapter2.tex [6
 
 
 
 ]
 Chapter 2.
-[5] [6]
+[7] [8]
 LaTeX Font Info:    Try loading font information for TS1+ptm on input line 53.
  (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-[7]
+[9]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
- [8
+ [10
 
-] [9
+] [11
 
 ])
 \openout2 = `Chapter3/chapter3.aux'.
 
- (./Chapter3/chapter3.tex [10
+ (./Chapter3/chapter3.tex [12
 
 
 
@@ -1414,16 +1424,14 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 ]
 Chapter 3.
 
-Package natbib Warning: Citation `Rea85' on page 11 undefined on input line 17.
+Package natbib Warning: Citation `Rea85' on page 13 undefined on input line 17.
 
 
 
-Package natbib Warning: Citation `Ancey1996' on page 11 undefined on input line
+Package natbib Warning: Citation `Ancey1996' on page 13 undefined on input line
  17.
 
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 19.
-[11]) [12] [13] [14
+[13]) [14] [15] [16
 
 
 ]
@@ -1432,10 +1440,16 @@ No file thesis.bbl.
 
 (./Appendix1/appendix1.tex
 Appendix A.
-[15
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 3.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 3.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 3.
+[17
 
 
-] [16]
+] [18]
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 72.
  (/usr/local/texlive/2018/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
@@ -1445,16 +1459,16 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-[17]) [18]
+[19]) [20]
 \openout2 = `Appendix2/appendix2.aux'.
 
  (./Appendix2/appendix2.tex
 Appendix B.
-) [19
+) [21
 
 
 
-] [20
+] [22
 
 
 ]
@@ -1471,30 +1485,31 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 187.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 187.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 187.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 093369130BB009D656D689A2D1936F02;3803.
+(rerunfilecheck)             Checksum: 72C76D96C9122EE79480FFC9BDDB50A2;6807.
  ) 
 Here is how much of TeX's memory you used:
- 26514 strings out of 492649
- 473413 string characters out of 6129622
- 556181 words of memory out of 5000000
- 29680 multiletter control sequences out of 15000+600000
- 619672 words of font info for 273 fonts, out of 8000000 for 9000
+ 26525 strings out of 492649
+ 473957 string characters out of 6129622
+ 556236 words of memory out of 5000000
+ 29691 multiletter control sequences out of 15000+600000
+ 617418 words of font info for 264 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,15n,92p,10383b,947s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
 live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texl
-ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texliv
-e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
-/2018/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/local/texlive/2
-018/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2018/texmf-d
-ist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/
-type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/
-times/utmri8a.pfb>
-Output written on thesis.pdf (34 pages, 197501 bytes).
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
+ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
+/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
+2018/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/local/texlive/20
+18/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2018/texmf-di
+st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/t
+ype1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/t
+imes/utmri8a.pfb>
+Output written on thesis.pdf (36 pages, 181467 bytes).
 PDF statistics:
- 403 PDF objects out of 1000 (max. 8388607)
- 346 compressed objects within 4 object streams
- 120 named destinations out of 1000 (max. 500000)
- 62102 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 472 PDF objects out of 1000 (max. 8388607)
+ 410 compressed objects within 5 object streams
+ 133 named destinations out of 1000 (max. 500000)
+ 62190 words of extra memory for PDF output out of 74296 (max. 10000000)
 
