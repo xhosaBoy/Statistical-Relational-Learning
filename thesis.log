@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.27)  24 JUN 2019 18:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.27)  26 JUN 2019 12:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1275,7 +1275,7 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 114.
 \PHD@crest=\box55
 </Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University-logo
-.jpg, id=120, 167.4255pt x 97.5645pt>
+.jpg, id=132, 167.4255pt x 97.5645pt>
 File: /Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University
 -logo.jpg Graphic file (type jpg)
 <use /Users/luyolomagangane/Documents/Academics/Images/Stellenbosch-University-
@@ -1337,7 +1337,7 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 
 ]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 31.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 34.
 )
 \tf@toc=\write6
 \openout6 = `thesis.toc'.
@@ -1397,31 +1397,42 @@ Underfull \hbox (badness 10000) in paragraph at lines 68--69
 
 ]
 Chapter 2.
-[7] [8]
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 53.
- (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-[9]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
- [10
 
-] [11
+Underfull \hbox (badness 10000) in paragraph at lines 18--22
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--26
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 44--46
+
+ []
+
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 59.
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [8] [9]
+Underfull \hbox (badness 10000) in paragraph at lines 83--88
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--98
+
+ []
+
+[10
+
+] [11] [12
 
 ])
 \openout2 = `Chapter3/chapter3.aux'.
 
- (./Chapter3/chapter3.tex [12
-
-
-
-
-]
+ (./Chapter3/chapter3.tex
 Chapter 3.
 
 Package natbib Warning: Citation `Rea85' on page 13 undefined on input line 17.
@@ -1431,7 +1442,12 @@ Package natbib Warning: Citation `Rea85' on page 13 undefined on input line 17.
 Package natbib Warning: Citation `Ancey1996' on page 13 undefined on input line
  17.
 
-[13]) [14] [15] [16
+[13
+
+
+
+
+]) [14] [15] [16
 
 
 ]
@@ -1485,14 +1501,14 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 187.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 187.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 187.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 72C76D96C9122EE79480FFC9BDDB50A2;6807.
+(rerunfilecheck)             Checksum: 219F96E7BB135A543740F190B8219DC5;7339.
  ) 
 Here is how much of TeX's memory you used:
- 26525 strings out of 492649
- 473957 string characters out of 6129622
- 556236 words of memory out of 5000000
- 29691 multiletter control sequences out of 15000+600000
- 617418 words of font info for 264 fonts, out of 8000000 for 9000
+ 26446 strings out of 492649
+ 472584 string characters out of 6129622
+ 556330 words of memory out of 5000000
+ 29627 multiletter control sequences out of 15000+600000
+ 601263 words of font info for 227 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,15n,92p,10383b,947s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
@@ -1506,10 +1522,10 @@ ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on thesis.pdf (36 pages, 181467 bytes).
+Output written on thesis.pdf (36 pages, 181046 bytes).
 PDF statistics:
- 472 PDF objects out of 1000 (max. 8388607)
- 410 compressed objects within 5 object streams
+ 483 PDF objects out of 1000 (max. 8388607)
+ 421 compressed objects within 5 object streams
  133 named destinations out of 1000 (max. 500000)
- 62190 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 47878 words of extra memory for PDF output out of 51595 (max. 10000000)
 

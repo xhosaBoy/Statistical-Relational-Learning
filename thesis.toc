@@ -16,16 +16,19 @@
 \contentsline {subsection}{\numberline {1.3.1}Knowledge Graph Latent Feature Models}{4}{subsection.1.3.1}
 \contentsline {subsection}{\numberline {1.3.2}Factorisation of Latent Feature Models}{5}{subsection.1.3.2}
 \contentsline {subsection}{\numberline {1.3.3}Other of Latent Feature Modelling Approaches}{5}{subsection.1.3.3}
-\contentsline {chapter}{\numberline {2}My second chapter}{7}{chapter.2}
-\contentsline {section}{\numberline {2.1}Short title}{7}{section.2.1}
+\contentsline {chapter}{\numberline {2}Literature Review}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}Knowledge Graphs}{7}{section.2.1}
+\contentsline {section}{\numberline {2.2}Short title}{8}{section.2.2}
+\contentsline {section}{\numberline {2.3}Tensor Factorisation}{10}{section.2.3}
+\contentsline {section}{\numberline {2.4}Nonlinear Factorisation}{10}{section.2.4}
 \contentsline {chapter}{\numberline {3}My third chapter}{13}{chapter.3}
 \contentsline {section}{\numberline {3.1}First section of the third chapter}{13}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}First subsection in the first section}{13}{subsection.3.1.1}
 \contentsline {subsection}{\numberline {3.1.2}Second subsection in the first section}{13}{subsection.3.1.2}
-\contentsline {subsubsection}{First subsub section in the second subsection}{13}{section*.12}
+\contentsline {subsubsection}{First subsub section in the second subsection}{13}{section*.11}
 \contentsline {subsection}{\numberline {3.1.3}Third subsection in the first section}{13}{subsection.3.1.3}
-\contentsline {subsubsection}{First subsub section in the third subsection}{13}{section*.13}
-\contentsline {subsubsection}{Second subsub section in the third subsection}{14}{section*.14}
+\contentsline {subsubsection}{First subsub section in the third subsection}{13}{section*.12}
+\contentsline {subsubsection}{Second subsub section in the third subsection}{14}{section*.13}
 \contentsline {section}{\numberline {3.2}Second section of the third chapter}{14}{section.3.2}
 \contentsline {section}{\numberline {3.3}The layout of formal tables}{14}{section.3.3}
 \contentsline {chapter}{Appendix \numberline {A}How to install \LaTeX }{17}{Appendix.a.A}
