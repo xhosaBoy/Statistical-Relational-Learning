@@ -1,0 +1,186 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%*********************************** Fourth Chapter *****************************
+%*******************************************************************************
+
+\chapter{Deep Learning Model Development}  %Title of the Fourth Chapter
+
+\ifpdf
+    \graphicspath{{Chapter1/Figs/Raster/}{Chapter1/Figs/PDF/}{Chapter1/Figs/}}
+\else
+    \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
+\fi
+
+
+\subsection{Deep Learning Classification Models}
+\dots and some more \dots
+The state-of-the-art in deep learning classification models is convolutional neural networks (CNN) \citet{reference}. CNNs are typically applied to object classification within images, and take advantage of the properties of object translation invariance and object location invariance \cite{reference}. These properties allow CNNs to perform robust classifications that generalise well across datasets. Translation invariance allows the CNN to build an object representation that is consistent under transformation, for example an image rotation would lead to a consistent final object representation being generated prior to logit computation for classification. Locality invariance allows the model to correctly identify an object no matter where it may reside with the boundaries of an image. \newline
+These properties are possible because of how the final object representation is generated. CNNs perform a convolutional operation on an image, using a trainable image filter \cite{reference}. The operation generates feature map of the image that constructs latent object representations of the image. In practise these representations are chained together to produce more complex latent representations the deeper the CNN. \newline
+% spatial and depth-wise convolutions
+It is possible to decompose convolution operations into spatial and depth-wise convolutions \cite{reference}. A spatial convolution operates on different regions of an image, producing distinct representations for each region, for example and image can be divided into four regions, where a spatial convolution operates independently on each of these regions using region-specific filters.This operation produces four distinct feature maps which are later flattened into a single hidden layer representation, before begin run through a linear layer to generate the final logits. In a depth-wise convolution, the distinct convolutional feature maps are generated using the depth dimensions of the input image, typically three dimensions with images, the red, blue and green image channels in a colour image. Channel-specific filters are used to generate these feature maps and once again the future maps are flattened prior to computing logits for the model classes. \newline
+Multilayer perceptrons (MLP) are the precursors to CNNs and suffer from two problems when used in deep model architectures: an explosion of parameters and poor generalisation. In addition to the above mentioned properties, CNNs also address both these problems. Convolutional filters reduce the parameter space with subsequent convolutional operations in deep layers of the network. There are a number of techniques employed that further reduce the parameter space, these techniques include striding, dilation and pooling. CNNs also generalise better than MLPs by preventing the construction of redudant of correlated latent features. Without the capability of multi latent feature reliance in subsequent, of form a principle component generation is achieved by CNNs. Because these principle components are independent, the model is able to achieve good generalisation. 
+
+\subsubsection{First subsub section in the second subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it \dots
+
+\subsection{Classification Model Development Framework}
+\dots and some more \dots
+Deep learning classification models are trained using a supervised learning framework - input samples are fed into the network with corresponding target labels. The computed class, represented as a logit magnitude, is compared against the target class and an objective is defined that is to be minimised. The logit magnitude is then typically passed through a thresholding function, a softmax function \cite{reference} if a proper probability is desired, or a sigmoid \cite{reference} if only a likelihood is required. Two techniques are used to simultaneously improve both variance and bias respectively: batch normalisation \cite{reference} and dropout \cite{reference}. \newline 
+Batch normalisation attempts to account for internal covariance shift \cite{reference}. Batch normalisation is inspired from population based feature mean normalisation, when the entire population is taken into consideration when computing the mean and standard deviation of the values which the feature can take on within the dataset. When training a deep learning model, it is common to perform a uniform random shuffle of the training set, then subdivide that the set into mini-batches \cite{reference}. This is the same process of taking a uniform random sample batch from the training data. The size of the sample batch determines whether the normalised features remain within distributional alignment of the population. In order to compensate for the resultant loss computed after a foward pass, it is important to re-align feature vector parameters to the sample distribution mean and standard deviation estimators. The generated loss surface is thus a closer approximation to the true loss surface of the population, and subsequent parameter updates do not suffer from sample distributional distortion. This results in improved test accuracy as the model is able to more closely approximate the true distribution of the data. \newline Model over parameterisation can lead to overfitting. This because the degrees of freedom available to estimate a function allow very complex nonlinear functions to be discovered, where these nonlinear functions or not representative of the generative process of the data at all \cite{reference}. These overfitting makes the model very sensitive to the training data, and results in poor generalisation across training, validation and testing data. This problem forms part of the broader bias/variance trade off, specifically high model variance due to over parameterisation. Deep learning models are particularly sensitive to overfitting given the high number of parameters present within the model. In order to compensate for this overfitting, it is common zero out a sample of neurons within a deep learning network. This has the effect of removing partial dependence between nodes deeper within the network, a form of principal component analysis generating independent latent features. These latent features result in a simpler model representation of the generative process of the data, and therefore allow it to generalise better across datasets. 
+
+\subsubsection{First subsub section in the third subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it and some more and some more and
+some more and some more and some more and some more and some more \dots
+
+\subsubsection{Second subsub section in the third subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it \dots
+
+\section{Deep Learning Best Practise}
+This section has been modified from ``Publication quality tables in \LaTeX*''
+ by Simon Fear.
+ % initialisation e.g. xavier initialisation and truncated normal
+ % Learning rate scheduling
+ % Optimiser
+ % Hyperparameter optimistaion 
+
+The layout of a table has been established over centuries of experience and 
+should only be altered in extraordinary circumstances. 
+
+When formatting a table, remember two simple guidelines at all times:
+
+\begin{enumerate}
+  \item Never, ever use vertical rules (lines).
+  \item Never use double rules.
+\end{enumerate}
+
+These guidelines may seem extreme but I have
+never found a good argument in favour of breaking them. For
+example, if you feel that the information in the left half of
+a table is so different from that on the right that it needs
+to be separated by a vertical line, then you should use two
+tables instead. Not everyone follows the second guideline:
+
+There are three further guidelines worth mentioning here as they
+are generally not known outside the circle of professional
+typesetters and subeditors:
+
+\begin{enumerate}\setcounter{enumi}{2}
+  \item Put the units in the column heading (not in the body of
+          the table).
+  \item Always precede a decimal point by a digit; thus 0.1
+      {\em not} just .1.
+  \item Do not use `ditto' signs or any other such convention to
+      repeat a previous value. In many circumstances a blank
+      will serve just as well. If it won't, then repeat the value.
+\end{enumerate}
+
+A frequently seen mistake is to use `\textbackslash begin\{center\}' \dots `\textbackslash end\{center\}' inside a figure or table environment. This center environment can cause additional vertical space. If you want to avoid that just use `\textbackslash centering'
+
+
+\begin{table}
+\caption{A badly formatted table}
+\centering
+\label{table:bad_table}
+\begin{tabular}{|l|c|c|c|c|}
+\hline 
+& \multicolumn{2}{c}{Species I} & \multicolumn{2}{c|}{Species II} \\ 
+\hline
+Dental measurement  & mean & SD  & mean & SD  \\ \hline 
+\hline
+I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
+\hline 
+I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
+\hline 
+I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
+\hline 
+I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
+\hline 
+CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
+\hline 
+CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
+\hline 
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{A nice looking table}
+\centering
+\label{table:nice_table}
+\begin{tabular}{l c c c c}
+\hline 
+\multirow{2}{*}{Dental measurement} & \multicolumn{2}{c}{Species I} & \multicolumn{2}{c}{Species II} \\ 
+\cline{2-5}
+  & mean & SD  & mean & SD  \\ 
+\hline
+I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
+
+I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
+
+I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
+
+I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
+
+CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
+
+CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Even better looking table using booktabs}
+\centering
+\label{table:good_table}
+\begin{tabular}{l c c c c}
+\toprule
+\multirow{2}{*}{Dental measurement} & \multicolumn{2}{c}{Species I} & \multicolumn{2}{c}{Species II} \\ 
+\cmidrule{2-5}
+  & mean & SD  & mean & SD  \\ 
+\midrule
+I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
+
+I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
+
+I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
+
+I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
+
+CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
+
+CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Loss Surface Analysis}
+and here I write more \dots
+% loss function choice
+% optimiser
+% learning rate scheduling
+
+\subsection{Models}
+\dots and some more 
+what they are, and how we got here, trial and error
+
+\subsection{Training Algorithm}
+\dots and some more \dots
+
+\subsubsection{First subsub section in the second subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it \dots
+
+\subsection{Model Analysis}
+\dots and some more \dots
+
+\subsubsection{First subsub section in the third subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it and some more and some more and
+some more and some more and some more and some more and some more \dots
+
+\subsubsection{Second subsub section in the third subsection}
+\dots and some more in the first subsub section otherwise it all looks the same
+doesn't it? well we can add some text to it \dots
