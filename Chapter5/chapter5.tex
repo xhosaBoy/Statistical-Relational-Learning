@@ -1,0 +1,356 @@
+%!TEX root = ../thesis.tex
+%*******************************************************************************
+%*********************************** Fifth Chapter *****************************
+%*******************************************************************************
+
+\ifpdf
+     \graphicspath{{/Users/luyolomagangane/Documents/Academics/Figures/Chapter5/}}
+\else
+    \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
+\fi
+
+\chapter{Results and Analysis}  %Title of the Fifth Chapter
+
+\section{Nonlinear Tensor Factorisation}
+% Background on 3 hypotheses that were tested
+\subsubsection{Hypothesis Overview}
+In this chapter we evaluate three hypothesis explored in nonlinear tensor factroisation for link prediction. Latent feature modelling has traditionally relied on linear modelling techniques in order to constrain parameterisation for computational efficiency at the expense of model expressiveness i.e. models that suffer from high bias. Recently nonlinear approaches have been proposed to overcome the bias problem and each propose hypothesis that aim to take advantage of their distinct architecture. The first nonlinear model to gain surpass state-of-the-art tensor factorisation models, was the recursive neural tensor network \cite{refefence}. There are two hypotheses proposed that were proposed in using this model architecture for link prediction, namely that recursive architectures are useful in part of speech tagging \cite{reference}, as the perform a combinatorial analysis of word sequences in sentences, instead of the conventional linear sequence used in part of speech tagging \cite{reference}. The second hypothesis is that pre-trained word embeddings offer superior performance to randomly generated entity vectors which were commonly used at the time for tensor factorisation \cite{reference}. \newline
+The second hypothesis we explored is the use of convolutional hyper networks with relational factorisation for link prediction \cite{reference}. This research is the current state-of-that-art latent feature modelling technique for link prediction \cite{reference}. There are also two hypotheses explored in this research - the first is that convolutional filters can be used explicitly for relational factorisation \cite{reference}, the second is that the hyper network architecture is useful in generating the relational filters due to increased parameterisation using a hyper linear layer \cite{reference}. \newline
+The final hypothesis we explored is the use of contextual entity representations as input to convolutional hyper networks. State-of-the-art natural language modelling techniques makes use contextual word representations \cite{Elmo, Bert} instead of static word embeddings \cite{fasttext, GloVe, Word2Vec}. Contextual word embeddings are represented as distinct subject entity representations, and distinct object entity representations. \newline
+The following chapter presents the results and analysis from the experiments performed to validate these hypotheses.
+
+\section{Recursive Neural Tensor Networks}
+\subsubsection{Model Summary} 
+Tensor factorisation has been a popular approach applied to statistical relational learning (SRL) \cite{reference, reference, reference}. In order to improve model expressiveness, a Recursive Neural Tensor Network architecture was proposed \cite{reference}. This model is inspired by recursive neural networks \cite{reference}. Recursive neural networks have been applied to natural language processing tasks, particularly part of speech tagging \cite{reference}. Traditionally, recurrent neural networks have been applied to this task \cite{reference}. Recurrent neural networks are based on the Markov assumption \cite{reference}, where the future states of the process depends only on the present state, not on the sequence of events that preceded it \cite{reference}. The state is constructed using sequential input within a time step window, for example, a sentence will contain a sequence of words, and the window will be the last word in the sentence and the four previous words before an anchor word. The state consists of the four previous words before the anchor word, and along with the anchor word, can be used to predict the next word in the sequence.\newline
+Instead of producing a state using a sequence of previous words, recursive neural networks generate the state using a combinatorial tree of the word sequence. The number of potential combinations are dependent on the length of the sequence, for example a three word sequence has three combinations, a four word sequence has six combinations and  a five word sequence has ten combinations. The combinations which produce the smallest magnitudes are then filtered out from the network, and remaining combinations are then recombined as new combinations, This filtering and recombination process is then continued until a next word prediction is made. \newline
+Recursive neural networks are combined with tensor factorisation to produce a more expressive model for link prediction. The subject and object entities are concatenated and then an matrix multiplication is taken with the resultant vector before a bias is added. \newline
+\subsubsection{Contrastive Max Margin Loss}
+The contrastive max-magrin loss \cite{reference} is used to train the RTNT model. The input consists of an entity-relational pair, where the entity is a subject entity. An object entity is presented as a target to complete the triple. A non-related object entity is presented is then presented as a corrupt object entity. Fact score is then computed for the target triple, as well as the corrupt triple as logits, and the difference between the two logits is the contrast between the true and false facts. The task is for the model is then to produce a higher fact score for the true triple than the false triple. If the model gets it wrong, then loss is generated and back propagated through the network to update model parameters. \newline
+
+\subsubsection{Experimental Setup} 
+
+We use the following benchmark knowledge graphs: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. \newline
+Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. \newline
+Visualisations of the respective knowledge graphs are presented below:
+
+\begin{figure}[H]
+  	\caption{Wordnet Entities and Relations Graphplot}
+   	\centering
+    	\includegraphics[width=\textwidth]{Wordnet}
+\end{figure}
+
+\begin{figure}[H]
+  	\caption{Freebase Entity and Relations Graphplot}
+   	\centering
+    	\includegraphics[width=\textwidth]{Freebase}
+\end{figure}
+
+
+We used the Tensorflow framework to develop our model. Randomly initialised entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Property counts for the respective knowledge graphs are presented below:
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Property Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{Wordnet_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Property Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{Freebase_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 38,696  \\
+  			Relations & 11  \\
+  			Triples & 136,611  \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 75,043   \\
+  			Relations & 13  \\
+  			Triples & 375,499  \\
+		\end{tabular}
+		}
+\end{table}
+
+
+Summary statistics of the respective knowledge graphs Resource Description Framework (RDF) decompision - subject, predicate, object - are presented below:
+
+% Predicate
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Predicate Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Predicate_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Predicate Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Predicate_Counts}
+		}
+\end{figure}
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Predicate Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 11 \\
+			Max & 43,312  \\
+			Min & 1, 229  \\
+  			Median & 7,705  \\
+  			IQR & 7,257.5  \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Predicate Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 13 \\
+			Max & 73,897  \\
+			Min & 4, 464  \\
+  			Median & 21,149  \\
+  			IQR & 34, 033  \\
+		\end{tabular}
+		}
+\end{table}
+
+% Subject
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Subject Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Subject_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Subject Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Subject_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 32,720 \\
+			Max & 619 \\
+			Min & 1 \\
+  			Median & 2 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 67,393 \\
+			Max & 37 \\
+			Min & 1 \\
+  			Median & 5 \\
+  			IQR & 4 \\
+		\end{tabular}
+		}
+\end{table}
+
+% Object
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Object Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Object_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Object Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Object_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 33,011 \\
+			Max & 537 \\
+			Min & 1 \\
+  			Median & 3 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 15,342 \\
+			Max & 59,663 \\
+			Min & 1 \\
+  			Median & 3 \\
+  			IQR & 6 \\
+		\end{tabular}
+		}
+\end{table}
+
+For Wordnet, it can be seen that relations are skewed toward "has instance" 43,312 occurrences, and "type of" 36,659 occurrences. We would expect poor performance from the model for out-of-sample data containing
+containing relations that are not "has instance" or "type of". Freebase relations are somewhat more uniform, however four relations have occurrences under 10,000. We would expect reasonable performance across all relations for this knowledge graph. \newline
+Wordnet and Freebae subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an IQR of 2 and 4 respectively. This are thus sparse distributions of data points, and the model will need to rely on 
+similarity of subject features in order to produce sensible inference. \newline
+Wordnet object occurrences are somewhat uniform. Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6.
+We would expect poor performance from a Freebase link prediction model given this distribution of objects. \newline
+
+% Hyperparameter optimisation
+
+\subsubsection{Hypothesis 1: Hyper Parameter Optimisation}
+Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
+We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling
+
+\subsubsection{Bias Variance Trade Off}
+Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
+
+\subsubsection{Link Prediction Results}
+The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
+
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Wordnet.png}
+\end{center}
+
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Freebase.png}
+\end{center}
+
+\begin{table}[H]
+	\caption{Link prediction accuracy on Wordnet and Freebase}
+	\centering
+	\begin{tabular}{lllllllllll}
+  		\textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
+  		\hline
+  		Distance Model & .683 & .610 & .647 \\
+  		Hadamard Model & .800 & .688 & .744 \\
+  		Single Layer Model & .760 & .853 & .807 \\
+  		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
+  		Recursive Neural Tensor Network & .732 & .518 & .625 \\
+  		\hline
+  		Recursive Neural Tensor Network & .732 & .518 & .625 \\
+	\end{tabular}
+\end{table}
+
+\section{HypER Convolutional Neural Networks}
+
+\subsubsection{Model Summary} 
+In order to overcome the expressiveness problems evident in the Freebase test dataset, more nonlinear relational factorisation approaches have been proposed \cite{ComplEx, Neural LP, TorusE}. \newline
+HypER is a model that uses convolutional relational filters r that are convolved with the subject entity e1, producing an intermediate relational representation. The dot product of the relational representation is then taken with the object entity e2 to produce relation-specific score between the two entities. The HypER model only produces a latent relational representation for the subject entity e1, we extend this model to also produce a relational representation for the object entity e2, and call this model HpyER+. HypER+ thus produces entity-relational representations that approximate KG spacial locality. \newline
+\subsubsection{Binary Cross Entropy Loss}
+The binary cross entropy loss \cite{reference} is used to train the HypER Convolutional model. Like the RNTN model, the input consists of an entity-relational pair, where the entity is a subject entity and an object entity is presented as a target to complete the triple. A logit is generated for each sample and passed through through a logarithmic sigmoid or softmax function. Loss is generated by comparing the produced likelihood with the expected likelihood, 0 or 1. The sum of all losses is aggregated and back propagated through the network for parameter update. \newline
+
+\subsubsection{Experimental Setup} 
+
+We use the following benchmark datasets: WN18 (Bordes et el. 2013): WN18 is a subset of Wordent, a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. The dataset contains 40,943 entities and 18 relations. WN18RR (Detmers etl el. 2018): WN18RR is a subset of WN18, created by removing the inverse relations. WN18RR contains 40,943 entities and 11 relations. \newline 
+FB15k (Bordes et el. 2013): FB15k is a subset of Freebase, a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. FB15k contains 14,951 entities and 1,345 relations. FB15k-237 (Toutanova et el. 2018): FB15k-237 is a subset of FB15k, created by removing the inverse relations. WN18RR contains 40,943 entities and 11 relations. \newline
+We used the PyTorch framework to develop our model. The code to reproduce results can be found on GitHub 1. Randomly initialised entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a high-memory Google Compute Engine instance with 8 cores, 16GB RAM, 250GB SSD with a NVIDIA Tesla V100. \newline
+We evaluate the model by ranking the scores of the predicted triples. Three ranking metrics are computed: Hit@10 - The percentage of predictions where the target object entity appeared within the top 10 results. Hit@3 - The percentage of predictions where the target object entity appeared within the top 3 results. Hit@1 - The percentage of predictions where the target object entity appeared as the topped ranked result. The mean rank (MR) of target the target entity object, as well as the reciprocal of the mean rank (MRR) are also computed as model evaluation metrics. Code to reproduce: https://github.com/xhosaBoy/hypernetwork-factorisation
+
+\subsubsection{Link Prediction Results}
+The link prediction accuracy results of the HypER Convolutional model, compared against other nonlinear factorisation models, are presented in table 5.2 and 5.3:
+
+\begin{table}[H]
+\caption{Link prediction results on WN18RR and FB15k-237.}
+\centering
+\begin{tabular}{lllllllllll}
+  \textbf{Dataset} & & &  \textbf{WN18RR} & & & & \textbf{FB15k-237} \\
+  \hline 
+                    	& MR    		& MRR    		& H@10		& H@3    		& H@1    		& MR    		& MRR    		& H@10     	& H@3     		& H@1 \\
+  \hline
+  DistMult      	& 5110  		& .430      		& .490      		& .440       	& .390     		& 254      		& .241     		& .419        	& .263       	& .155 \\
+  ComplEx    	& 5261       	& .440      		& .510     		& .460       	& .410     		& 339        	& .247      		& .428       	& .275       	& .158 \\
+  Neural LP   	& -       		& -      		& -      		& -             	& -          		& -        		& .250      		& .408         	& -             	& - \\
+  R-GCN       	& -       		& -      		& - 			& -       		& -     		& -        		& .248     		& .417         	& .264       	& .151 \\
+  MINERVA        & -       		& -      		& -      		& -       		& -     		& -        		& -      		& .456        	& -       		& - \\
+  ConvE        	& \textbf{4187}  & .430   		& .520      		& .440  		& .400  		& \textbf{244}   	& .325  		& .501  		& .356  		& .237 \\
+  HypER       	& 5798   		& \textbf{.465}  	& \textbf{.522}  	& \textbf{.477}  	& \textbf{.436}  	& 250   		& \textbf{.341}  	& \textbf{.520}  	& \textbf{.376}  	& \textbf{.252} \\
+  \hline
+  HypER 300d 	& 5772 		& .461    		& .515      		& .475        	& .432     		& 487      		& .316      		& .488       	& .346        	& .230 \\
+  HypER+ 300d	& \textbf{2692} 	& \textbf{.474}  	& \textbf{.546}  	& \textbf{.484}  	&  \textbf{.440} 	& \textbf{450}   	& \textbf{.317}  	& \textbf{.492}  	& .346   		& .230
+
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Link prediction results on WN18 and FB15k.}
+\centering
+\begin{tabular}{lllllllllll}
+  \textbf{Dataset} & & &  \textbf{WN18} & & & & \textbf{FB15k} \\
+  \hline 
+                    	& MR    		& MRR    		& H@10		& H@3    		& H@1    		& MR    		& MRR    		& H@10     	& H@3     		& H@1 \\
+  \hline
+  TransE       	& \textbf{251}   	& -           		& .892       	& -            		& -           		& 125    		& -          		& .471         	& -            		& - \\
+  DistMult      	& 902  		& .822      		& .936      		& .914       	& .728     		& 97      		& .654     		& .824        	& .733       	& .546 \\
+  ComplEx    	& -       		& .941      		& .947     		& .936       	& .936     		& -        		& .692      		& .840       	& .759       	& .599 \\
+  ANALOGY  	& -      		& .942       	& .947      		& .944       	& .939    		& -         		& .725     		& .854         	& .785       	& .646 \\
+  Neural LP   	& -       		& .940      		& .945      		& -             	& -          		& -        		& .760      		& .837         	& -             	& - \\
+  R-GCN       	& -       		& .819      		& \textbf{.964.} 	& .929       	& .697     		& -        		& .696      		& .842         	& .760       	& .601 \\
+  TorusE        	& -       		& .947      		& .954      		& .950       	& .943     		& -        		& .733      		& .832        	& .771       	& .674 \\
+  ConvE        	& 374   		& .943     		& .956      		& .946       	& .935     		& 51      		& .657      		& .831        	& .723       	& .558 \\
+  HypER       	& 431   		& \textbf{.951}   & .958      		& \textbf{.955}  	& \textbf{.947}  	& \textbf{44}     	& \textbf{.790}  	& \textbf{.885}  	& \textbf{.829}  	& \textbf{.734} \\
+  \hline
+  HypER 300d 	& 518 		& .950    		& .958      		& .953        	& .946     		& 75      		& .826      		& .893       	& .852        	& \textbf{.786} \\
+  HypER+ 300d	& \textbf{248} 	& \textbf{.951}  	& \textbf{.959}  	& \textbf{.954}  	& .946     		& \textbf{70}     	& \textbf{.828}  	& \textbf{.901}  	& \textbf{.859}   & .783
+
+\end{tabular}
+\end{table}
+
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Wordnet.png}
+\end{center}
+
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Freebase.png}
+\end{center}
+
+
+
+\section{HypER Convolutional Neural Networks with Pretrained Entity Embeddings}
+
+\section{Leader Board Research Versus Hypothesis Research}
+
