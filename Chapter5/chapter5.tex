@@ -22,6 +22,32 @@ The following chapter presents the results and analysis from the experiments per
 
 \section{Recursive Neural Tensor Networks}
 \dots and some more \dots
+% Recursive neural tensor network 
+Tensor factorisation has been a popular approach applied to latent feature modelling \cite{reference, reference, reference}. in order to improve model expressiveness, a Recursive Neural Tensor Network architecture was proposed \cite{reference}. This model is inspired by recursive neural networks \cite{reference}. Recursive neural networks have been applied to natural language processing tasks, particularly part of speech tagging \cite{reference}. Traditionally recurrent neural networks have been applied to this task \cite{reference}. Recurrent neural networks are based on the Markov assumption \cite{reference}, where the future states of the process depends only on the present state, not on the sequence of events that preceded it \cite{reference}. The state is constructed using sequential input within a time step window, for example, a sentence will contain a sequence of words, and the window will be the last word in the sentence and the four previous words before an anchor word. The state consists of the four previous words before the anchor word, and along with the anchor word, can be used to predict the next word in the sequence.\newline
+Instead of producing a state using a sequence of previous words, recursive neural networks generate the state using a combinatorial tree of the word sequence. The number of potential combinations are dependent on the length of the sequence for example, a three word sequence has three combinations, a four word sequence has six combinations and  a five word sequence has ten combinations. The combinations which produce the smallest magnitudes are then filtered out from the network, and remaining combinations are then recombined as new combinations, This filtering and recombination process is then continued until a next word prediction is made. \newline
+Recursive neural networks are combined with tensor factorisation to produce a more expressive model for link prediction. The subject and object entities are concatenated and then an matrix multiplication is taken with the resultant vector before a bias is added. \newline
+% Contrastive Max Margin loss
+The contrastive max-magrin loss \cite{reference} is used to train the RTNT model. The input consists of an entity-relational pair, where the entity is a subject entity. An object entity is presented as a target to complete the triple. A non-related object entity is presented is then presented as a corrupt object entity. Fact score is then computed for the target triple, as well as the corrupt triple as logits, and the difference between the two logits is the contrast between the true and false facts. The task is for the model is then to produce a higher fact score for the true triple than the false triple. If the model gets it wrong, then loss is generated and back propagated through the network to update model parameters. \newline
+% Susceptible to overfitting and early stopping solution
+Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
+
+The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
+
+\begin{table}[H]
+\caption{Link prediction accuracy on Wordnet and Freebase}
+\centering
+\begin{tabular}{lllllllllll}
+  \textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
+  \hline
+  Distance Model & .683 & .610 & .647 \\
+  Hadamard Model & .800 & .688 & .744 \\
+  Single Layer Model & .760 & .853 & .807 \\
+  Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
+  Recursive Neural Tensor Network & .732 & .940 & .945 \\
+
+\end{tabular}
+\end{table}
+
 
 
 
