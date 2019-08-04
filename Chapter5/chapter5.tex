@@ -6,7 +6,7 @@
 \chapter{Results and Analysis}  %Title of the Fifth Chapter
 
 \ifpdf
-    \graphicspath{{Chapter1/Figs/Raster/}{Chapter1/Figs/PDF/}{Chapter1/Figs/}}
+    \graphicspath{{Chapter1/Figs/Raster/}{Chapter1/Figs/PDF/}{Chapter1/Figs/}{/Users/luyolomagangane/Documents/Academics/Images/Recursive-Neural-Tensor-Networks/}}
 \else
     \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
 \fi
@@ -28,8 +28,6 @@ Instead of producing a state using a sequence of previous words, recursive neura
 Recursive neural networks are combined with tensor factorisation to produce a more expressive model for link prediction. The subject and object entities are concatenated and then an matrix multiplication is taken with the resultant vector before a bias is added. \newline
 % Contrastive Max Margin loss
 The contrastive max-magrin loss \cite{reference} is used to train the RTNT model. The input consists of an entity-relational pair, where the entity is a subject entity. An object entity is presented as a target to complete the triple. A non-related object entity is presented is then presented as a corrupt object entity. Fact score is then computed for the target triple, as well as the corrupt triple as logits, and the difference between the two logits is the contrast between the true and false facts. The task is for the model is then to produce a higher fact score for the true triple than the false triple. If the model gets it wrong, then loss is generated and back propagated through the network to update model parameters. \newline
-% Susceptible to overfitting and early stopping solution
-Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
 
 The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
 
@@ -43,10 +41,23 @@ The link prediction accuracy results of the RNTN model, a nonlinear factorisatio
   Hadamard Model & .800 & .688 & .744 \\
   Single Layer Model & .760 & .853 & .807 \\
   Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  Recursive Neural Tensor Network & .732 & .940 & .945 \\
+  Recursive Neural Tensor Network & .732 & .518 & .625 \\
 
 \end{tabular}
 \end{table}
+
+% Susceptible to overfitting and early stopping solution
+Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
+% Hyperparameter optimisation
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Wordnet.png}
+\end{center}
+
+\begin{center}
+    \includegraphics[width=\textwidth]{RNTN_Training_Results_Freebase.png}
+\end{center}
+
+
 
 
 
