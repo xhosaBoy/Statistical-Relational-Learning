@@ -82,7 +82,30 @@ We used the PyTorch framework to develop our model. The code to reproduce result
 We evaluate the model by ranking the scores of the predicted triples. Three ranking metrics are computed: Hit@10 - The percentage of predictions where the target object entity appeared within the top 10 results. Hit@3 - The percentage of predictions where the target object entity appeared within the top 3 results. Hit@1 - The percentage of predictions where the target object entity appeared as the topped ranked result. The mean rank (MR) of target the target entity object, as well as the reciprocal of the mean rank (MRR) are also computed as model evaluation metrics. Code to reproduce: https://github.com/xhosaBoy/hypernetwork-factorisation
 
 \subsubsection{Link Prediction Results}
-The link prediction accuracy results of the HypER Convolutional model, compared against other nonlinear factorisation models, are presented in table 5.2:
+The link prediction accuracy results of the HypER Convolutional model, compared against other nonlinear factorisation models, are presented in table 5.2 and 5.3:
+
+\begin{table}[H]
+\caption{Link prediction results on WN18RR and FB15k-237.}
+\centering
+\begin{tabular}{lllllllllll}
+  \textbf{Dataset} & & &  \textbf{WN18RR} & & & & \textbf{FB15k-237} \\
+  \hline 
+                    	& MR    		& MRR    		& H@10		& H@3    		& H@1    		& MR    		& MRR    		& H@10     	& H@3     		& H@1 \\
+  \hline
+  DistMult      	& 5110  		& .430      		& .490      		& .440       	& .390     		& 254      		& .241     		& .419        	& .263       	& .155 \\
+  ComplEx    	& 5261       	& .440      		& .510     		& .460       	& .410     		& 339        	& .247      		& .428       	& .275       	& .158 \\
+  Neural LP   	& -       		& -      		& -      		& -             	& -          		& -        		& .250      		& .408         	& -             	& - \\
+  R-GCN       	& -       		& -      		& - 			& -       		& -     		& -        		& .248     		& .417         	& .264       	& .151 \\
+  MINERVA        & -       		& -      		& -      		& -       		& -     		& -        		& -      		& .456        	& -       		& - \\
+  ConvE        	& \textbf{4187}  & .430   		& .520      		& .440  		& .400  		& \textbf{244}   	& .325  		& .501  		& .356  		& .237 \\
+  HypER       	& 5798   		& \textbf{.465}  	& \textbf{.522}  	& \textbf{.477}  	& \textbf{.436}  	& 250   		& \textbf{.341}  	& \textbf{.520}  	& \textbf{.376}  	& \textbf{.252} \\
+  \hline
+  HypER 300d 	& 5772 		& .461    		& .515      		& .475        	& .432     		& 487      		& .316      		& .488       	& .346        	& .230 \\
+  HypER+ 300d	& \textbf{2692} 	& \textbf{.474}  	& \textbf{.546}  	& \textbf{.484}  	&  \textbf{.440} 	& \textbf{450}   	& \textbf{.317}  	& \textbf{.492}  	& .346   		& .230
+
+\end{tabular}
+\end{table}
+
 
 \begin{table}[H]
 \caption{Link prediction results on WN18 and FB15k.}
@@ -94,13 +117,13 @@ The link prediction accuracy results of the HypER Convolutional model, compared 
   \hline
   TransE       	& \textbf{251}   	& -           		& .892       	& -            		& -           		& 125    		& -          		& .471         	& -            		& - \\
   DistMult      	& 902  		& .822      		& .936      		& .914       	& .728     		& 97      		& .654     		& .824        	& .733       	& .546 \\
-  ComplEx    	& -       		& .941      		& .947     		& .936       	& .936     		& -        		& .692      		& .840.       	& .759       	& .599 \\
+  ComplEx    	& -       		& .941      		& .947     		& .936       	& .936     		& -        		& .692      		& .840       	& .759       	& .599 \\
   ANALOGY  	& -      		& .942       	& .947      		& .944       	& .939    		& -         		& .725     		& .854         	& .785       	& .646 \\
   Neural LP   	& -       		& .940      		& .945      		& -             	& -          		& -        		& .760      		& .837         	& -             	& - \\
   R-GCN       	& -       		& .819      		& \textbf{.964.} 	& .929       	& .697     		& -        		& .696      		& .842         	& .760       	& .601 \\
   TorusE        	& -       		& .947      		& .954      		& .950       	& .943     		& -        		& .733      		& .832        	& .771       	& .674 \\
   ConvE        	& 374   		& .943     		& .956      		& .946       	& .935     		& 51      		& .657      		& .831        	& .723       	& .558 \\
-  HypER       	& 431   		& .\textbf{951}   & .958      		& \textbf{.955}  	& \textbf{.947}  	& \textbf{44}     	& \textbf{.790}  	& \textbf{.885}  	& \textbf{.829}  	& \textbf{.734} \\
+  HypER       	& 431   		& \textbf{.951}   & .958      		& \textbf{.955}  	& \textbf{.947}  	& \textbf{44}     	& \textbf{.790}  	& \textbf{.885}  	& \textbf{.829}  	& \textbf{.734} \\
   \hline
   HypER 300d 	& 518 		& .950    		& .958      		& .953        	& .946     		& 75      		& .826      		& .893       	& .852        	& \textbf{.786} \\
   HypER+ 300d	& \textbf{248} 	& \textbf{.951}  	& \textbf{.959}  	& \textbf{.954}  	& .946     		& \textbf{70}     	& \textbf{.828}  	& \textbf{.901}  	& \textbf{.859}   & .783
