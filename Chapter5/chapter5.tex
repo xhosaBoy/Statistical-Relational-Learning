@@ -29,34 +29,63 @@ The contrastive max-magrin loss \cite{reference} is used to train the RTNT model
 
 \subsubsection{Experimental Setup} 
 
-We use the following benchmark knowledge graphs: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. Wordnet contains 38,696 entities and 11 relations.  \newline
-Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Freebase contains 75,043 entities and 13 relations.   \newline
+We use the following benchmark knowledge graphs: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. \newline
+Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. \newline
 Visualisations of the respective knowledge graphs are presented below:
 
 \begin{figure}[H]
-   \caption{Sample of Wordnet Entities and Relations}
-   \centering
+  	\caption{Sample of Wordnet Entities and Relations}
+   	\centering
     	\includegraphics[width=\textwidth]{Wordnet}
 \end{figure}
+
+\begin{figure}[H]
+  	\caption{Sample of Freebase Entity and Relations}
+   	\centering
+    	\includegraphics[width=\textwidth]{Freebase}
+\end{figure}
+
 
 We used the Tensorflow framework to develop our model. Randomly initialised entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Statistics for the respective datasets are presented below:
 
 \begin{table}[H]
-	\caption{Wordnet Property Counts}
-	\centering
-	\begin{tabular}{lllllllllll}
-  		\textbf{Property} & \textbf{Count}  \\
-  		\hline
-  		Entities & 38, 696  \\
-  		Relations & 11  \\
-  		Triples & 136, 611  \\
-	\end{tabular}
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 38, 696  \\
+  			Relations & 11  \\
+  			Triples & 136, 611  \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 75,043   \\
+  			Relations & 13  \\
+  			Triples & 375, 499  \\
+		\end{tabular}
+		}
 \end{table}
 
 \begin{figure}[H]
-   \caption{Wordnet Property Counts}
-   \centering
-    	\includegraphics[width=0.5\textwidth]{Wordnet_Counts}
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Property Counts}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{Wordnet_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+	\caption{Freebase Property Counts}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{Freebase_Counts}
+		}
 \end{figure}
 
 Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
