@@ -34,13 +34,13 @@ Freebase - a large collaborative knowledge base consisting of data about the wor
 Visualisations of the respective knowledge graphs are presented below:
 
 \begin{figure}[H]
-  	\caption{Sample of Wordnet Entities and Relations}
+  	\caption{Wordnet Entities and Relations Graphplot}
    	\centering
     	\includegraphics[width=\textwidth]{Wordnet}
 \end{figure}
 
 \begin{figure}[H]
-  	\caption{Sample of Freebase Entity and Relations}
+  	\caption{Freebase Entity and Relations Graphplot}
    	\centering
     	\includegraphics[width=\textwidth]{Freebase}
 \end{figure}
@@ -50,13 +50,13 @@ We used the Tensorflow framework to develop our model. Randomly initialised enti
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Property Counts}
+   		\caption{Wordnet Property Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth]{Wordnet_Counts}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Property Counts}
+		\caption{Freebase Property Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth]{Freebase_Counts}
 		}
@@ -94,16 +94,14 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Predicate Counts}
+   		\caption{Wordnet Predicate Barplot}
    		\centering
-		% \includegraphics[width=0.45\textwidth]{Wordnet_Predicate_Counts}
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Predicate_Counts}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Predicate Counts}
+		\caption{Freebase Predicate Barplot}
    		\centering
-    		% \includegraphics[width=0.45\textwidth]{Freebase_Predicate_Counts}
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Predicate_Counts}
 		}
 \end{figure}
@@ -114,10 +112,11 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		\caption{Wordnet Predicate Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
-  			\textbf{Statistic} & \textbf{Count}  \\
+  			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
+			Count & 11 \\
 			Max & 43, 312  \\
-			Min & 12, 29  \\
+			Min & 1, 229  \\
   			Median & 7, 705  \\
   			IQR & 7, 257.5  \\
 		\end{tabular}
@@ -127,12 +126,58 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		\caption{Freebase Predicate Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
-  			\textbf{Statistic} & \textbf{Count}  \\
+  			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
+			Count & 13 \\
 			Max & 73, 897  \\
 			Min & 4, 464  \\
   			Median & 21, 149  \\
   			IQR & 34, 033  \\
+		\end{tabular}
+		}
+\end{table}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Subject Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Subject_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Subject Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Subject_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 32, 720 \\
+			Max & 619 \\
+			Min & 1 \\
+  			Median & 2 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 67, 393 \\
+			Max & 37 \\
+			Min & 1 \\
+  			Median & 5 \\
+  			IQR & 4 \\
 		\end{tabular}
 		}
 \end{table}
