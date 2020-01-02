@@ -92,6 +92,8 @@ We used the Tensorflow framework to develop our model. Randomly initialised enti
 
 Summary statistics of the respective knowledge graphs Resource Description Framework (RDF) decompision - subject, predicate, object - are presented below:
 
+% Predicate
+
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
    		\caption{Wordnet Predicate Barplot}
@@ -105,7 +107,6 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Predicate_Counts}
 		}
 \end{figure}
-
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -136,6 +137,8 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		\end{tabular}
 		}
 \end{table}
+
+% Subject
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
@@ -182,6 +185,52 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		}
 \end{table}
 
+% Object
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{Wordnet Object Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Object_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Object Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Object_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Wordnet Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 33, 011 \\
+			Max & 537 \\
+			Min & 1 \\
+  			Median & 3 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{Freebase Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 15, 342 \\
+			Max & 59, 663 \\
+			Min & 1 \\
+  			Median & 3 \\
+  			IQR & 6 \\
+		\end{tabular}
+		}
+\end{table}
 
 
 Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
