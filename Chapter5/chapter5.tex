@@ -239,31 +239,17 @@ similarity of subject features in order to produce sensible inference. \newline
 Wordnet object occurrences are somewhat uniform. Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6.
 We would expect poor performance from a Freebase link prediction model given this distribution of objects. \newline
 
+% Hyperparameter optimisation
+
 \subsubsection{Hypothesis 1: Hyper Parameter Optimisation}
 Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
 We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling
 
-\subsubsection{Link Prediction Results}
-The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
-
-\begin{table}[H]
-\caption{Link prediction accuracy on Wordnet and Freebase}
-\centering
-\begin{tabular}{lllllllllll}
-  \textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
-  \hline
-  Distance Model & .683 & .610 & .647 \\
-  Hadamard Model & .800 & .688 & .744 \\
-  Single Layer Model & .760 & .853 & .807 \\
-  Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  Recursive Neural Tensor Network & .732 & .518 & .625 \\
-
-\end{tabular}
-\end{table}
-
 \subsubsection{Bias Variance Trade Off}
 Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
-% Hyperparameter optimisation
+
+\subsubsection{Link Prediction Results}
+The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
 
 \begin{center}
     \includegraphics[width=\textwidth]{RNTN_Training_Results_Wordnet.png}
@@ -272,6 +258,22 @@ Machine learning models can suffer from overfitting \cite{reference} - when trai
 \begin{center}
     \includegraphics[width=\textwidth]{RNTN_Training_Results_Freebase.png}
 \end{center}
+
+\begin{table}[H]
+	\caption{Link prediction accuracy on Wordnet and Freebase}
+	\centering
+	\begin{tabular}{lllllllllll}
+  		\textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
+  		\hline
+  		Distance Model & .683 & .610 & .647 \\
+  		Hadamard Model & .800 & .688 & .744 \\
+  		Single Layer Model & .760 & .853 & .807 \\
+  		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
+  		Recursive Neural Tensor Network & .732 & .518 & .625 \\
+  		\hline
+  		Recursive Neural Tensor Network & .732 & .518 & .625 \\
+	\end{tabular}
+\end{table}
 
 \section{HypER Convolutional Neural Networks}
 
