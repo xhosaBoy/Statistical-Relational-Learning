@@ -424,45 +424,45 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Subject Barplot}
+   		\caption{WN18 Subject Barplot}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Subject_Counts}
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Subject_Counts}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Subject Barplot}
+		\caption{FB15k Subject Barplot}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Subject_Counts}
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Subject_Counts}
 		}
 \end{figure}
 
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{Wordnet Subject Statistics}
+		\caption{WN18 Subject Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
-			Count & 32,720 \\
-			Max & 619 \\
+			Count & 32,544 \\
+			Max & 520 \\
 			Min & 1 \\
-  			Median & 2 \\
+  			Median & 3 \\
   			IQR & 2 \\
 		\end{tabular}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Subject Statistics}
+		\caption{FB15k Subject Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
-			Count & 67,393 \\
-			Max & 37 \\
+			Count &14,865 \\
+			Max & 4,381 \\
 			Min & 1 \\
-  			Median & 5 \\
-  			IQR & 4 \\
+  			Median & 27 \\
+  			IQR & 32 \\
 		\end{tabular}
 		}
 \end{table}
@@ -471,28 +471,28 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Object Barplot}
+   		\caption{WN18 Object Barplot}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Object_Counts}
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Object_Counts}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Object Barplot}
+		\caption{FB15k Object Barplot}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Object_Counts}
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Object_Counts}
 		}
 \end{figure}
 
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{Wordnet Object Statistics}
+		\caption{WN18 Object Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
-			Count & 33,011 \\
-			Max & 537 \\
+			Count & 32,543 \\
+			Max & 520 \\
 			Min & 1 \\
   			Median & 3 \\
   			IQR & 2 \\
@@ -500,26 +500,24 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Object Statistics}
+		\caption{FB15k Object Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
   			\hline
-			Count & 15,342 \\
-			Max & 59,663 \\
+			Count & 14,930 \\
+			Max & 9,645 \\
 			Min & 1 \\
-  			Median & 3 \\
-  			IQR & 6 \\
+  			Median & 23 \\
+  			IQR & 30 \\
 		\end{tabular}
 		}
 \end{table}
 
-For Wordnet, it can be seen that relations are skewed toward "has instance" 43,312 occurrences, and "type of" 36,659 occurrences. We would expect poor performance from the model for out-of-sample data containing
-containing relations that are not "has instance" or "type of". Freebase relations are somewhat more uniform, however four relations have occurrences under 10,000. We would expect reasonable performance across all relations for this knowledge graph. \newline
-Wordnet and Freebae subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an IQR of 2 and 4 respectively. This are thus sparse distributions of data points, and the model will need to rely on 
-similarity of subject features in order to produce sensible inference. \newline
-Wordnet object occurrences are somewhat uniform. Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6.
-We would expect poor performance from a Freebase link prediction model given this distribution of objects. \newline
+For WN18, it can be seen that relations are skewed toward the relations "hyponym",  "hypernym", and "derivationally related from", with a maximum of 37,221 occurrences. \newline
+FB15k relations are somewhat more uniform. We would expect reasonable performance across all relations for this knowledge graph. \newline
+WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 27 respectively, and with an IQR of 2 and 32 respectively. 
+WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 23.
 
 % Best Practise Deep Learning Techniques
 
