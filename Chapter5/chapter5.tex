@@ -248,7 +248,7 @@ Recursive Neural Tensor Networks with Best Practise Deep Learning Techniques}
 Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
 We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling
 
-\subsubsection{Bias Variance Trade Off}
+\subsubsection{Batching, Logits and Early Stopping}
 Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
 
 \subsubsection{Link Prediction Results}
@@ -521,62 +521,248 @@ WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewe
 
 % Best Practise Deep Learning Techniques
 
-\subsubsection{Hypothesis 1: \newline 
-Recursive Neural Tensor Networks with Best Practise Deep Learning Techniques}
-Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
-We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling
+\subsubsection{Hypothesis 2: \newline 
+HypER Relational Filter Regularisation: HypER+}
+HypER Relational Filter Regularisation, introduced as HypER+, is implemented using regularised relational filters, as well as removal of hidden layer regularisation, from the original HypER model. \newline
+The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. \newline
+We evaluate the model using standard link prediction benchmarks. \newline 
+Code to reproduce: https://github.com/xhosaBoy/HypER-Regularised-Relations.
 
-\subsubsection{Bias Variance Trade Off}
-Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
+\subsubsection{Dropout and Batch Normalisation}
+Deep learning models are prone to overfitting training data due to over parameterisation ~\citep{dropout paper}. A technique called dropout is used to overcome this problem. 
+Dropout involves removing nodes within a layer, to remove excessive dependency on that node by the model. This encourages generalisation by the model, to the underlying distribution of the data. \newline  
+Datasets often suffer from noise. This noise masks the true underlying distribution of the data, and can make it challenging for a model to estimate the likely distribution.
+An aggregation of data samples help reveal the true distribution ~\citep{Book about statistical machine learning}. Batch nomralisation is the application of statistical properties of such a data aggregation
+to individual data points within a dataset. Typically the mean and standard deviation of the bath is applied to a batch that will be used to compute forward and back propagation through the network. \newline
+This technique is applied to relational filters in the HypER model. Batch normalisaiton is already applied to entity data points in the model. 
 
 \subsubsection{Link Prediction Results}
-The link prediction accuracy results of the RNTN model, a nonlinear factorisation model compared against linear factorisation models, are presented in table 5.1:
+The link prediction benchmark results of the HypER+ model, compared against other link prediction models, are presented below:
+
+% Cost
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Cost}
+   		\caption{WN18 Cost}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Cost_Results_Early_Stopping}
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Cost_Results}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Cost}
+		\caption{FB15k Cost}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Cost_Results}
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Cost_Results}
 		}
 \end{figure}
-
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{Wordnet Accuracy}
+   		\caption{WN18 Cost Clipped View}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Accuracy_Results_Early_Stopping}
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Cost_Results_Clipped}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Accuracy}
+		\caption{FB15k Cost Clipped View}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Accuracy_Results}
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Cost_Results_Clipped}
 		}
 \end{figure}
 
+% Hits @10
 
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @10}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_10_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@10}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_10_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @10 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_10_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@10  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_10_Results_Clipped}
+		}
+\end{figure}
+
+% Hits @3
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @3}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_3_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@3}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_3_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @3 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_3_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@3  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_3_Results_Clipped}
+		}
+\end{figure}
+
+% Hits @1
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @1}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_1_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@1}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_1_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Hits @1 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_1_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Hits@1  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_hits_at_1_Results_Clipped}
+		}
+\end{figure}
+
+% Mean rank
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Mean Rank}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_mean_rank_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Mean Rank}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_mean_rank_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Mean Rank Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_mean_rank_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Mean Rank Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_mean_rank_Results_Clipped}
+		}
+\end{figure}
+
+% Mean reciprocal rank
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Mean Reciprocal Rank}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_mean_reciprocal_rank_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Mean Reciprocal Rank}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_mean_reciprocal_rank_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18 Mean Reciprocal Rank Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_mean_reciprocal_rank_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k Mean Reciprocal Rank Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_mean_reciprocal_rank_Results_Clipped}
+		}
+\end{figure}
+
+% Test results
 
 \begin{table}[H]
-	\caption{Link prediction accuracy on Wordnet and Freebase}
-	\centering
-	\begin{tabular}{lllllllllll}
-  		\textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
-  		\hline
-  		Distance Model & .683 & .610 & .647 \\
-  		Hadamard Model & .800 & .688 & .744 \\
-  		Single Layer Model & .760 & .853 & .807 \\
-  		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  		Recursive Neural Tensor Network & .562 & .535 & .549 \\
-  		\hline
-  		Recursive Neural Tensor Network+ & .674 & .548 & .611 \\
-	\end{tabular}
+	\parbox{.5\linewidth}{
+		\caption{Link prediction results on WN18}
+		\centering
+		\resizebox{0.5\columnwidth}{!}{%
+		\begin{tabular}{lllllllllll}
+  			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
+  			\hline
+  			TransE (Bordes et al. 2013) & .892 & - & - & \textbf{251} & - \\
+  			DistMult (Yang et al. 2015) & .936 & .914 & .728 & 902 & .822 \\
+  			ComplEx (Trouillon et al. 2016) & .947 & .936 & .936 & - & .941 \\
+  			ANALOGY (Liu, Wu, and Yang 2017) & .947 & .944 & .939 & - & .942 \\
+  			Neural LP (Yang, Yang, and Cohen 2017) & .945 & - & - & - & .940 \\
+			R-GCN (Schlichtkrull et al. 2018) & \textbf{.964} & .929 & .697 & - & .819 \\
+			TorusE (Ebisu and Ichise 2018) & .954 & .950 & .943 & - & .947 \\
+			ConvE (Dettmers et al. 2018) & .956 & .946 & .935 & 374 & .943 \\
+			HypER (Bala\v{z}evi\'c et al. 2019) & .958 & \textbf{.955} & \text{.947} & 431 & \textbf{.951} \\
+  			\hline
+  			HypER+ (ours) & .957 & .953 & .945 & 599 & .949 \\
+		\end{tabular}%
+		}}
+	\hfill
+	\parbox{.5\linewidth}{
+	\caption{Link prediction results on FB15k}
+		\centering
+		\resizebox{0.5\columnwidth}{!}{%
+		\begin{tabular}{lllllllllll}
+  			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
+  			\hline
+  			TransE (Bordes et al. 2013) & .471 & - & - & 125 & - \\
+  			DistMult (Yang et al. 2015) & .824 & .733 & .546 & 97 & .654 \\
+  			ComplEx (Trouillon et al. 2016) & .840 & .759 & .599 & - & .692 \\
+  			ANALOGY (Liu, Wu, and Yang 2017) & .854 & .785 & .646 & - & .725 \\
+  			Neural LP (Yang, Yang, and Cohen 2017) & .837 & - & - & - & .760 \\
+			R-GCN (Schlichtkrull et al. 2018) & .842 & .760 & .601 & - & .696 \\
+			TorusE (Ebisu and Ichise 2018) & .832 & .771 & .674 & - & .733\\
+			ConvE (Dettmers et al. 2018) & .831 & .723 & .558 & 51 & .657 \\
+			HypER (Bala\v{z}evi\'c et al. 2019) & .885 & .829 & .734 & \textbf{44} & .790 \\
+  			\hline
+  			HypER+ (ours) & \textbf{.894} & \textbf{.856} & \textbf{.790} & 79 & \textbf{.829} \\
+		\end{tabular}%
+		}}
 \end{table}
 
 \section{HypER Convolutional Neural Networks with Pretrained Entity Embeddings}
