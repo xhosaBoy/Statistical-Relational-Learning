@@ -311,8 +311,8 @@ The binary cross entropy loss \cite{reference} is used to train the HypER Convol
 
 \subsubsection{Experimental Setup} 
 
-We use the following benchmark knowledge graphs: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. \newline
-Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. \newline
+We use the following benchmark knowledge graphs: WN18 (Bordes et al. 2013) is a subset of Wordnet, a database containing lexical relations between words. The knowledge graph contains 40,943 entities and 18 relations. \newline 
+FB15k - (Bordes et al. 2013) is a subset of Freebase, a large database of facts about the real world. FB15k contains 14,951 entities and 1,345 relations. \newline \newline
 Visualisations of the respective knowledge graphs are presented below:
 
 \begin{figure}[H]
@@ -338,7 +338,7 @@ We used the Pytorch framework to develop our model. This model is built on top o
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Property Barplot}
+		\caption{FB15k Property Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth]{FB15k_Counts}
 		}
@@ -359,7 +359,7 @@ We used the Pytorch framework to develop our model. This model is built on top o
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Property Counts}
+		\caption{FB15k Property Counts}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
@@ -384,7 +384,7 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{Freebase Predicate Barplot}
+		\caption{FB15k Predicate Barplot}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Predicate_Counts}
 		}
@@ -519,14 +519,15 @@ FB15k relations are somewhat more uniform. We would expect reasonable performanc
 WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 27 respectively, and with an IQR of 2 and 32 respectively. 
 WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 23.
 
-% Best Practise Deep Learning Techniques
+%  Regularised Relational Filters
 
 \subsubsection{Hypothesis 2: \newline 
 HypER Relational Filter Regularisation: HypER+}
-HypER Relational Filter Regularisation, introduced as HypER+, is implemented using regularised relational filters, as well as removal of hidden layer regularisation, from the original HypER model. \newline
+HypER Relational Filter Regularisation, introduced as HypER+, is implemented using regularised relational filters, as well an adjustment of hidden layer regularisation, from the original HypER model. \newline
 The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. \newline
 We evaluate the model using standard link prediction benchmarks. \newline 
-Code to reproduce: https://github.com/xhosaBoy/HypER-Regularised-Relations.
+Code to reproduce: https://github.com/xhosaBoy/HypER-Regularised-Relations \newline
+Baseline: https://github.com/xhosaBoy/HypER-baseline
 
 \subsubsection{Dropout and Batch Normalisation}
 Deep learning models are prone to overfitting training data due to over parameterisation ~\citep{dropout paper}. A technique called dropout is used to overcome this problem. 
@@ -569,11 +570,11 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 		}
 \end{figure}
 
-% Hits @10
+% Hits@10
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @10}
+   		\caption{WN18 Hits@10}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_10_Results}
 		}
@@ -587,7 +588,7 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @10 Clipped View}
+   		\caption{WN18 Hits@10 Clipped View}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_10_Results_Clipped}
 		}
@@ -599,11 +600,11 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 		}
 \end{figure}
 
-% Hits @3
+% Hits@3
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @3}
+   		\caption{WN18 Hits@3}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_3_Results}
 		}
@@ -617,7 +618,7 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @3 Clipped View}
+   		\caption{WN18 Hits@3 Clipped View}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_3_Results_Clipped}
 		}
@@ -629,11 +630,11 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 		}
 \end{figure}
 
-% Hits @1
+% Hits@1
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @1}
+   		\caption{WN18 Hits@1}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_1_Results}
 		}
@@ -647,7 +648,7 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18 Hits @1 Clipped View}
+   		\caption{WN18 Hits@1 Clipped View}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_hits_at_1_Results_Clipped}
 		}
@@ -765,7 +766,464 @@ The link prediction benchmark results of the HypER+ model, compared against othe
 		}}
 \end{table}
 
-\section{HypER Convolutional Neural Networks with Pretrained Entity Embeddings}
+\section{HypER+ with Pre-Trained Word Embeddings}
 
-\section{Leader Board Research Versus Hypothesis Research}
+\subsubsection{Model Summary} 
+In order to overcome the expressiveness problems evident in the Freebase test dataset, more nonlinear relational factorisation approaches have been proposed \cite{ComplEx, Neural LP, TorusE}. \newline
+HypER is a model that uses convolutional relational filters r that are convolved with the subject entity e1, producing an intermediate relational representation. The dot product of the relational representation is then taken with the object entity e2 to produce relation-specific score between the two entities. The HypER model only produces a latent relational representation for the subject entity e1, we extend this model to also produce a relational representation for the object entity e2, and call this model HpyER+. HypER+ thus produces entity-relational representations that approximate KG spacial locality. \newline
+\subsubsection{Binary Cross Entropy Loss}
+The binary cross entropy loss \cite{reference} is used to train the HypER+ model. Like the RNTN model, the input consists of an entity-relational pair, where the entity is a subject entity and an object entity is presented as a target to complete the triple. A logit is generated for each sample and passed through through a logarithmic sigmoid or softmax function. Loss is generated by comparing the produced likelihood with the expected likelihood, 0 or 1. The sum of all losses is aggregated and back propagated through the network for parameter update. \newline
+
+\subsubsection{Experimental Setup} 
+
+We use the following benchmark knowledge graphs: WN18RR is a subset of WN18, created by Dettmers et al. by removing the inverse relations from WN18. WN18RR contains 40,943 entities and 11 relations. \newline
+FB15k-237 - was created by Toutanova et al., noting that the validation and test sets of FB15k and WN18 contain the inverse of many relations present in the training set, making it easy for simple models to do well. FB15k-237 is a subset of FB15k with the inverse relations removed. It contains 14,541 entities and 237 relations. \newline \newline
+Visualisations of the respective knowledge graphs are presented below:
+
+\begin{figure}[H]
+  	\caption{WN18RR Entities and Relations Graphplot}
+   	\centering
+    	\includegraphics[width=\textwidth]{WN18RR_Graph}
+\end{figure}
+
+\begin{figure}[H]
+  	\caption{FB15k-237 Entity and Relations Graphplot}
+   	\centering
+    	\includegraphics[width=\textwidth]{FB15k-237_Graph}
+\end{figure}
+
+
+We used the Pytorch framework to develop our model. This model is built on top of the HypER+ model introduced by (Magangane, Luyolo, and Brink, Wille 2019) ~\citep{magangane2019hyperplus}.  Glove pre-trained word vectors are used to initialise entity and relational embeddings for model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Property counts for the respective knowledge graphs are presented below:
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Property Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{WN18RR_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Property Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth]{FB15k-237_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{WN18RR Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 40,943  \\
+  			Relations & 11  \\
+  			Triples & 93,003 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Property Counts}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Property} & \textbf{Count}  \\
+  			\hline
+  			Entities & 14,541   \\
+  			Relations & 237  \\
+  			Triples & 310,116  \\
+		\end{tabular}
+		}
+\end{table}
+
+
+Summary statistics of the respective knowledge graphs Resource Description Framework (RDF) decomposition - subject, predicate, object - are presented below:
+
+% Predicate
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Predicate Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Predicate_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Predicate Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Predicate_Counts}
+		}
+\end{figure}
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{WN18RR Predicate Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 11 \\
+			Max & 37,221  \\
+			Min & 86 \\
+  			Median & 3150  \\
+  			IQR & 5433.5  \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Predicate Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 237 \\
+			Max & 16,391 \\
+			Min & 45  \\
+  			Median & 426  \\
+  			IQR & 819 \\
+		\end{tabular}
+		}
+\end{table}
+
+% Subject
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Subject Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Subject_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Subject Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Subject_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{WN18RR Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 32,349 \\
+			Max & 494 \\
+			Min & 1 \\
+  			Median & 2 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Subject Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count &13,891 \\
+			Max & 1,518 \\
+			Min & 1 \\
+  			Median & 16 \\
+  			IQR & 20 \\
+		\end{tabular}
+		}
+\end{table}
+
+% Object
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Object Barplot}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Object_Counts}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Object Barplot}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Object_Counts}
+		}
+\end{figure}
+
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{WN18RR Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 26,162 \\
+			Max & 514 \\
+			Min & 1 \\
+  			Median & 1 \\
+  			IQR & 2 \\
+		\end{tabular}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Object Statistics}
+		\centering
+		\begin{tabular}{lllllllllll}
+  			\textbf{Statistic} & \textbf{Value}  \\
+  			\hline
+			Count & 13,504 \\
+			Max & 7,124 \\
+			Min & 1 \\
+  			Median & 10 \\
+  			IQR & 16 \\
+		\end{tabular}
+		}
+\end{table}
+
+For WN18RR, it can be seen that relations are skewed toward the relations "hypernym" and "derivationally related from", with a maximum of 37,221 occurrences, with an IQR of 5433.5 and 819 respectively. \newline
+FB15k-237 are skewed toward film relations. We would expect reasonable performance across this type of relation for the knowledge graph. \newline
+WN18R and FB15k-237 subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 16 respectively, and with an IQR of 2 and 20 respectively. 
+WN18RR object occurrences are somewhat uniform. FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 1 and an interquartile range of 10,
+and an IQR of 2 and 16 respectively. \newline
+Such high variance in FB15k-237 suggests poor potential model performance for FB15k-237 relative to WN18RR.  
+
+% Pre-Trained Word Embeddings
+
+\subsubsection{Hypothesis 3: \newline 
+HypER+ with Glove Word Embeddings}
+HypER+ here is implemented using Glove pre-trained word embeddings. \newline
+The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. \newline
+We evaluate the model using standard link prediction benchmarks. \newline 
+Code to reproduce: https://github.com/xhosaBoy/HypER-Pretrained-Word-Vectors \newline
+Baseline: https://github.com/xhosaBoy/HypER-baseline
+
+\subsubsection{Word Embeddings}
+Previous work represented entities and relations as randomly initialised vector representations. We show that performance can be improved when entities and relations are represented as an average of their constituting word vectors. 
+This allows sharing of statistical strength between, for instance, facts involving the “Michael Jackson” and “Musician” We demonstrate that the HypER+ model improves across all knowledge grpahs when these word vectors are initialized 
+with vectors learned from unsupervised large corpora, namely the Glove language model.
+
+\subsubsection{Link Prediction Results}
+The link prediction benchmark results of the HypER+ with pre-trained embeddings model, compared against other link prediction models, are presented below:
+
+% Cost
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Cost}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Cost_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Cost}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Cost_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Cost Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Cost_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Cost Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Cost_Results_Clipped}
+		}
+\end{figure}
+
+% Hits@10
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@10}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_10_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@10}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_10_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@10 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_10_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@10  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_10_Results_Clipped}
+		}
+\end{figure}
+
+% Hits@3
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@3}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_3_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@3}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_3_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@3 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_3_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@3  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_3_Results_Clipped}
+		}
+\end{figure}
+
+% Hits@1
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@1}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_1_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@1}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_1_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Hits@1 Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_1_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Hits@1  Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_1_Results_Clipped}
+		}
+\end{figure}
+
+% Mean rank
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Mean Rank}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_rank_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Mean Rank}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_rank_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Mean Rank Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_rank_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Mean Rank Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_rank_Results_Clipped}
+		}
+\end{figure}
+
+% Mean reciprocal rank
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Mean Reciprocal Rank}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_reciprocal_rank_Results}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Mean Reciprocal Rank}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_reciprocal_rank_Results}
+		}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\caption{WN18RR Mean Reciprocal Rank Clipped View}
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_reciprocal_rank_Results_Clipped}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+		\caption{FB15k-237 Mean Reciprocal Rank Clipped View}
+   		\centering
+		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_reciprocal_rank_Results_Clipped}
+		}
+\end{figure}
+
+% Test results
+
+\begin{table}[H]
+	\parbox{.5\linewidth}{
+		\caption{Link prediction results on WN18RR}
+		\centering
+		\resizebox{0.5\columnwidth}{!}{%
+		\begin{tabular}{lllllllllll}
+  			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
+  			\hline
+  			DistMult (Yang et al. 2015) & .490 & .440 & .390 & 5110 & .430 \\
+  			ComplEx (Trouillon et al. 2016) & .510 & .460 & .410 & 5261 & .440 \\
+  			Neural LP (Yang, Yang, and Cohen 2017) & - & - & - & - & - \\
+			MINERVA (Das et al. 2018) & - & - & - & - & - \\
+			ConvE (Dettmers et al. 2018) & .520 & .440 & .400 & 4187 & .430 \\
+			HypER (Bala\v{z}evi\'c et al. 2019) & .522 & .477 & \textbf{.436} & 5798 & .465 \\
+  			\hline
+  			HypER+ (ours) & \textbf{.552} & \textbf{.481} & .432 & \textbf{1586} & \textbf{.471} \\
+		\end{tabular}%
+		}}
+	\hfill
+	\parbox{.5\linewidth}{
+	\caption{Link prediction results on FB15k-237}
+		\centering
+		\resizebox{0.5\columnwidth}{!}{%
+		\begin{tabular}{lllllllllll}
+  			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
+  			\hline
+  			DistMult (Yang et al. 2015) & .419 & .263 & .155 & 254 & .241 \\
+  			ComplEx (Trouillon et al. 2016) & .428 & .275 & .158 & 339 & .247 \\
+  			Neural LP (Yang, Yang, and Cohen 2017) & .408 & - & - & - & .250 \\
+			MINERVA (Das et al. 2018) & .456 & - & - & - & - \\
+			ConvE (Dettmers et al. 2018) & .501 & .356 & .237 & 244 & .325 \\
+			HypER (Bala\v{z}evi\'c et al. 2019) & .520 & \textbf{.376} & \textbf{.252} & 250 & .341 \\
+  			\hline
+  			HypER+ (ours) & \textbf{.524} & \textbf{.376} & \textbf{.252} & \textbf{213} & \textbf{.342} \\
+		\end{tabular}%
+		}}
+\end{table}
+
+
+
 
