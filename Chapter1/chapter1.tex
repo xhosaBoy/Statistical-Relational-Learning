@@ -13,21 +13,20 @@
 
 
 %********************************** %First Section  **************************************
-\section{Statistical Relational Learning} %Section - 1.1 
-\subsection{Artificial General Intelligence} % Artificial general intelligence 
-The ultimate ambition of artificial intelligence (A.I.) research is to produce human-level intelligence. Such intelligence can take form the form of conversational artificial general intelligence (AGI). The problem can be posed as a question and answer game [Alan Turing]. The premise - a human asks a series of questions to an unobservable agent, where the task is for the agent to provide answers indistinguishable from human responses. The challenge of course is the breadth of topics that can be queried, as well as the permutations of possible coherent responses.
-\subsection{General Question Answering} % General question answering (Problem statement & Identification of desired outcome)
-This task is also known as general question answering (GQA) [references]. Typical A.I. implementations operate within well bounded, narrow domains. For example audio to text synthesisers [references]; object detection within images and videos [references]; financial, meteorological and operational forecasting [references].  All of these modelling applications focus more generally on finite perceptive domains [references]. In order to achieve AGI, reasoning capability is also required [requirements for AGI reference].
-\subsection{Applications of General Question Answering} % Applications of GQA (Intelligent Virtual Assistants and GQA computer systems)
-Intelligent virtual assistants (IVA) such as Alexa, Cortana, Google Assistant and Siri are mobile application attempts at AGI; Watson, Wolfram Alpha and Knowledge Engine are other GQA computer systems. So often a user will ask one of these systems a question which results in a search engine lookup, due to failure in comprehending the question and the capability of providing a coherent response.
-\subsection{General Question Answering Approaches} % Potential Solutions to GQA (Reinforcement Learning and Knowledge representation and reasoning)
-Reinforcement learning. Will not be covered in this dissertation....
+
+\section{Overview} %Section - 1.1 
+
+\emph{"... as they say, your model is only as good as the data you have. \newline So it all starts with the data ..."} \newline
+\indent \indent - Nyalleng Moorosi, \emph{Deep Learning Indaba} (2017). \newline 
+
+The ultimate ambition of artificial intelligence (AI) research is to produce human-level intelligence. Such intelligence can take form the form of conversational artificial general intelligence (AGI). The problem can be posed as a question and answer game [Alan Turing]. The premise - a human asks a series of questions to an unobservable agent, where the task is for the agent to provide answers indistinguishable from human responses. The challenge of course is the breadth of topics that can be queried, as well as the permutations of possible coherent responses.
+This task is also known as general question answering (GQA) [references]. Typical AI implementations operate within well bounded, narrow domains. For example audio to text synthesisers [references]; object detection within images and videos [references]; financial, meteorological and operational forecasting [references].  All of these modelling applications focus more generally on finite perceptive domains [references]. In order to achieve AGI, reasoning capability is also required [requirements for AGI reference]. 
+Intelligent virtual assistants (IVA) such as Alexa, Cortana, Google Assistant and Siri are mobile application attempts at AGI; Watson, Wolfram Alpha and Knowledge Engine are other GQA computer systems. So often a user will ask one of these systems a question which results in a search engine lookup, due to failure in comprehending the question and the capability of providing a coherent response. \newline
 Knowledge representation and reasoning (KRR) is an active area of research being used as an approach to solve this problem [references]. The field aims to use mathematical logic to construct knowledge representations about a domain using knowledge graphs. Knowledge graphs (KG) model information in the form of facts presented as subject-predicate-object triples. These triples are expressed as entity-relational sets $(e_1, r, e_2)$ where $e_1$ is the subject entity and $e_2$ is the object entity, and the relationships, $r$,  between them. KGs have been used for information extraction, search query augmentation and general question answering. Google Knowledge Graph, DBPedia and Yago are some of the largest graph-structured database knowledge graphs implemented as knowledge bases.  \newline % some examples of knowledge bases, and query languages.
 KGs can be used to generate new knowledge from existing facts. These KGs can then be queried to provide logically consistent answers, more formally ontological reasoning is used to query ontological domains.
-\subsection{Uncertainty in Knowledge Representations}% Uncertainty in knowledge representations (Statistical Relational Learning)
 The problem with KRR is it contains no mechanism of capturing the uncertainty in known facts, as well as the uncertainty when new facts are generated, statistical relation learning (SRL) is an approach to solve this problem and active research area. SRL comprises three primary tecnhiques: Latent Feature Modelling - this comprises building entity-rational representations for relationship classification, Graph Feature modelling - Using graphical structures to model entity-relational properties within a domain, and Inductive Probabilistic Logic programing - Building probabilistic models of facts to directly model uncertainty in knowledge bases. Tasks in SRL include link prediction, entity-resolution and link-based clustering. 
-Link prediction .... Entity-resolution ..., Link-based clustering ... % How can we use all these to answer general questions and generate new knowledge?
-Link prediction with Latent Feature Models is the focus of this dissertation.
+Link prediction .... Entity-resolution ..., Link-based clustering ... 
+% Link prediction with Latent Feature Models is the focus of this dissertation.
 
 A {\em \LaTeX{} class file}\index{\LaTeX{} class file@LaTeX class file} is a file, which holds style information for a particular \LaTeX{}.
 
@@ -44,7 +43,6 @@ CIF: \hspace*{5mm}F_0^j(a) = \frac{1}{2\pi \iota} \oint_{\gamma} \frac{F_0^j(z)}
 \nomenclature[x-i]{$\oint_\gamma$}{integration around a curve $\gamma$} % first letter X is for Other Symbols
 \nomenclature[r-j]{$j$}{superscript index}                                                       % first letter R is for superscripts
 \nomenclature[s-0]{$0$}{subscript index}                                                        % first letter S is for subscripts
-
 
 %********************************** %Second Section  *************************************
 \section{Modelling Techniques} %Section - 1.2
