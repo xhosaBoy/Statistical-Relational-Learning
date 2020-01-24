@@ -29,16 +29,12 @@ We use these models to read and understand other passages of text, in conversati
     	\includegraphics[width=\textwidth]{Objects_and_the_Relationships_Between_Them}
 \end{figure}
 
-
 \textbf{Challenges}. Reasoning about knowledge expressed in natural language ~\citep{minervini2019differentiable} is simple for humans, but trying to imitate this behaviour in computers reveals its underlying complexity. \newline 
 The first task is providing a mechanism for perceiving syntax. Humans recognise text as sequences of words, and words as a sequence of characters. Characters can belong to different writing systems which can be dense - have a few characters used in a large number of combinations, or sparse - have a very large number of characters used in less combinations ~\citep{Hua2010}. A computer has to first be able to perceive these characters. \newline
 The second task is even more challenging: semantics. Semantics is the meaning of words in language ~\citep{chomsky1955logical}. Semantics is what allows humans to understand each other in conversation, through written text, and through visual imagery. Semantics allow us to understand that an actor is a thing, and that things can have relationships with other things. Giving computers the capability to semantic understanding is very challenging because of the "messiness" of language. If a person is shown a word in the singular, and a word in the plural, for example "film" and "films" a person will most likely understand that there is not much difference in meaning between the two words, a computer may interpret them as having completely different meanings. Different words can also have similar meanings, for example "movie" and "film". Capturing this statistical similarity once again challenging for machines. And finally the order in which words are seen provides context, for example, the word "star" has completely different meaning in "Chadwick Boseman is a movie star" and "Black Panther looked up into the night sky an saw a star". \newline
-The third task is organising information in such a way as to be able to reason about the knowledge it conveys. Humans typically use the few objects and relationships within a domain to infer new plausible relationships between objects. For computers, this sort information is organised in a database. 
-
+The third task is organising information in such a way as to be able to reason about the knowledge it conveys. Humans build mental models using default reasoning ~\citep{reiter1980logic} - believing that most Objects A have relationship Relationship with Object B, with a small number of exceptions. For example we could believe that films (Object A) have not won (Relationship) an Oscar (Object B), except for films such as Black Panther (Object B). We will believe this is true for any given movie, unless we are familiar enough with movie history to identify the exceptions. Formallly, the default beliefs we hold are facts, and this process of reasoning allows us to infer new facts - plausible relationships between objects. In order to allow computers to use the same method of reasoning to perform inference, data has to be structured as facts and stored in a database ~\citep{angeli2013philosophers}. Computers are then capable of question answering given information within their database. The problem with this approach is facts are either present in the database or they are not i.e. questions can be answered exactly, or they cannot. There is no measure of plausibility that can be used to accept new potential facts, or discard implausible facts ~\citep{koller2007introduction}.  
 
 % Link prediction with Latent Feature Models is the focus of this dissertation.
-
-
 
 \nomenclature[z-cif]{$CIF$}{Cauchy's Integral Formula}                                % first letter Z is for Acronyms 
 \nomenclature[a-F]{$F$}{complex function}                                                   % first letter A is for Roman symbols
@@ -49,7 +45,9 @@ The third task is organising information in such a way as to be able to reason a
 \nomenclature[r-j]{$j$}{superscript index}                                                       % first letter R is for superscripts
 \nomenclature[s-0]{$0$}{subscript index}                                                        % first letter S is for subscripts
 
+
 %********************************** %Second Section  *************************************
+
 \section{Modelling Techniques} %Section - 1.2
 
 \subsection{Latent Feature Modelling} % Latent Feature Modelling
