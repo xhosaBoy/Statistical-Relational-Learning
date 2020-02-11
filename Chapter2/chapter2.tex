@@ -22,7 +22,7 @@ This chapter presents a discussion on the supervised learning paradigm, an analy
 
 \section{Supervised Learning}
 
-ML prediction models take as input a set of features. These features are attributes of a data sample. For example in the fruit prediction task mentioned above, input features would be the attributes of a fruit. They would include characteristics such as shape, colour, texture and size. These inputs are provided to a model that maps to outputs. In the example above, these outputs would be the types of fruit, and could represent values such as oranges, apples, strawberries and pineapples, amongst others. The model is then taught (trained) to identify the correct fruit (output) based on the features (input) it receives. This type of training paradigm is called supervised learning \citep{bishop2006pattern, hastie2009elements, murphy2012machine}. \newline
+ML prediction models take as input a set of features. These features are attributes of a data sample. For example in the fruit prediction task mentioned above, input features would be the attributes of a fruit. They would include characteristics such as shape, colour, texture and size. These inputs are provided to a model that maps to outputs. In the example above, these outputs would be types of fruit, and could represent values such as oranges, apples, strawberries and pineapples, amongst others. The model is then taught (trained) to identify the correct fruit (output) based on the features (input) it receives. This type of training paradigm is called supervised learning \citep{bishop2006pattern, hastie2009elements, murphy2012machine}. \newline
 
 \begin{figure}[H]
   	\caption{Supervised Learning}
@@ -30,15 +30,27 @@ ML prediction models take as input a set of features. These features are attribu
     	\includegraphics[width=\textwidth]{supervised_learning}
 \end{figure}
 
-The computed class, represented as a logit magnitude, is compared against the target class and an objective is defined that is to be minimised. The logit magnitude is then typically passed through a thresholding function, a softmax function \cite{reference} if a proper probability is desired, or a sigmoid \cite{reference} if only a likelihood is required. Two techniques are used to simultaneously improve both variance and bias respectively: batch normalisation \cite{reference} and dropout \cite{reference}. \newline 
+Features can be continuous valued or discrete, where discrete values are referred to as categorical variables. Outputs can also be continuous or discrete, where discrete outputs are known as labels. Input-output pairs comprise a dataset which is represented as follows, \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, where \begin{math} D \end{math} is the dataset, \begin{math} x_i \end{math} is the input sample and \begin{math} y_i \end{math} is the output. The model has to learn the correct mapping of input to output - features to label. We use data samples to train the model to recognise which features are correlated with which labels. The model is trained using an algorithm where it is shown a sample and it outputs what it believes is the correct label. If it gets the label wrong, an objective function is used to assess how large the error was, and the model is adjusted. The algorithm is expressed as follows: \bigbreak
 
-
-%Classification decision boundary example
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\textbf{Input} 
+	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
+  	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
+	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
+     		\begin{math} y \gets predict(x, y) \end{math} // predict label for sample \\
+		\begin{math} e \gets y' - y \end{math} // compute error
+     		}
+	Update model w.r.t. \begin{math}  e \end{math}
+	\caption{Supervised Learning}
+\end{algorithm} \bigbreak
 
 %Loss surface image
+We try to minimise this error during training, and because we try to minimise the objective function value, it is called a loss function. \newline
 
+The computed class, represented as a logit magnitude, is compared against the target class and an objective is defined that is to be minimised. The logit magnitude is then typically passed through a thresholding function, a softmax function \cite{reference} if a proper probability is desired, or a sigmoid \cite{reference} if only a likelihood is required. Two techniques are used to simultaneously improve both variance and bias respectively: batch normalisation \cite{reference} and dropout \cite{reference}. \newline 
 
-%Training algorithm
+%Classification decision boundary example
 
 
 %********************************** %Second Section  **************************************
