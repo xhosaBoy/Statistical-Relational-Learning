@@ -84,14 +84,13 @@ where $\frac{\partial F} {\partial W}(W_n, X_{n-1})$ is the Jacobian of $F$ with
 
 \subsection{Convolutional Networks}
 
-MLPs also suffer from an explosion of parameters and as well as poor generalisation to out of sample data, this is because MLPs construct redundant, correlated latent features ~\citep{krizhevsky2012imagenet}. In fact when modelling a sample using a regular feed-forward network, we find that the number of model parameters grows exponentially. For example, a feed-forward network with $2$ hidden layers consisting of $512$ and $256$ neurons respectively, an output size of $10$ and an input sample shape of $\left [ \begin{matrix} 200 & 1 \end{matrix} \right] $, then the model ends up having 
+MLPs suffer from an explosion of parameters  ~\citep{krizhevsky2012imagenet}. In fact when modelling a sample using a regular feed-forward network, we find that the number of model parameters grows exponentially. For example, a feed-forward network with $2$ hidden layers consisting of $512$ and $256$ neurons respectively, an output size of $10$ and an input sample shape of $\left [ \begin{matrix} 200 & 1 \end{matrix} \right] $, then the model ends up having: 
 
 \begin{equation}
 	parameters = (200 \times 512 + 512) + (512 \times 256 + 256) + (256 \times 10 + 10)
 \end{equation}
 
-a total of $236,810$ parameters. \newline
- 
+a total of $236,810$ parameters. Compounding this issue, is the incapability of MLPs to take advantage of structure in data, thus having no way of compensating for distributions of representations of the same conceptual sample. In order to cater for sample representation distribution variance, MLPs have to be larger, so as to have enough learning capacity to be able to hold sufficientluy representative feature mappings ~\citep{lecun1998gradient}. \newline
 The state-of-the-art in deep learning classification models is convolutional neural networks (CNN) \cite{reference}. CNNs are typically applied to object classification within images, and take advantage of the properties of object translation invariance and object location invariance \cite{reference}. These properties allow CNNs to perform robust classifications that generalise well across datasets. Translation invariance allows the CNN to build an object representation that is consistent under transformation, for example an image rotation would lead to a consistent final object representation being generated prior to logit computation for classification. Locality invariance allows the model to correctly identify an object no matter where it may reside with the boundaries of an image.\newline
 These properties are possible because of how the final object representation is generated. CNNs perform a convolutional operation on an image, using a trainable image filter \cite{reference}. The operation generates feature map of the image that constructs latent object representations of the image. In practise these representations are chained together to produce more complex latent representations the deeper the CNN. \newline
 % spatial and depth-wise convolutions
