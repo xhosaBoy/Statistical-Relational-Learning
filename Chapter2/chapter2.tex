@@ -65,15 +65,33 @@ Multilayer perceptrons (MLP) were the early deep learning models implemented as 
 
 \begin{subequations}
 \begin{gather}
-	f_0=x \\
+	f_0 = x \\
 	f_i=\sigma_i(W_if_{i - 1} + b_i) \quad i \in [1, N]
 \end{gather}
 \end{subequations}
 
 where $f_0$ is the input layers, $f_i$ is the respective computation layer. Each layer has a particular number,  $m_i$, of neurons. The parameters of a layer consist of a matrix $W_i \in \mathbb{R}^{m_i \times m_{i-1}}$ and bias vector $b_i \in  \mathbb{R}^{m_i}$. Each layer also has a non-linear activation function $\sigma_i$. \newline
-Loss functions are used to train deep models under a supervised learning paradigm. The error computed by the loss is used in a process called back propagation - the computing of parametric first order partial derivatives, and the adjustment of the parameters in direction and magnitude of their respective derivative. Together the forward pass algorithm and back propagation, allow the automatic discovery of the most meaningful representation to compute the model output. We refer the reader to ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and back propagation. 
+Loss functions are used to train deep models under a supervised learning paradigm. The error computed by the loss is used in a process called back propagation - the computing of parametric first order partial derivatives, and the adjustment of the parameters in direction and magnitude of their respective derivative. This process is formally described by:
+
+\begin{subequations}
+\begin{gather}
+	\frac{\partial E} {\partial W_n} = \frac{\partial F} {\partial W}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} \\
+	\frac{\partial E} {\partial X_{n-1}} = \frac{\partial F} {\partial X}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} 
+\end{gather}
+\end{subequations}
+
+where $\frac{\partial F} {\partial W}(W_n, X_{n-1})$ is the Jacobian of $F$ with respect to $W$ evaluated at the point $(W_n, X_{n-1})$, and  $\frac{\partial F} {\partial X}(W_n, X_{n-1})$ is the Jacobian of $F$ with respect to $X$. The Jacobian of a vector function is a matrix containing the partial derivatives of all the outputs with respect to all the inputs. Together the forward pass algorithm and back propagation, allow the automatic discovery of the most meaningful representation to compute the model output. We refer the reader to ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and back propagation. 
 
 \subsection{Convolutional Networks}
+
+MLPs also suffer from an explosion of parameters and as well as poor generalisation to out of sample data, this is because MLPs construct redundant, correlated latent features ~\citep{krizhevsky2012imagenet}. In fact when modelling a sample using a regular feed-forward network, we find that the number of model parameters grows exponentially. For example, a feed-forward network with $2$ hidden layers consisting of $512$ and $256$ neurons respectively, an output size of $10$ and an input sample shape of $\left [ \begin{matrix} 200 & 1 \end{matrix} \right] $, then the model ends up having 
+
+\begin{equation}
+	parameters = (200 \times 512 + 512) + (512 \times 256 + 256) + (256 \times 10 + 10)
+\end{equation}
+
+a total of $236,810$ parameters. \newline
+ 
 The state-of-the-art in deep learning classification models is convolutional neural networks (CNN) \cite{reference}. CNNs are typically applied to object classification within images, and take advantage of the properties of object translation invariance and object location invariance \cite{reference}. These properties allow CNNs to perform robust classifications that generalise well across datasets. Translation invariance allows the CNN to build an object representation that is consistent under transformation, for example an image rotation would lead to a consistent final object representation being generated prior to logit computation for classification. Locality invariance allows the model to correctly identify an object no matter where it may reside with the boundaries of an image.\newline
 These properties are possible because of how the final object representation is generated. CNNs perform a convolutional operation on an image, using a trainable image filter \cite{reference}. The operation generates feature map of the image that constructs latent object representations of the image. In practise these representations are chained together to produce more complex latent representations the deeper the CNN. \newline
 % spatial and depth-wise convolutions
