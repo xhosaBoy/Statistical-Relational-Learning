@@ -135,8 +135,14 @@ where $h_t$ the cell output, and used as the state vector for input received as 
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\textbf{Backpropagation Through Time.} Back-propagation through time (BPTT) is an iterative gradient update process. An error signal is computed against all sequence entries using the sequence output at that time step, and the target output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \newline
- Assuming a loss function $L$ and having computed the derivative of this loss up to the output of the convolutional layer, $\frac{\partial L} {\partial O}$, in order to update the parameters the convolutional layer, we require the derivative of $L$ with respect to the weights and biases of the convolutional layer $\frac{\partial L} {\partial W}$ and $\frac{\partial L} {\partial b}$. We also require the derivative with respect to the inputs of the layer $\frac{\partial L} {\partial X}$ in order to propagate the error back to the preceding layers. \newline
+\textbf{Backpropagation Through Time.} Back-propagation through time (BPTT) is a gradient update process that relies on parameter updates by chaining first order derivative cell outputs through sequence-time. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \newline
+Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
+
+\begin{equation}
+\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
+\end{equation}
+
+ , $\frac{\partial L} {\partial O}$, in order to update the parameters the convolutional layer, we require the derivative of $L$ with respect to the weights and biases of the convolutional layer $\frac{\partial L} {\partial W}$ and $\frac{\partial L} {\partial b}$. We also require the derivative with respect to the inputs of the layer $\frac{\partial L} {\partial X}$ in order to propagate the error back to the preceding layers. \newline
 The convolution backpropagation algorithm is thus given by:
 
 \begin{subequations}
