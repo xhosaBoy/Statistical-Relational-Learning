@@ -135,23 +135,20 @@ where $h_t$ the cell output, and used as the state vector for input received as 
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\textbf{Backpropagation Through Time.} Back-propagation through time (BPTT) is a gradient update process that relies on parameter updates by chaining first order derivative cell outputs through sequence-time. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \newline
+\textbf{Backpropagation Through Time.} Back-propagation through time (BPTT) is a gradient-based process that computes parameter updates by chaining first order derivative cell outputs through sequence-time. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \newpage
 Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
 
 \begin{equation}
 \frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
 \end{equation}
 
- , $\frac{\partial L} {\partial O}$, in order to update the parameters the convolutional layer, we require the derivative of $L$ with respect to the weights and biases of the convolutional layer $\frac{\partial L} {\partial W}$ and $\frac{\partial L} {\partial b}$. We also require the derivative with respect to the inputs of the layer $\frac{\partial L} {\partial X}$ in order to propagate the error back to the preceding layers. \newline
-The convolution backpropagation algorithm is thus given by:
+One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
 
-\begin{subequations}
-\begin{gather}
-	\frac{\partial L} {\partial b} = \frac{\partial L} {\partial O}\frac{\partial O} {\partial b} \\
-	\frac{\partial L} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial L} {\partial O_{ij}^{d}}X_{i+a,j+b,c}^{pad} \\
-	\frac{\partial L} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial L} {\partial O_{ij}^{d}}
-\end{gather}
-\end{subequations}
+\begin{equation}
+\frac{\partial h_t} {\partial h_k} = \prod_J\frac{\partial h_j} {\partial h_{j-1}}
+\end{equation}
+
+for $j$ from $k + 1$ to $t$. This multiplicative operation causes small gradients to become progressively smaller as the sequence window become larger, or become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as Long Short-Term Memory ~\citep{hochreiter1997long} and Gated Recurrent Units ~\citep{cho2014learning}.
 
 
 %********************************** %Third Section  **************************************
