@@ -99,10 +99,9 @@ The convolution forward pass is given by:
 	O_{ij}^{d} = b_d + \sum_{a=0}^{F - 1}\sum_{b=0}^{F - 1}\sum_{c=0}^{I - 1}W_{a,b,c,d}X_{i+a,j+b,c}^{pad}
 \end{equation}
 
-where $O$ is the value of the output volume at position $(i,j,d)$, $b$ bias vector of shape $\left [ \begin{matrix} D \end{matrix} \right]$, $W$ is the weight tensor of shape $\left [ \begin{matrix} F & F & I & D \end{matrix} \right]$, $X$ is the padded input volume and $a, b, c$ are the volume dimensions.
-
-% spatial and depth-wise convolutions
-It is possible to decompose convolution operations into spatial and depth-wise convolutions \cite{reference}. A spatial convolution operates on different regions of an image, producing distinct representations for each region, for example and image can be divided into four regions, where a spatial convolution operates independently on each of these regions using region-specific filters.This operation produces four distinct feature maps which are later flattened into a single hidden layer representation, before begin run through a linear layer to generate the final logits. In a depth-wise convolution, the distinct convolutional feature maps are generated using the depth dimensions of the input image, typically three dimensions with images, the red, blue and green image channels in a colour image. Channel-specific filters are used to generate these feature maps and once again the future maps are flattened prior to computing logits for the model classes. \newline
+where $O$ is the value of the output volume at position $(i,j,d)$, $b$ bias vector of shape $\left [ \begin{matrix} D \end{matrix} \right]$, $W$ is the weight tensor of shape $\left [ \begin{matrix} F & F & I & D \end{matrix} \right]$, $X$ is the padded input volume and $a, b, c$ are the volume dimensions. \newpage
+\textbf{Pooling Layers.} A pooling layer is used to reduce the spatial size of the representation. They are used to reduce the number of parameters in the network. Pooling layers provide latent features deeper int the network with a larger receptive field - input regions that they look at in order to represent larger sample surfaces. In particular, pooling stride gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some 2-dimensional aggregation operation (usually a max, but others like average may also be used) to regions of the input volume. A pooling layer has no trainable parameters itself.  \newline
+\textbf{Fully Connected Layers.}
 
 
 %********************************** %Third Section  **************************************
