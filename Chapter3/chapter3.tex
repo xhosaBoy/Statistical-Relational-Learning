@@ -4,7 +4,6 @@
 %*******************************************************************************
 \chapter{Neural Tensor Factorisation}
 
-
 % **************************** Define Graphics Path **************************
 
 \ifpdf
@@ -13,14 +12,19 @@
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
 
-\section{Link Prediction}
-Link prediction aims to rank plausible entity relationships. In latent feature modelling, it is posed as a classification task. These ranks are computed by scoring entity-relational pairs against all entities within the knowledge base. Relationships that rank highly become potential new facts that have been discovered and generate new knowledge within the knowledge base. Similar to inductive logic \citet{Rea85,Ancey1996}, these facts need to be coherent, consistent and are not contradictory. Latent feature models contain statistical properties such as the capability to model a likelihood distribution over candidate entity relationships. This is.a more flexible modelling approach that provides a measure "confidence" in a fact, given the magnitude of the computed relationship score. 
+
+Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach aims to rank plausible relationships between entities by using using trainable embedding representaitons. Previous latent feature models have focused on limiting the number of parameters so as to be able to scale to large KBs. This has come at the expense of model expressiveness and prevented complex entity-relational interaction modelling. Neural tensor networks (NTN), An extension to tensor factorisation was the first successful approach at taking advantage of expressiveness of deep models. It relied on adding a recursive network (RCN) representation to the bilnear tensor product, and wrapping that representation in a fully connected layer in order to compute a probability of relational plausibility. Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches by applying the convolutional operation to model entity-relational interactions before completing a factorisation to generate a probability of plausibility. This chapter introduces. Hypernetworks were then applied to add further expressive power to ConvE (HypER) by pre-computing relational filter representations for subsequent use in a neural tensor factorisation approach. In this chapter we introduce NTN+, a modern deep learning approach to the original NTN model, and HypER+, an extention to the HypER the compensates for the covariate shift introduced by augmenting relational filters with a hypernetwork model. We then extend HypER+ to make use of pre-trained GLOVE word embeddings to address the problem of entity interaction sparsity in KBs.
+
+
+% **************************** Section 1 **************************
+
+\section{Neural Tensor Networks}
 
 \subsection{Entity-Relational Classification}
 % e-r-e
 Entity-relational classification is a subsection of the more general ranking problem in machine learning (ML) \citet{ranking, ranking ranking}. Standard classification involves the determining of the most appropriate categories in which entity belongs. If a logistic approach is used, a logit distribution across candidate classes is generated. A logit is referred to as an inverse probability \citet{wikipedia}, a magnitude with is the passed thought a thresholding logarithmic sigmoid function to generate a likelihood, or a probability in a finite number of mutually exclusive classes.. The category with the highest logit associated with is then determined to be the most likely category in which the entity belongs. In the ranking. 
 
-\section{Nonlinear Factorisation Models}
+\subsection{Nonlinear Factorisation Models}
 % Tensor factorisation
 Tensor facorisation makes use of explicit relational representations, in contrast to implicit relational representations such as SVD. The relational representations are expressed as matrices, which are used to generate subject entity relational (ER) transformations by computing the inner product between them respectively. An inner product of the ER representation and object entity is then taken to produce a relational plausibility magnitude. The tensor factorisation algorithm thus makes use of linear representations as well as linear operations to compute relational scores. 
 % MLP relational factorisation
@@ -45,7 +49,7 @@ what they are, and how we got here, trial and error
  \caption {Scoring functions of link prediction models. $*$ is the convolutional operator $F_r = vec^{-1}(w_rH)$ the matrix of relation specific convolutional filters, $f$ is a non-linear function}
 \end{table}
 
-\section{Model Analysis}
+\subsection{Model Analysis}
 Latent feature models determine factual plausibility by ranking all possible entity relationships within a knowledge graph. This is done by scoring all entities against against an ER representation, and then ranking those scores in descending order. To evaluate the performance of the latent feature model, a number of benchmark ranking metrics are used \cite{reference}. These metrics include the Hit@10 accuracy, Hit@3 accuracy, Hit@1 accuracy, Mean Rank, and Mean Reciprocal Rank. Definitions for each of the metrics are as follows:
 \begin{itemize}
 	\item \textbf{Hit@10 accuracy}: Occurs when the target subject entity appears within the top ten ranked subject entities when scored against an ER representation
@@ -55,9 +59,13 @@ Latent feature models determine factual plausibility by ranking all possible ent
 	\item \textbf{Mean Reciprocal Rank}: The inverse of the mean rank. Where a larger value is better with a desired metric of close to 1, which is the maximum.
 \end{itemize}
 
-\section{Nonlinear Factorisation Hypothesis}
-and here I write more \dots
+\subsection{Nonlinear Factorisation Hypothesis}
 Progress in ER classification using latent feature models has tracked progress made in deep learning model development. The current state-of-the art in image classification architecture makes use of fundamental convolutional architectures \cite{reference}. The current state-of-the in natural language modelling makes use of contextual word embeddings \cite{reference}. A potential approach to further improve the performance of latent feature models is to take context into account when selecting entities. A practical implementation of this approach is using distinct subject and object representations for scoring facts. This has the effect of taking into consideration the directionality of the the entity similar to the approach considered in \cite{Deep Knowledge Models}. A new model using this approach can be developed using the current state-of-the-art latent feature model, HypER, as a basis, and simply incorporate the use use of distinct subject and object entity representations. This new model, Hyper+, can then be evaluated using the model analysis metrics discussed above. 
 
 \subsection{Training Algorithm}
+
+
+% **************************** Section 2 **************************
+
+\section{Hypernetwork Tensor Factorisation}
 
