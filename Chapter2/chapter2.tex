@@ -155,38 +155,48 @@ for $j$ from $k + 1$ to $t$. This multiplicative operation causes small gradient
 
 \section{Regularisation}
 
-%Deep Learning Best Practice}
- % initialisation e.g. xavier initialisation and truncated normal
- Xavier initilisation \cite{reference} is commonly used to initialise model parameters. This initialisation technique has the benefit of non-bias. It also influences the starting position on the loss surface increasing the likelihood of convergence. An other common parameter initialisation strategy is truncated normal initialisation \cite{reference}, where model paramaters are sampled from a univariate Gaussian distribution with mean zero and variance one. \newline
- % optimiser
-The Adam \cite{reference} optimiser is commonly used for model training. This optimiser is an adaptive moment optimiser that scales the learning rate depending on the scale of parameter update changes. Other optimisers used for parameter updates include stochastic gradient descent \cite{reference}, ADAG-Grad \cite {reference} and RMS-Prop \cite{reference}. \newline
-% learning rate scheduling
-Learning rate scheduling \cite{reference}, the practice of reducing the learning rate after successive training cycles is now also common. It is implemented either as a continual process, where the learning rate is reduced by some proportion after every iteration, or on a step basis, where the learning rate is reduced by a proportion after every epoch. \newline
- % Hyperparameter optimistaion 
-One of the most challenging aspects of model training is hyper parameter optimistaion \cite{reference}. Bayesian optimisation techniques have been used recently to overcome this problem \cite{reference}. Another hyper parameter search technique commonly used is random grid search \cite{reference}. This technique relies on iterations of hyper parameter sets that are uniformly sampled from range of available values. \newline
+Model over parameterisation can lead to overfitting of in-sample data. This because the degrees of freedom available to estimate a function allow very complex nonlinear functions to be discovered, where these nonlinear functions are not representative of the generative process of the data. In fact, the model ends up modelling noise in the dataset. Overfitting results in poor generalisation across training, validation and testing datasets. This problem forms part of the broader bias/variance trade off, specifically high model variance due to over parameterisation. Deep learning models are particularly sensitive to overfitting given the high number of parameters present within the model. Regularisation techniques are used to improve the generalisation capability of deep models across training and test datasets. \bigskip
 
-Model over parameterisation can lead to overfitting. This because the degrees of freedom available to estimate a function allow very complex nonlinear functions to be discovered, where these nonlinear functions or not representative of the generative process of the data at all \cite{reference}. These overfitting makes the model very sensitive to the training data, and results in poor generalisation across training, validation and testing data. This problem forms part of the broader bias/variance trade off, specifically high model variance due to over parameterisation. Deep learning models are particularly sensitive to overfitting given the high number of parameters present within the model. In order to compensate for this overfitting, it is common zero out a sample of neurons within a deep learning network. This has the effect of removing partial dependence between nodes deeper within the network, a form of principal component analysis generating independent latent features. These latent features result in a simpler model representation of the generative process of the data, and therefore allow it to generalise better across datasets. \newline
+\textbf{L1 and L2 Regularisation.} Lasso (L1) ~\citep{tibshirani1996regression} and Ridge (L2) ~\citep{hoerl1970ridge} regression are two common approaches used in regularisation. These approaches prevent overfitting by adding a term to the loss that penalizes the model if it becomes too complex. They ares defined as follows:
 
-Batch normalisation attempts to account for internal covariance shift \cite{reference}. Batch normalisation is inspired from population based feature mean normalisation, when the entire population is taken into consideration when computing the mean and standard deviation of the values which the feature can take on within the dataset. When training a deep learning model, it is common to perform a uniform random shuffle of the training set, then subdivide that the set into mini-batches \cite{reference}. This is the same process of taking a uniform random sample batch from the training data. The size of the sample batch determines whether the normalised features remain within distributional alignment of the population. In order to compensate for the resultant loss computed after a foward pass, it is important to re-align feature vector parameters to the sample distribution mean and standard deviation estimators. The generated loss surface is thus a closer approximation to the true loss surface of the population, and subsequent parameter updates do not suffer from sample distributional distortion. This results in improved test accuracy as the model is able to more closely approximate the true distribution of the data. \newline 
+\begin{subequations}
+	\begin{gather}
+		loss_{L1} = loss + \lambda\sum_i\abs{w_i}  \\
+		loss_{L2} = loss + \lambda\sum_iw^2
+	\end{gather}
+\end{subequations}
 
-\subsection{Loss Surface Analysis}
-Defining an objective function is best informed by analysing the surface it generates. If the objective functions aims to minimise an error, it is a loss function, and if an objective function maximises an expected return, it is a reward function. Nonlinear factorisation models are commonly trained using loss functions presented in the following table:
+L1 regularization has the effect of forcing some parameters to shrink to 0, effectively removing them from the model. L2 regularization has the effect of preventing any of the parameters from becoming too large and overpowering the others. \newline
+\textbf{Early Stopping.} As deep models are trained using a supervised learning paradigm, the model training accuracy gradually increases. As training continues, the model validation accuracy gradually increases, and then begins decreasing. In this scenario the model has begun overfitting the training data. If the model continues training, the validation accuracy may continue decreasing, and should the model then be tested, the resulting test accuracy may be lower than the training accuracy. Early stopping ~\citep{prechelt1998early} is a technique used to try to prevent overfitting. Once the training and validation accuracies begin to diverge, training continues for a few more epoch, and if the divergence persists, training is terminated. \newline
+\textbf{Dropout.} During training, nodes in a deep model can generate redundant latent features that overfit training data. Dropout is a technique that is used to zero out a proportion of neurons in the layer of a deep model ~\citep{srivastava2014dropout}. This has the effect of removing partial dependence between nodes deeper within the network, a form of principal component analysis generating independent latent features. These latent features result in a simpler model representation of the generative process of the data, and therefore allow it to generalise better across datasets. \newline
+\textbf{Batch Normalisation.} Deep models are composed of parameterised layers. These parameters are adjusted during training, resulting in a distribution shift of node output within each layer, a problem known as internal covariate shift. This distribution shift makes it difficult for the model to map the generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem ~\citep{ioffe2015batch}. Batch normalisation solves two other problems experienced during deep model training: nonlinearity saturation, and weight initialisation sensitivity, shortening the required training time. \newline
+Batch normalisation works by computing the layer-specific moving average estimators of the batch mean and standard deviation. The normalised output is then scaled and shifted before being used as input for the following layer. Each layer's node output is then modified by these statistics before being passed onto the following layer. The training time batch statistics are then aggregated into global population statistics during test time. \newline
+Batch normalisation during training time is thus defined as follows:
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{lllllllllll}
-  		\textbf{Name} & \textbf{Expression} \\
-  		\hline
-  		Log (Nickel, Tresp, and Kriegel 2011) & $e^T_1W_r e_2$  \\
-  		Constrastive Max Margin (Bordes et al. 2013) & $|| e_1 + w_r - e_2 ||$ \\
-  		Cross Entropy (Socher et al. 2013) & $u^T_r f(e_1W_r^{[1..k]} e_2 + V_r \begin{bmatrix}e_1 \\ e_2\end{bmatrix} + b_r)$ \\
-  		Binary Cross Entropy (Nickel, Rosasco, and Poggio 2016) & $r^T_p(e_s * e_o)$ \\
-  		Softmax Cross Entropy (Balazevicl, Allen, and Hospedales 2018) & $f(vec(e_1 * vec^{-1}(w_rH))W)e_2$ \\
-  		Sparse Categorical Cross Entropy (Magangane and Brink 2019) & $f(vec(e_1 * vec^{-1}(w_rH))W)f(vec(e_2 * vec^{-1}(w_rH))W)$
-		\end{tabular}
- 	\caption {Scoring functions of link prediction models. $*$ is the convolutional operator $F_r = vec^{-1}(w_rH)$ the matrix of relation specific convolutional filters, $f$ is a non-linear function}
-\end{table} 
+\begin{subequations}
+	\begin{gather}
+		\hat{x_i} = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2}} \\
+		y_i = \gamma \hat{x_i} + \beta
+	\end{gather}
+\end{subequations}
 
-% loss function choice
-The choice of loss function determines the training loss surface which in turn determines the expected model accuracy and convergence rate.
+Batch normalisation during test time is thus defined as follows:
 
+\begin{subequations}
+	\begin{gather}
+		\hat{x} = \frac{x - E \left [ x \right ]}{\sqrt{VAR \left [ x \right ]}} \\
+		y = \gamma \hat{x} + \beta
+	\end{gather}
+\end{subequations}
+
+where $x$ is the normalised layer output, and $y$ is the scaled and shifted next layer input. 
+
+
+%********************************** %Fourth Section  **************************************
+
+\section{Summary}
+
+In this chapter we've discussed: \newline
+\textbf{Supervised Learning.} A paradigm used to train ML models where target output is provided with corresponding input. This paradigm helps models build an input-output map the approximates the underlying data distribution. The effectiveness of this mapping is heavily dependent on the input representation of samples, known as features, and can be used to model IID and non-IID datasets. \newline
+\textbf{Deep Learning Models.} We can take advantage of automatic representation construction using deep learning models. Deep models differ from their shallow counterparts by computing latent feature representations directly from the data. This has shown to be more effective then manually constructing features representations using techniques such as bucketing, crossing, hashing and embedding. CNNs solve the over parameterisation problem in MLPs, and simultaneously take advantage of the structure present in data samples. RNNs provide context of previous samples using state vectors when modelling sequential data. Both these approaches have been applied successfully in classification and regression tasks. \newline
+\textbf{Regularisation}. Deep models can overfit data and as a result poorly generalise across training and test datasets. A number of approaches have been used to address this problem including lasso and ridge regression, early stopping and dropout. Batch normalisation has proved particularly effective at regularisation as it compensates for the covariate shift experienced by deep models during training. In addition to addressing covariate shift, batch normalisation also speeds up training time, and makes deep models less sensitive to weight initialisation.
