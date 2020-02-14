@@ -2,9 +2,11 @@
 %*******************************************************************************
 %****************************** Third Chapter **********************************
 %*******************************************************************************
-\chapter{Link Prediction With Latent Feature Modelling}
+\chapter{Neural Tensor Factorisation}
+
 
 % **************************** Define Graphics Path **************************
+
 \ifpdf
     \graphicspath{{Chapter3/Figs/Raster/}{Chapter3/Figs/PDF/}{Chapter3/Figs/}}
 \else
@@ -12,18 +14,13 @@
 \fi
 
 \section{Link Prediction}
-And now I begin my third chapter here \dots
-And now to cite some more people~\citet{Rea85,Ancey1996}
-
 Link prediction aims to rank plausible entity relationships. In latent feature modelling, it is posed as a classification task. These ranks are computed by scoring entity-relational pairs against all entities within the knowledge base. Relationships that rank highly become potential new facts that have been discovered and generate new knowledge within the knowledge base. Similar to inductive logic \citet{Rea85,Ancey1996}, these facts need to be coherent, consistent and are not contradictory. Latent feature models contain statistical properties such as the capability to model a likelihood distribution over candidate entity relationships. This is.a more flexible modelling approach that provides a measure "confidence" in a fact, given the magnitude of the computed relationship score. 
 
 \subsection{Entity-Relational Classification}
-\dots and some more \newline
 % e-r-e
 Entity-relational classification is a subsection of the more general ranking problem in machine learning (ML) \citet{ranking, ranking ranking}. Standard classification involves the determining of the most appropriate categories in which entity belongs. If a logistic approach is used, a logit distribution across candidate classes is generated. A logit is referred to as an inverse probability \citet{wikipedia}, a magnitude with is the passed thought a thresholding logarithmic sigmoid function to generate a likelihood, or a probability in a finite number of mutually exclusive classes.. The category with the highest logit associated with is then determined to be the most likely category in which the entity belongs. In the ranking. 
 
 \section{Nonlinear Factorisation Models}
-and here I write more \dots
 % Tensor factorisation
 Tensor facorisation makes use of explicit relational representations, in contrast to implicit relational representations such as SVD. The relational representations are expressed as matrices, which are used to generate subject entity relational (ER) transformations by computing the inner product between them respectively. An inner product of the ER representation and object entity is then taken to produce a relational plausibility magnitude. The tensor factorisation algorithm thus makes use of linear representations as well as linear operations to compute relational scores. 
 % MLP relational factorisation
@@ -32,7 +29,6 @@ Deep learning modes have the capability to build useful latent feature represent
 Convolutional neural networks were then used to model relational representations. In this approach, CNN filters explicitly model relations, and subject and object entities are modeled using real-valued feature vectors.. A convolutional operation is then performed using the the relational filters and subject entity. The generated ER representation is then flattened and an inner product is taken with the object entity to compute a relational score. ConvE and HypER are CNN approaches to relational factorisation. 
 
 \subsection{Models}
-\dots and some more 
 what they are, and how we got here, trial and error
 \begin{table}[H]
 \centering
@@ -49,31 +45,7 @@ what they are, and how we got here, trial and error
  \caption {Scoring functions of link prediction models. $*$ is the convolutional operator $F_r = vec^{-1}(w_rH)$ the matrix of relation specific convolutional filters, $f$ is a non-linear function}
 \end{table}
 
-
-\subsection{Training Algorithm}
-\dots and some more \dots
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwResult{Write here the result }
- initialization\;
- \While{While condition}{
-  instructions\;
-  \eIf{condition}{
-   instructions1\;
-   instructions2\;
-   }{
-   instructions3\;
-  }
- }
- \caption{How to write algorithms}
-\end{algorithm}
-
-\subsubsection{First subsub section in the second subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
-
 \section{Model Analysis}
-\dots and some more \dots
 Latent feature models determine factual plausibility by ranking all possible entity relationships within a knowledge graph. This is done by scoring all entities against against an ER representation, and then ranking those scores in descending order. To evaluate the performance of the latent feature model, a number of benchmark ranking metrics are used \cite{reference}. These metrics include the Hit@10 accuracy, Hit@3 accuracy, Hit@1 accuracy, Mean Rank, and Mean Reciprocal Rank. Definitions for each of the metrics are as follows:
 \begin{itemize}
 	\item \textbf{Hit@10 accuracy}: Occurs when the target subject entity appears within the top ten ranked subject entities when scored against an ER representation
@@ -83,42 +55,9 @@ Latent feature models determine factual plausibility by ranking all possible ent
 	\item \textbf{Mean Reciprocal Rank}: The inverse of the mean rank. Where a larger value is better with a desired metric of close to 1, which is the maximum.
 \end{itemize}
 
-
-\subsubsection{First subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it and some more and some more and
-some more and some more and some more and some more and some more \dots
-
-\subsubsection{Second subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
-
-
 \section{Nonlinear Factorisation Hypothesis}
 and here I write more \dots
 Progress in ER classification using latent feature models has tracked progress made in deep learning model development. The current state-of-the art in image classification architecture makes use of fundamental convolutional architectures \cite{reference}. The current state-of-the in natural language modelling makes use of contextual word embeddings \cite{reference}. A potential approach to further improve the performance of latent feature models is to take context into account when selecting entities. A practical implementation of this approach is using distinct subject and object representations for scoring facts. This has the effect of taking into consideration the directionality of the the entity similar to the approach considered in \cite{Deep Knowledge Models}. A new model using this approach can be developed using the current state-of-the-art latent feature model, HypER, as a basis, and simply incorporate the use use of distinct subject and object entity representations. This new model, Hyper+, can then be evaluated using the model analysis metrics discussed above. 
 
-\subsection{Models}
-\dots and some more 
-what they are, and how we got here, trial and error
-
 \subsection{Training Algorithm}
-\dots and some more \dots
-
-\subsubsection{First subsub section in the second subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
-
-\subsection{Model Analysis}
-\dots and some more \dots
-
-\subsubsection{First subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it and some more and some more and
-some more and some more and some more and some more and some more \dots
-
-\subsubsection{Second subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
-
 
