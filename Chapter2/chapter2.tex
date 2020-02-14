@@ -169,4 +169,24 @@ Model over parameterisation can lead to overfitting of in-sample data. This beca
 L1 regularization has the effect of forcing some parameters to shrink to 0, effectively removing them from the model. L2 regularization has the effect of preventing any of the parameters from becoming too large and overpowering the others. \newline
 \textbf{Early Stopping.} As deep models are trained using a supervised learning paradigm, the model training accuracy gradually increases. As training continues, the model validation accuracy gradually increases, and then begins decreasing. In this scenario the model has begun overfitting the training data. If the model continues training, the validation accuracy may continue decreasing, and should the model then be tested, the resulting test accuracy may be lower than the training accuracy. Early stopping ~\citep{prechelt1998early} is a technique used to try to prevent overfitting. Once the training and validation accuracies begin to diverge, training continues for a few more epoch, and if the divergence persists, training is terminated. \newline
 \textbf{Dropout.} During training, nodes in a deep model can generate redundant latent features that overfit training data. Dropout is a technique that is used to zero out a proportion of neurons in the layer of a deep model ~\citep{srivastava2014dropout}. This has the effect of removing partial dependence between nodes deeper within the network, a form of principal component analysis generating independent latent features. These latent features result in a simpler model representation of the generative process of the data, and therefore allow it to generalise better across datasets. \newline
-\textbf{Batch Normalisation.} Internal covariance shift \cite{reference}. Batch normalisation is inspired from population based feature mean normalisation, when the entire population is taken into consideration when computing the mean and standard deviation of the values which the feature can take on within the dataset. When training a deep learning model, it is common to perform a uniform random shuffle of the training set, then subdivide that the set into mini-batches \cite{reference}. This is the same process of taking a uniform random sample batch from the training data. The size of the sample batch determines whether the normalised features remain within distributional alignment of the population. In order to compensate for the resultant loss computed after a foward pass, it is important to re-align feature vector parameters to the sample distribution mean and standard deviation estimators. The generated loss surface is thus a closer approximation to the true loss surface of the population, and subsequent parameter updates do not suffer from sample distributional distortion. This results in improved test accuracy as the model is able to more closely approximate the true distribution of the data. \newline 
+\textbf{Batch Normalisation.} Deep models are composed of parameterised layers. These parameters are adjusted during training, resulting in a distribution shift of node output within each layer, a problem known as internal covariate shift. This distribution shift makes it difficult for the model to map the generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem ~\citep{ioffe2015batch}. Batch normalisation solves two other problems experienced during deep model training: nonlinearity saturation, and weight initialisation sensitivity, shortening the required training time. \newline
+Batch normalisation works by computing the layer-specific moving average estimators of the batch mean and standard deviation. The normalised output is then scaled and shifted before being used as input for the following layer. Each layer's node output is then modified by these statistics before being passed onto the following layer. The training time batch statistics are then aggregated into global population statistics during test time. \newline
+Batch normalisation during training time is thus defined as follows:
+
+\begin{subequations}
+	\begin{gather}
+		\hat{x_i} = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2}} \\
+		y_i = \gamma \hat{x_i} + \beta
+	\end{gather}
+\end{subequations}
+
+Batch normalisation during test time is thus defined as follows:
+
+\begin{subequations}
+	\begin{gather}
+		\hat{x} = \frac{x - E \left [ x \right ]}{\sqrt{VAR \left [ x \right ]}} \\
+		y = \gamma \hat{x} + \beta
+	\end{gather}
+\end{subequations}
+
+where $x$ is the normalised layer output, and $y$ is the scaled and shifted next layer input. 
