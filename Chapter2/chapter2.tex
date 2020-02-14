@@ -190,3 +190,13 @@ Batch normalisation during test time is thus defined as follows:
 \end{subequations}
 
 where $x$ is the normalised layer output, and $y$ is the scaled and shifted next layer input. 
+
+
+%********************************** %Fourth Section  **************************************
+
+\section{Summary}
+
+In this chapter we've discussed: \newline
+\textbf{Supervised Learning.} A paradigm used to train ML models where target output is provided with corresponding input. This paradigm helps models build an input-output map the approximates the underlying data distribution. The effectiveness of this mapping is heavily dependent on the input representation of samples, known as features, and can be used to model IID and non-IID datasets. \newline
+\textbf{Deep Learning Models.} We can take advantage of automatic representation construction using deep learning models. Deep models differ from their shallow counterparts by computing latent feature representations directly from the data. This has shown to be more effective then manually constructing features representations using techniques such as bucketing, crossing, hashing and embedding. CNNs solve the over parameterisation problem in MLPs, and simultaneously take advantage of the structure present in data samples. RNNs provide context of previous samples using state vectors when modelling sequential data. Both these approaches have been applied successfully in classification and regression tasks. \newline
+\textbf{Regularisation}. Deep models can overfit data and as a result poorly generalise across training and test datasets. A number of approaches have been used to address this problem including lasso and ridge regression, early stopping and dropout. Batch normalisation has proved particularly effective at regularisation as it compensates for the covariate shift experienced by deep models during training. In addition to addressing covariate shift, batch normalisation also speeds up training time, and makes deep models less sensitive to weight initialisation.
