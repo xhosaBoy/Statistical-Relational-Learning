@@ -38,7 +38,7 @@ Features can be continuous valued or discrete, where discrete values are referre
 	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
   	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
 	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     		\begin{math} y \gets predict(x, y) \end{math} // predict label for sample \\
+     		\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
 		\begin{math} e \gets y' - y \end{math} // compute error
      		}
 	Update model w.r.t. \begin{math}  e \end{math}
