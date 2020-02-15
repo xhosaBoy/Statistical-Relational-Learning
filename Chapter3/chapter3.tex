@@ -15,7 +15,7 @@
 
 Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach aims to rank plausible relationships between entities by using using trainable embedding representaitons. Previous latent feature models have focused on limiting the number of parameters so as to be able to scale to large KBs, at a cost of complex entity-relational interaction modelling. \newline
 Neural tensor networks (NTN), An extension to tensor factorisation was the first successful approach at taking advantage of expressiveness of deep models. It relied on adding a recursive network (RCN) representation to the bilnear tensor product, and wrapping that representation in a fully connected layer to then compute a relational score. Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches by applying the convolutional operation in modelling entity-relational interactions, before completing a factorisation to compute a relational score. Hypernetworks were then applied to the ConvE model (HypER) to add further expressive power by pre-computing relational filter representations for subsequent use in a neural tensor factorisation. \newline
-In this chapter we examine the NTN model, and attempt a simple improvement by applying modern deep learning approaches. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
+In this chapter we examine the NTN model, and attempt a simple improvement by applying early stopping and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
 
 
 % **************************** Section 1 **************************
@@ -49,45 +49,13 @@ Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducin
 	g(e_1, R, e_2) =  u_R^Tf(e_1^TW_R^{\left [1:k\right ]}e_2 + V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ] + b_R)
 \end{equation}
 
-where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias.
+where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias. \newline
 
-\subsection{Early Stopping and Random Grid Search}
-% Tensor factorisation
-Tensor facorisation makes use of explicit relational representations, in contrast to implicit relational representations such as SVD. The relational representations are expressed as matrices, which are used to generate subject entity relational (ER) transformations by computing the inner product between them respectively. An inner product of the ER representation and object entity is then taken to produce a relational plausibility magnitude. The tensor factorisation algorithm thus makes use of linear representations as well as linear operations to compute relational scores. 
-% MLP relational factorisation
-Deep learning modes have the capability to build useful latent feature representations, and given previous approaches to build relational representations using matrices, research was conducted to explore replacing relational matrices, with relational neural networks. E-MLP and ER-MLP were early attempts at relational factorisation using neural networks. Computing relational scores using these approaches is computationally expensive and prone to overfitting \cite{reference}. Recursive neural tensor networks were proposed as an alternative, however suffer from limited expressive power \cite{reference}.
-% CNN relational factorisation
-Convolutional neural networks were then used to model relational representations. In this approach, CNN filters explicitly model relations, and subject and object entities are modeled using real-valued feature vectors.. A convolutional operation is then performed using the the relational filters and subject entity. The generated ER representation is then flattened and an inner product is taken with the object entity to compute a relational score. ConvE and HypER are CNN approaches to relational factorisation. 
+The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated during back propagation, producing a distributed word representation that aligns with the knowledge base.
 
-\subsection{Models}
-what they are, and how we got here, trial and error
-\begin{table}[H]
-\centering
-\begin{tabular}{lllllllllll}
-  \textbf{Model} & \textbf{Scoring Function} \\
-  \hline
-  RESCAL (Nickel, Tresp, and Kriegel 2011) & $e^T_1W_r e_2$  \\
-  TransE (Bordes et al. 2013) & $|| e_1 + w_r - e_2 ||$ \\
-  NTN (Socher et al. 2013) & $u^T_r f(e_1W_r^{[1..k]} e_2 + V_r \begin{bmatrix}e_1 \\ e_2\end{bmatrix} + b_r)$ \\
-  HolE (Nickel, Rosasco, and Poggio 2016) & $r^T_p(e_s * e_o)$ \\
-  HypER (Balazevicl, Allen, and Hospedales 2018) & $f(vec(e_1 * vec^{-1}(w_rH))W)e_2$ \\
-  HypER+ (Magangane and Brink 2019) & $f(vec(e_1 * vec^{-1}(w_rH))W)f(vec(e_2 * vec^{-1}(w_rH))W)$
-\end{tabular}
- \caption {Scoring functions of link prediction models. $*$ is the convolutional operator $F_r = vec^{-1}(w_rH)$ the matrix of relation specific convolutional filters, $f$ is a non-linear function}
-\end{table}
+\subsection{Early Stopping and Random Search}
 
-\subsection{Model Analysis}
-Latent feature models determine factual plausibility by ranking all possible entity relationships within a knowledge graph. This is done by scoring all entities against against an ER representation, and then ranking those scores in descending order. To evaluate the performance of the latent feature model, a number of benchmark ranking metrics are used \cite{reference}. These metrics include the Hit@10 accuracy, Hit@3 accuracy, Hit@1 accuracy, Mean Rank, and Mean Reciprocal Rank. Definitions for each of the metrics are as follows:
-\begin{itemize}
-	\item \textbf{Hit@10 accuracy}: Occurs when the target subject entity appears within the top ten ranked subject entities when scored against an ER representation
-	\item \textbf{Hit@3 accuracy}: Occurs when the target subject entity appears within the top three ranked subject entities when scored against an ER representation
-	\item \textbf{Hit@1 accuracy}: Occurs when the target subject entity appears as the top top ranked subject entity when scored against an ER representation
-	\item \textbf{Mean Rank}: For all questions asked within the test dataset, what is the average target subject entity rank. Where a smaller value is better and a desired value of close to 1, which is the minimum.
-	\item \textbf{Mean Reciprocal Rank}: The inverse of the mean rank. Where a larger value is better with a desired metric of close to 1, which is the maximum.
-\end{itemize}
 
-\subsection{Nonlinear Factorisation Hypothesis}
-Progress in ER classification using latent feature models has tracked progress made in deep learning model development. The current state-of-the art in image classification architecture makes use of fundamental convolutional architectures \cite{reference}. The current state-of-the in natural language modelling makes use of contextual word embeddings \cite{reference}. A potential approach to further improve the performance of latent feature models is to take context into account when selecting entities. A practical implementation of this approach is using distinct subject and object representations for scoring facts. This has the effect of taking into consideration the directionality of the the entity similar to the approach considered in \cite{Deep Knowledge Models}. A new model using this approach can be developed using the current state-of-the-art latent feature model, HypER, as a basis, and simply incorporate the use use of distinct subject and object entity representations. This new model, Hyper+, can then be evaluated using the model analysis metrics discussed above. 
 
 \subsection{Training Algorithm}
 
