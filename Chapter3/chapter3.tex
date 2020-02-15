@@ -22,11 +22,36 @@ In this chapter we examine the NTN model, and attempt a simple improvement by ap
 
 \section{Neural Tensor Networks}
 
-\subsection{Entity-Relational Classification}
-% e-r-e
-Entity-relational classification is a subsection of the more general ranking problem in machine learning (ML) \citet{ranking, ranking ranking}. Standard classification involves the determining of the most appropriate categories in which entity belongs. If a logistic approach is used, a logit distribution across candidate classes is generated. A logit is referred to as an inverse probability \citet{wikipedia}, a magnitude with is the passed thought a thresholding logarithmic sigmoid function to generate a likelihood, or a probability in a finite number of mutually exclusive classes.. The category with the highest logit associated with is then determined to be the most likely category in which the entity belongs. In the ranking. 
+\subsection{Neural Tensor Factorisation}
+RESCAL introduced the bilinear tensor product for relational scoring ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 
-\subsection{Nonlinear Factorisation Models}
+\begin{equation}
+	f_{i, j, k}^{RESCAL} := e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}w_{a,b,k}e_{ia}e_{jb}
+\end{equation}
+
+where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \newline
+A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. The model is defined as follows:
+
+\begin{subequations}
+	\begin{gather}
+		n_{ik}^{j} = e_i^TW_ke_j \\
+		\sigma(t) = \frac{1}{1 + e^-t} \\
+		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{ik}^{j})
+	\end{gather}
+\end{subequations}
+
+where $n$ is the relational score, $\sigma$ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $S$ and $O$ indexed by relation $R$. This model introduces non-linear entity-relational interaction modelling to tensor factorisation. 
+
+\subsection{Recursive Neural Tensor Factorisation}
+Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score ~\citep{socher2013reasoning}. Recursive networks (RCN) try to capture the rules for word combinations by constructing compositional representations of two words ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN extended nonlinear tensor factorisation model is defined as follows:
+
+\begin{equation}
+	g(e_1, R, e_2) =  u_R^Tf(e_1^TW_R^{\left [1:k\right ]}e_2 + V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ] + b_R)
+\end{equation}
+
+where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias.
+
+\subsection{Early Stopping and Random Grid Search}
 % Tensor factorisation
 Tensor facorisation makes use of explicit relational representations, in contrast to implicit relational representations such as SVD. The relational representations are expressed as matrices, which are used to generate subject entity relational (ER) transformations by computing the inner product between them respectively. An inner product of the ER representation and object entity is then taken to produce a relational plausibility magnitude. The tensor factorisation algorithm thus makes use of linear representations as well as linear operations to compute relational scores. 
 % MLP relational factorisation
