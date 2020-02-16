@@ -61,7 +61,7 @@ The contrastive max-margin objective is minimised during training. This objectiv
 
 where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \bigskip
 
-The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated during back propagation, producing a distributed word representation that aligns with the KB. \newpage
+The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \newpage
 
 \textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \bigskip
 
@@ -151,6 +151,7 @@ The HypER training algorithm minimises the binary cross-entropy objective. \newp
      		}
 	Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
 	\caption{HypER+ Training Algorithm}
-\end{algorithm} \bigbreak
-
-\textbf{Pre-trained Word Vectors}.  
+\end{algorithm} \bigskip
+ \bigskip
+ 
+\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. These are 200-dimensional embeddings, which are aggregated by the set of words that represent an entity, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation. 
