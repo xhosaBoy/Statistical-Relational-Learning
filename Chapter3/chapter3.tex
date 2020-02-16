@@ -129,15 +129,15 @@ HypER is inspired by ConvE, and implements a convolutional operator that models 
 	\phi_r(e_1, \; e_2) = f(vec(e_1 * (vec^{-1}(w_rH)))W)e_2
 \end{equation}
 
-where $\psi_r$ is the relational score, $e_s$ is the subject, $e_r$ is the object, and $r_r$ is the predicate. $f$ is the concatenation operation between the subject and predicate, $w$ are the 2-dimensional convolutional filters and $W$ is the parameterised matrix of the fully connected layer. $g$ is a ReLU non-linearity applied to the fully connected layer output. ConvE is thus a convolutional factorisation composition. The computed relational probability is defined as follows: 
+where $\phi_r$ is the relational score, $e_1$ is the subject, and $e_2$ is the object. $vec^{-1}$ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters, $w$ is the predicate input and $H$ is the parameterised matrix of the fully connected layer of the hypernetwork. $f$ is a ReLU non-linearity applied to the fully connected layer output of the main network. HypER is thus a hypernetwork factorisation composition. The computed relational probability is defined as follows: 
 
 \begin{equation}
-	p = \sigma(\psi_r(e_s,e_o)) 
+	p = \sigma(\phi_r(e_1,e_2)) 
 \end{equation}
 
 % Specifically, this operator increases expressiveness in subject-relation interaction modelling by using grouped convolutions . \newline 
 % Grouped convolutions have the benefit ... \newline 
-The model implementation allows it make use of grouped convolutions ~\citep{}. \newline
+% The model implementation allows it make use of grouped convolutions ~\citep{}. \newline
 The HypER training algorithm minimises the binary cross-entropy objective. 
 
 \subsection{Modern Optimisation}
