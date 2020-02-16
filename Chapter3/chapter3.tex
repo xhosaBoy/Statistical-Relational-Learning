@@ -135,32 +135,21 @@ where $\phi_r$ is the relational score, $e_1$ is the subject, and $e_2$ is the o
 	p = \sigma(\phi_r(e_1,e_2)) 
 \end{equation}
 
-% Specifically, this operator increases expressiveness in subject-relation interaction modelling by using grouped convolutions . \newline 
-% Grouped convolutions have the benefit ... \newline 
-% The model implementation allows it make use of grouped convolutions ~\citep{}. \newline
-The HypER training algorithm minimises the binary cross-entropy objective. 
+The HypER training algorithm minimises the binary cross-entropy objective. \newpage
 
-\subsection{Modern Optimisation}
+\textbf{Hyper Covariate Shift}. We make the observation that hypernetworks may also suffer from covariate shift. The network parameters are adjusted during training, resulting in a distributional drift across the entire main network as training progresses. To address this problem, we introduce batch normalisation between the hypernetwork and main network. We adjust the model accordingly, and introduce HypER+. \bigskip 
 
-Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \newpage
-Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space.
-
-\subsection{Training Algorithm}
-
-(Doss et al. 2015) reimplement the NTN model in Tensorflow ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: \bigbreak
+\textbf{Training Algorithm}. HypER+ is trained using the binary cross-entropy objective. We use the same hyperparameters as the original HypER model, as well as the Adam optimiser. The HypER+ training algorithm is as follows: \newline
 
 \begin{algorithm}[H]
-	\textbf{loop} // repeat for $N$ experiments using random uniform hyperparameter configuration \\
-		\SetAlgoLined
-		\textbf{Input} 
-		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
-  		\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
-	 	\For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     			\begin{math} y_{correct} \gets predict(x, \; y_{correct}) \end{math} // predict label for sample \\
-			\begin{math} y_{corrupt} \gets predict(x, \; y_{corrupt}) \end{math} // predict label for sample \\
-			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}) \end{math} // compute error
-     			}
-		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
-	\textbf{end loop}
-	\caption{Updated NTN Training Algorithm}
+	\SetAlgoLined
+	\textbf{Input} 
+	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
+  	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
+	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
+     		\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
+		\begin{math} e \gets y' - y \end{math} // compute error
+     		}
+	Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
+	\caption{HypER+ Training Algorithm}
 \end{algorithm} \bigbreak
