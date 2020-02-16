@@ -112,12 +112,22 @@ The binary cross-entropy objective is minimised during training. This objective 
 
 where $L$ is the loss value, $p$ is the relational probability computed by the model, and $t$ is the target. $N$ is the number of entities, and $i$ is the batch sample number. \newpage
 
+
 \subsection{Hypernetwork Tensor Factorisation}
 
-Hypernetwork fully connected layer to construct the relation-specific convolutional filters ...
-Specifically, this operator increases expressiveness in subject-relation interaction modelling by using grouped convolutions . \newline 
-Grouped convolutions have the benefit ... \newline 
-This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor.
+Hypernetworks are meta networks that generate parameters for a main network ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that describes the entire weights of a given layer. This configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction, it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwoirk model can be defined as follows: 
+
+\begin{equation}
+	K^j = g(z^j), \quad \forall j = 1, \dots, D
+\end{equation}
+
+where $K$ are the layer parameters, $g$ is the hypernetwork composition, and $z$ is the hypernetwork input. \bigskip
+
+HypER is inspired by ConvE, and implements a convolutional operator that models entity-relational interactions ~\citep{balazevic2019hypernetwork}. HypER makes use of a hypernetwork to generate relation-specific convolutional filter. The subject and relational-filter are then used in a convolution operation to generate latent representation which is then flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows: \newline
+
+% Specifically, this operator increases expressiveness in subject-relation interaction modelling by using grouped convolutions . \newline 
+% Grouped convolutions have the benefit ... \newline 
+% This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor.
 
 Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score ~\citep{socher2013reasoning}. Recursive networks (RCN) try to capture the rules for word combinations by constructing compositional representations of two words ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN extended nonlinear tensor factorisation model is defined as follows:
 
