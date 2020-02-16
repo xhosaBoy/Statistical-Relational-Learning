@@ -38,7 +38,7 @@ Features can be continuous valued or discrete, where discrete values are referre
 	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
   	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
 	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     		\begin{math} y \gets predict(x, y) \end{math} // predict label for sample \\
+     		\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
 		\begin{math} e \gets y' - y \end{math} // compute error
      		}
 	Update model w.r.t. \begin{math}  e \end{math}
@@ -64,20 +64,20 @@ Deep learning models have become the preferred models for classification and reg
 Multilayer perceptrons (MLP) were the early deep learning models implemented as feed-forward neural networks consisting of $N$ layers, applied to an input vector $ x $. These models compute un-normalised scores known as logits, for each of the possible $ M $ outputs, classes and values in classification and regression respectively. They do this by executing a number of steps in an algorithm called the forward pass. Each step is called a layer, where an MLP can consist of a number of layers. A basic MLP consists of three of these layers, an input, hidden and output layer. The MLP computes a linear combinations of input features, then transforms the representation using a nonlinear hidden activation layer, before computing a linear combination of outputs. MLP models can be defined as follows:
 
 \begin{subequations}
-\begin{gather}
-	f_0 = x \\
-	f_i=\sigma_i(W_if_{i - 1} + b_i) \quad i \in [1, N]
-\end{gather}
+	\begin{gather}
+		f_0 = x \\
+		f_i=\sigma_i(W_if_{i - 1} + b_i) \quad i \in [1, N]
+	\end{gather}
 \end{subequations}
 
 where $f_0$ is the input layers, $f_i$ is the respective computation layer. Each layer has a particular number,  $m_i$, of neurons. The parameters of a layer consist of a matrix $W_i \in \mathbb{R}^{m_i \times m_{i-1}}$ and bias vector $b_i \in  \mathbb{R}^{m_i}$. Each layer also has a non-linear activation function $\sigma_i$. \newline
 Loss functions are used to train deep models under a supervised learning paradigm. The error computed by the loss is used in a process called back propagation - the computing of parametric first order partial derivatives, and the adjustment of the parameters in direction and magnitude of their respective derivative. This process is given by:
 
 \begin{subequations}
-\begin{gather}
-	\frac{\partial E} {\partial W_n} = \frac{\partial F} {\partial W}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} \\
-	\frac{\partial E} {\partial X_{n-1}} = \frac{\partial F} {\partial X}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} 
-\end{gather}
+	\begin{gather}
+		\frac{\partial E} {\partial W_n} = \frac{\partial F} {\partial W}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} \\
+		\frac{\partial E} {\partial X_{n-1}} = \frac{\partial F} {\partial X}(W_n, X_{n-1})\frac{\partial E} {\partial X_n} 
+	\end{gather}
 \end{subequations}
 
 where $\frac{\partial F} {\partial W}(W_n, X_{n-1})$ is the Jacobian of $F$ with respect to $W$ evaluated at the point $(W_n, X_{n-1})$, and  $\frac{\partial F} {\partial X}(W_n, X_{n-1})$ is the Jacobian of $F$ with respect to $X$. The Jacobian of a vector function is a matrix containing the partial derivatives of all the outputs with respect to all the inputs. Together the forward pass algorithm and back propagation, allow the automatic discovery of the most meaningful representation to compute the model output. We refer the reader to ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and back propagation. 
@@ -110,11 +110,11 @@ where $O$ is the value of the output volume at position $(i,j,d)$, $b$ bias vect
 The convolution backpropagation algorithm is thus given by:
 
 \begin{subequations}
-\begin{gather}
-	\frac{\partial L} {\partial b} = \frac{\partial L} {\partial O}\frac{\partial O} {\partial b} \\
-	\frac{\partial L} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial L} {\partial O_{ij}^{d}}X_{i+a,j+b,c}^{pad} \\
-	\frac{\partial L} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial L} {\partial O_{ij}^{d}}
-\end{gather}
+	\begin{gather}
+		\frac{\partial L} {\partial b} = \frac{\partial L} {\partial O}\frac{\partial O} {\partial b} \\
+		\frac{\partial L} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial L} {\partial O_{ij}^{d}}X_{i+a,j+b,c}^{pad} \\
+		\frac{\partial L} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial L} {\partial O_{ij}^{d}}
+	\end{gather}
 \end{subequations}
 
 %********************************** %Recurrent Networks **************************************
@@ -139,13 +139,13 @@ where $h_t$ the cell output, and used as the state vector for input received as 
 Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
 
 \begin{equation}
-\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
+	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
 \end{equation}
 
 One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
 
 \begin{equation}
-\frac{\partial h_t} {\partial h_k} = \prod_J\frac{\partial h_j} {\partial h_{j-1}}
+	\frac{\partial h_t} {\partial h_k} = \prod_J\frac{\partial h_j} {\partial h_{j-1}}
 \end{equation}
 
 for $j$ from $k + 1$ to $t$. This multiplicative operation causes small gradients to become progressively smaller as the sequence window become larger, or become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as Long Short-Term Memory ~\citep{hochreiter1997long} and Gated Recurrent Units ~\citep{cho2014learning}.
