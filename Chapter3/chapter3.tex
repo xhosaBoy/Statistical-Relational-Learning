@@ -15,10 +15,10 @@
 
 Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach aims to rank plausible relationships between entities by using using trainable embedding representaitons. Previous latent feature models have focused on limiting the number of parameters so as to be able to scale to large KBs, at a cost of complex entity-relational interaction modelling. \newline
 Neural tensor networks (NTN), An extension to tensor factorisation was the first successful approach at taking advantage of expressiveness of deep models. It relied on adding a recursive network (RCN) representation to the bilnear tensor product, and wrapping that representation in a fully connected layer to then compute a relational score. Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches by applying the convolutional operation in modelling entity-relational interactions, before completing a factorisation to compute a relational score. Hypernetworks were then applied to the ConvE model (HypER) to add further expressive power by pre-computing relational filter representations for subsequent use in a neural tensor factorisation. \newline
-In this chapter we examine the NTN model, and attempt a simple improvement by applying Adam optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
+In this chapter we examine the NTN model, and attempt a simple improvement by applying adaptive moment estimation optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
 
 
-% **************************** Section 1 **************************
+% **************************** First Section **************************
 
 \section{Neural Tensor Networks}
 
@@ -61,7 +61,7 @@ The contrastive max-margin objective is minimised during training. This objectiv
 
 where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \bigskip
 
-The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \newpage
+The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \bigskip
 
 \textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \bigskip
 
@@ -86,11 +86,11 @@ Setting model hyperparameters remains a challenge in deep model training. A simp
 \end{algorithm} \newpage
 
 
-% **************************** Section 2 **************************
+% **************************** Second Section **************************
 
 \section{Hypernetwork Tensor Factorisation}
 
-\subsection{Convolutional Tensor Factorisation}
+\subsection{Convolutional Factorisation}
 ConvE introduced the convolutional operator to link prediction model composition ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in subject-predicate interaction modelling by using 2-dimensional instead of 1-dimensional convolutions, being particularly effective at modelling knowledge graph (KG) nodes with high indegree. ConvE concatenates subject and predicate vectors, creating a 2-dimensional representation. Convolutional filters are then applied to this representation before it is flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows:
 
 \begin{equation}
@@ -111,8 +111,7 @@ The binary cross-entropy objective is minimised during training. This objective 
 
 where $L$ is the loss value, $p$ is the relational probability computed by the model, and $t$ is the target. $N$ is the number of entities, and $i$ is the batch sample number. \newpage
 
-
-\subsection{Hypernetwork Tensor Factorisation}
+\subsection{Hypernetwork Factorisation}
 
 Hypernetworks are meta networks that generate parameters for a main network ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that describes the entire weights of a given layer. This configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction, it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwoirk model can be defined as follows: 
 
@@ -134,7 +133,7 @@ where $\phi_r$ is the relational score, $e_1$ is the subject, and $e_2$ is the o
 	p = \sigma(\phi_r(e_1,e_2)) 
 \end{equation}
 
-The HypER training algorithm minimises the binary cross-entropy objective. \newpage
+The HypER training algorithm minimises the binary cross-entropy objective. HypER entities and relations are intialised using Xavier initialisation ~\citep{glorot2010understanding}, drawn from a distribution with zero mean and finite variance. \newpage
 
 \textbf{Hyper Covariate Shift}. We make the observation that hypernetworks may also suffer from covariate shift. The network parameters are adjusted during training, resulting in a distributional drift across the entire main network as training progresses. To address this problem, we introduce batch normalisation between the hypernetwork and main network. We adjust the model accordingly, and introduce HypER+. \bigskip 
 
@@ -154,4 +153,13 @@ The HypER training algorithm minimises the binary cross-entropy objective. \newp
 \end{algorithm} \bigskip
  \bigskip
  
-\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. These are 200-dimensional embeddings, which are aggregated by the set of words that represent an entity, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation. 
+\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. We use these word vectors to initialise  200-dimensional embeddings, which are aggregated by the set of words that represent an entity or relation, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation.  
+
+
+%********************************** %Third Section  **************************************
+
+\section{Summary}
+
+In this chapter we've discussed: \newline
+\textbf{Neural Tensor Networks.} An early successful attempt at using the expressive power of neural networks for link prediction. This model also makes use of RCNs, which try to model semantic compositionality, and this model makes use of pre-trained word vectors to improve link prediction performance. We apply modern stochastic and hyperparameter optimsiation techniques to the NTN training algorithm, namely Adam and hyperparameter random search. \newpage
+\textbf{Hypernetwork Tensor Factorisation.}  Hypernetworks can be used to generate parameters for other networks. This approach has the effect of applying a configuration to a neural network, and changing its behaviour given indexing input. A hypernetworks were used to generate parameters for a convolutional network in the model HypER. Concretely, HypER generates relation-specific convolutional filters which are used in a neural factorisation approach to link prediction. We adjust HypER to compensate for the covariate shift caused by the hypernetwork and introduce HypER+. We then extend HypER+ to make use of GloVe pre-trained word vectors by initialising entities and relations using these embeddings. \newline
