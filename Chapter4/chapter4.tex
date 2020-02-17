@@ -12,31 +12,25 @@
     \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
 \fi
 
-\section{Neural Tensor Factorisation}
-
-\subsubsection{Overview}
-This chapter explores three hypotheses explored for link prediction using knowledge graph neural tensor factroisation, namely the application of modern deep learning techniques to recursive neural tensor networks, relational filter regularisation using dropout in hyper convolutional neural tensor networks, and finally the application of pretrained word embeddings in hyper convolutional neural tensor factorisation. \newline 
-
-Tensor factorisation is the use of high dimensional tensors for relational modeling ~\citep{Nickel_2016}. Statistical relational learning has traditionally relied on linear modelling techniques in order to constrain parameterisation for computational efficiency at the expense of model expressiveness i.e. models that suffer from high bias. Recently nonlinear approaches have been proposed to overcome the bias problem and each propose hypothesis that aim to take advantage of their distinct architecture. The first nonlinear model to gain surpass state-of-the-art tensor factorisation models, was the recursive neural tensor network \cite{refefence}. There are two hypotheses proposed that were proposed in using this model architecture for link prediction, namely that recursive architectures are useful in part of speech tagging \cite{reference}, as the perform a combinatorial analysis of word sequences in sentences, instead of the conventional linear sequence used in part of speech tagging \cite{reference}. The second hypothesis is that pre-trained word embeddings offer superior performance to randomly generated entity vectors which were commonly used at the time for tensor factorisation \cite{reference}. \newline
-The second hypothesis we explored is the use of convolutional hyper networks with relational factorisation for link prediction \cite{reference}. This research is the current state-of-that-art latent feature modelling technique for link prediction \cite{reference}. There are also two hypotheses explored in this research - the first is that convolutional filters can be used explicitly for relational factorisation \cite{reference}, the second is that the hyper network architecture is useful in generating the relational filters due to increased parameterisation using a hyper linear layer \cite{reference}. \newline
-The final hypothesis we explored is the use of contextual entity representations as input to convolutional hyper networks. State-of-the-art natural language modelling techniques makes use contextual word representations \cite{Elmo, Bert} instead of static word embeddings \cite{fasttext, GloVe, Word2Vec}. Contextual word embeddings are represented as distinct subject entity representations, and distinct object entity representations. \newline
-The following chapter presents the results and analysis from the experiments performed to validate these hypotheses.
+\section{Overview}
+This chapter discusses three hypotheses examined in the dissertation: the application of modern deep learning techniques to the training algorithm of recursive neural tensor networks, compensating for covariate shift introduced by a hypernetwork for convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. \bigskip
 
 
 %********************************** %Recursive Neural Tensor Networks  **************************************
 
 \section{Recursive Neural Tensor Networks}
+
 \subsubsection{Model Summary} 
-Tensor factorisation has been a popular approach applied to statistical relational learning (SRL) \cite{reference, reference, reference}. In order to improve model expressiveness, a Recursive Neural Tensor Network architecture was proposed \cite{reference}. This model is inspired by recursive neural networks \cite{reference}. Recursive neural networks have been applied to natural language processing tasks, particularly part of speech tagging \cite{reference}. Traditionally, recurrent neural networks have been applied to this task \cite{reference}. Recurrent neural networks are based on the Markov assumption \cite{reference}, where the future states of the process depends only on the present state, not on the sequence of events that preceded it \cite{reference}. The state is constructed using sequential input within a time step window, for example, a sentence will contain a sequence of words, and the window will be the last word in the sentence and the four previous words before an anchor word. The state consists of the four previous words before the anchor word, and along with the anchor word, can be used to predict the next word in the sequence.\newline
-Instead of producing a state using a sequence of previous words, recursive neural networks generate the state using a combinatorial tree of the word sequence. The number of potential combinations are dependent on the length of the sequence, for example a three word sequence has three combinations, a four word sequence has six combinations and  a five word sequence has ten combinations. The combinations which produce the smallest magnitudes are then filtered out from the network, and remaining combinations are then recombined as new combinations, This filtering and recombination process is then continued until a next word prediction is made. \newline
-Recursive neural networks are combined with tensor factorisation to produce a more expressive model for link prediction. The subject and object entities are concatenated and then an matrix multiplication is taken with the resultant vector before a bias is added. \newline
-\subsubsection{Contrastive Max Margin Loss}
-The contrastive max-magrin loss \cite{reference} is used to train the RTNT model. The input consists of an entity-relational pair, where the entity is a subject entity. An object entity is presented as a target to complete the triple. A non-related object entity is presented is then presented as a corrupt object entity. Fact score is then computed for the target triple, as well as the corrupt triple as logits, and the difference between the two logits is the contrast between the true and false facts. The task is for the model is then to produce a higher fact score for the true triple than the false triple. If the model gets it wrong, then loss is generated and back propagated through the network to update model parameters. \newline
+This model is inspired by recursive neural networks (RCN). RCNs are combined with the bilinear tensor product to produce a latent entity-relational representation. This representation is pass through a neural network to generate a relational score between two entities (NTN). 
+
+\subsubsection{Contrastive Max-Margin Loss}
+The contrastive max-magrin loss is used to train the NTN model. The input consists of an subject-predicate pair. A non-related object is then presented as a corrupt entity. A relational score is then computed for the target triple, as well as the corrupt triple, and the difference between the two is then contrasted. The task is for the model is then to produce a higher relational score for the true triple than the false triple. If the model gets it wrong, a loss is generated and back propagated through the network to update model parameters. \newline
 
 \subsubsection{Experimental Setup} 
 
-We use the following benchmark knowledge graphs: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. \newline
-Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. \newline
+We use the following link prediction benchmark datasets: Wordnet - a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. \newline
+Freebase - a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. \bigskip
+
 Visualisations of the respective knowledge graphs are presented below:
 
 \begin{figure}[H]
@@ -51,8 +45,9 @@ Visualisations of the respective knowledge graphs are presented below:
     	\includegraphics[width=\textwidth]{Freebase}
 \end{figure}
 
+We used the Tensorflow framework to develop our model.  This model is built on top of the Neural Tensor model introduced by (Socher and Chen, et al. 2013) ~\citep{socher2013reasoning} and implemented in Tensorflow by (Doss, LeNail and Liu 2015)  ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings during model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. \bigskip
 
-We used the Tensorflow framework to develop our model.  This model is built on top of the Neural Tensor model introduced by (Socher, Chen, Manning and Ng 2013) ~\citep{NIPS2013_5028} and implemented in Tensorflow by (Doss, LeNail and Liu 2015)  ~\citep{Doss2015}. Randomly initialised entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Property counts for the respective knowledge graphs are presented below:
+Property counts for the respective knowledge graphs are presented below:
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
@@ -239,21 +234,17 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 \end{table}
 
 For Wordnet, it can be seen that relations are skewed toward "has instance" 43,312 occurrences, and "type of" 36,659 occurrences. We would expect poor performance from the model for out-of-sample data containing
-containing relations that are not "has instance" or "type of". Freebase relations are somewhat more uniform, however four relations have occurrences under 10,000. We would expect reasonable performance across all relations for this knowledge graph. \newline
+containing relations that are not "has instance" or "type of". Freebase relations are somewhat more uniform, however four relations have occurrences under 10,000. We would expect reasonable performance across all relations for this dataset. \newpage
+
 Wordnet and Freebae subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an IQR of 2 and 4 respectively. This are thus sparse distributions of data points, and the model will need to rely on 
-similarity of subject features in order to produce sensible inference. \newline
-Wordnet object occurrences are somewhat uniform. Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6.
-We would expect poor performance from a Freebase link prediction model given this distribution of objects. \newline
+similarity of subject features in order to produce sensible inference. Wordnet object occurrences are somewhat uniform. Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6.
+We would expect poor performance from a Freebase link prediction model given this distribution of objects. 
 
 %********************************** %Modern Deep Learning Techniques **************************************
 
-\subsubsection{Hypothesis 1: \newline 
-Recursive Neural Tensor Networks with Modern Deep Learning Techniques}
-Model hyperparameter optimisation is implemented using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. \newline
-We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling
+\section{NTN with Modern Deep Learning Techniques}
 
-\subsubsection{Batching, Logits and Early Stopping}
-Machine learning models can suffer from overfitting \cite{reference} - when training has progressed too long, and the model parameters have been optimised for prediction on the training set. This leads to poor generalisation  and reveals itself in the form of increasing training accuracy, and decreasing validation accuracy. In order to overcome this problem, early stopping is often used during training. This is when triaining is terminated should decreasing validation accuracy be detected.\newline
+We change the training algorithm optimiser from AdaGrad to Adam, and implement model hyperparameter optimisation using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. Code to reproduce: https://github.com/xhosaBoy/deep-knowledge-modelling.
 
 \subsubsection{Link Prediction Results}
 The link prediction accuracy results of the RNTN model, a neural factorisation model compared against linear factorisation models, are presented in table 5.1:
