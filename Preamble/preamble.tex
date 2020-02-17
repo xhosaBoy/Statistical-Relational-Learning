@@ -24,7 +24,7 @@
 
 \ifsetCustomFont
   % Set your custom font here and use `customfont' in options. Leave empty to
-  % load computer modern font (default LaTeX font).
+  % load computer modern font (default LaTeX font)
   %\RequirePackage{helvet}
 
   % For use with XeLaTeX
@@ -43,6 +43,18 @@
 
 % *****************************************************************************
 % **************************** Custom Packages ********************************
+
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Sharelatex Example},
+    bookmarks=true,
+    pdfpagemode=FullScreen,
+    }
 
 % ************************* Algorithms and Pseudocode **************************
 
