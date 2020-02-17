@@ -291,9 +291,9 @@ The link prediction accuracy results of the RNTN model, a neural factorisation m
   		Hadamard Model & .800 & .688 & .744 \\
   		Single Layer Model & .760 & .853 & .807 \\
   		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  		Recursive Neural Tensor Network & .562 & .535 & .549 \\
+  		NTN & .562 & .535 & .549 \\
   		\hline
-  		Recursive Neural Tensor Network+ & .674 & .548 & .611 \\
+  		Updated NTN & .674 & .548 & .611 \\
 	\end{tabular}
 \end{table}
 
@@ -1203,3 +1203,12 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 		\end{tabular}%
 		}}
 \end{table}
+
+%********************************** %Chapter Summary  **************************************
+
+\section{Summary}
+
+In this chapter we've discussed: \newline
+\textbf{NTN with Modern Deep Learning Techniques.} We've attempted a simple improvement in the NTN model by appplying modern deep learning training techniques, including Adam and hyperparameter random search. The results indicate there potential performance gains by deep models simply by updating their respective training algorithms with modern methods. In this instance, we see an accuracy gain of 6.2\%, for the Wordnet and Freebase datasets. \newline
+\textbf{HypER+.}  Here we compensate for the covariate shift introduced by the hypernetwork in convolutional factorisation. The distributional drift is pronounced enough that we are able to improve the Hit@1 accuracy on of the original HypER model on average by 2.7\%, for the WN18 and FB15k datasets.\newline
+\textbf{HypER+. with GloVe} Finally we extend HypER+ to make use of pre-trained GloVe word vectors. The semantic information inherent in these embeddings somewhat overpower the structural information present in the knowledge graph. The resultant model on average decreases the Hit@1 accuracy on of the original HypER model on average by 0.4\%, for the WN18RR and FB15k-237 datasets. \newline
