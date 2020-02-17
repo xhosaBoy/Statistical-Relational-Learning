@@ -133,7 +133,7 @@ where $\phi_r$ is the relational score, $e_1$ is the subject, and $e_2$ is the o
 	p = \sigma(\phi_r(e_1,e_2)) 
 \end{equation}
 
-The HypER training algorithm minimises the binary cross-entropy objective. \newpage
+The HypER training algorithm minimises the binary cross-entropy objective. HypER entities and relations are intialised using Xavier initialisation ~\citep{glorot2010understanding}, drawn from a distribution with zero mean and finite variance. \newpage
 
 \textbf{Hyper Covariate Shift}. We make the observation that hypernetworks may also suffer from covariate shift. The network parameters are adjusted during training, resulting in a distributional drift across the entire main network as training progresses. To address this problem, we introduce batch normalisation between the hypernetwork and main network. We adjust the model accordingly, and introduce HypER+. \bigskip 
 
@@ -153,7 +153,7 @@ The HypER training algorithm minimises the binary cross-entropy objective. \newp
 \end{algorithm} \bigskip
  \bigskip
  
-\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. These are 200-dimensional embeddings, which are aggregated by the set of words that represent an entity, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation. 
+\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. We use these word vectors to initialise  200-dimensional embeddings, which are aggregated by the set of words that represent an entity or relation, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation.  
 
 
 %********************************** %Third Section  **************************************
@@ -161,5 +161,5 @@ The HypER training algorithm minimises the binary cross-entropy objective. \newp
 \section{Summary}
 
 In this chapter we've discussed: \newline
-\textbf{Neural Tensor Networks.} An early successful attempt at using the expressive power of neural networks for link prediction. This model also makes use of RCNs, which try to model semantic compositionality, and this model makes use of pre-trained word vectors to improve link prediction performance. We apply modern stochastic and hyperparameter optimsiation techniques to the NTN training algorithm, namely Adam and hyperparameter random search. \newline
-\textbf{Hypernetwork Tensor Factorisation.}  \newline
+\textbf{Neural Tensor Networks.} An early successful attempt at using the expressive power of neural networks for link prediction. This model also makes use of RCNs, which try to model semantic compositionality, and this model makes use of pre-trained word vectors to improve link prediction performance. We apply modern stochastic and hyperparameter optimsiation techniques to the NTN training algorithm, namely Adam and hyperparameter random search. \newpage
+\textbf{Hypernetwork Tensor Factorisation.}  Hypernetworks can be used to generate parameters for other networks. This approach has the effect of applying a configuration to a neural network, and changing its behaviour given indexing input. A hypernetworks were used to generate parameters for a convolutional network in the model HypER. Concretely, HypER generates relation-specific convolutional filters which are used in a neural factorisation approach to link prediction. We adjust HypER to compensate for the covariate shift caused by the hypernetwork and introduce HypER+. We then extend HypER+ to make use of GloVe pre-trained word vectors by initialising entities and relations using these embeddings. \newline
