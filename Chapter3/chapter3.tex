@@ -29,8 +29,10 @@ RESCAL introduced the bilinear tensor product for relational scoring ~\citep{nic
 	f_{i, j, k}^{RESCAL} := e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}w_{a,b,k}e_{ia}e_{jb}
 \end{equation}
 
-where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \newline
-A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. The model is defined as follows:
+where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \bigskip
+
+A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. \newline
+The model is defined as follows:
 
 \begin{subequations}
 	\begin{gather}
@@ -59,16 +61,13 @@ The contrastive max-margin objective is minimised during training. This objectiv
 
 where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \bigskip
 
-The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated during back propagation, producing a distributed word representation that aligns with the KB.
+The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \newpage
 
-\subsection{Modern Optimisation}
+\textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \bigskip
 
-Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \newpage
-Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space.
+Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \bigskip
 
-\subsection{Training Algorithm}
-
-(Doss et al. 2015) reimplement the NTN model in Tensorflow ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: \bigbreak
+\textbf{Training Algorithm.} (Doss et al. 2015) reimplement the NTN model in Tensorflow ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: \bigbreak
 
 \begin{algorithm}[H]
 	\textbf{loop} // repeat for $N$ experiments using random uniform hyperparameter configuration \\
@@ -84,10 +83,75 @@ Setting model hyperparameters remains a challenge in deep model training. A simp
 		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
 	\textbf{end loop}
 	\caption{Updated NTN Training Algorithm}
-\end{algorithm} \bigbreak
+\end{algorithm} \newpage
 
 
 % **************************** Section 2 **************************
 
 \section{Hypernetwork Tensor Factorisation}
 
+\subsection{Convolutional Tensor Factorisation}
+ConvE introduced the convolutional operator to link prediction model composition ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in subject-predicate interaction modelling by using 2-dimensional instead of 1-dimensional convolutions, being particularly effective at modelling knowledge graph (KG) nodes with high indegree. ConvE concatenates subject and predicate vectors, creating a 2-dimensional representation. Convolutional filters are then applied to this representation before it is flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows:
+
+\begin{equation}
+	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \overline{r_r} \right ]*w))W)e_o
+\end{equation}
+
+where $\psi_r$ is the relational score, $e_s$ is the subject, $e_r$ is the object, and $r_r$ is the predicate. $f$ is the concatenation operation between the subject and predicate, $w$ are the 2-dimensional convolutional filters and $W$ is the parameterised matrix of the fully connected layer. $g$ is a ReLU non-linearity applied to the fully connected layer output. ConvE is thus a convolutional factorisation composition. The computed relational probability is defined as follows: 
+
+\begin{equation}
+	p = \sigma(\psi_r(e_s,e_o)) 
+\end{equation}
+
+The binary cross-entropy objective is minimised during training. This objective is particularly effective as during we expect only a single true class during inference, modelled as $1$, and every other class to be false, $0$. The objective is defined follows:
+
+\begin{equation}
+	L(p, \; t) =  -\frac{1}{N}\sum_i(t \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i))
+\end{equation}
+
+where $L$ is the loss value, $p$ is the relational probability computed by the model, and $t$ is the target. $N$ is the number of entities, and $i$ is the batch sample number. \newpage
+
+
+\subsection{Hypernetwork Tensor Factorisation}
+
+Hypernetworks are meta networks that generate parameters for a main network ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that describes the entire weights of a given layer. This configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction, it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwoirk model can be defined as follows: 
+
+\begin{equation}
+	K^j = g(z^j), \quad \forall j = 1, \dots, D
+\end{equation}
+
+where $K$ are the layer parameters, $g$ is the hypernetwork composition, and $z$ is the hypernetwork input. \bigskip
+
+HypER is inspired by ConvE, and implements a convolutional operator that models entity-relational interactions ~\citep{balazevic2019hypernetwork}. HypER makes use of a hypernetwork to generate relation-specific convolutional filter. The subject and relational-filter are then used in a convolution operation to generate latent representation which is then flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows: 
+
+\begin{equation}
+	\phi_r(e_1, \; e_2) = f(vec(e_1 * (vec^{-1}(w_rH)))W)e_2
+\end{equation}
+
+where $\phi_r$ is the relational score, $e_1$ is the subject, and $e_2$ is the object. $vec^{-1}$ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters, $w$ is the predicate input and $H$ is the parameterised matrix of the fully connected layer of the hypernetwork. $f$ is a ReLU non-linearity applied to the fully connected layer output of the main network. HypER is thus a hypernetwork factorisation composition. The computed relational probability is defined as follows: 
+
+\begin{equation}
+	p = \sigma(\phi_r(e_1,e_2)) 
+\end{equation}
+
+The HypER training algorithm minimises the binary cross-entropy objective. \newpage
+
+\textbf{Hyper Covariate Shift}. We make the observation that hypernetworks may also suffer from covariate shift. The network parameters are adjusted during training, resulting in a distributional drift across the entire main network as training progresses. To address this problem, we introduce batch normalisation between the hypernetwork and main network. We adjust the model accordingly, and introduce HypER+. \bigskip 
+
+\textbf{Training Algorithm}. HypER+ is trained using the binary cross-entropy objective. We use the same hyperparameters as the original HypER model, as well as the Adam optimiser. The HypER+ training algorithm is as follows: \newline
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\textbf{Input} 
+	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
+  	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
+	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
+     		\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
+		\begin{math} e \gets y' - y \end{math} // compute error
+     		}
+	Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
+	\caption{HypER+ Training Algorithm}
+\end{algorithm} \bigskip
+ \bigskip
+ 
+\textbf{Pre-trained Word Vectors}. We then apply pre-trained GloVe word vectors ~\citep{pennington2014glove} to the HypER+ training algorithm. These are 200-dimensional embeddings, which are aggregated by the set of words that represent an entity, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation. 
