@@ -155,11 +155,17 @@ An IID dataset is order invariant, this is because the probability of seeing one
 
 \noindent An example of non-IID data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is dependent on the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. If we try to predict the temperature one day into the future, it is reasonable to believe that if the daily high on day $ t - 2 $ was mild, and the daily high on day $ t - 1 $ was warm, the daily high on day $ t $ may be hot. The probability of daily high on day $ t $ is thus dependent on the temperature on day $ t - 1$ and $ t - 2$. \par
  
-\noindent Natural language is a good example of this, where sentences are comprised of a sequence of words. If we had to try to predict the next word from a set of sequence words, it may be useful to have memory of what came before. \par
+\noindent Text expressed in natural language is another example of non-IID data. This data is arranged in sentences which are comprised of a sequence of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the word at $t -1$ and $t - 2$. For example in the sentence, "I think, therefore I ...", we would want to predict "am" as the next word. \par
 
-We can build models that attempt to estimate the probability distribution over a sequence. Formally, we Estimate joint probability over sequence and predict. equation:
+\noindent In the task of one step ahead prediction, we build models that attempt to estimate a probability distribution over a sequence. This distribution estimates the likelihood of seeing a data point given a seeing a preceding sequence, formally we estimate a conditional distribution given a joint distribution over a sequence. The conditional distribution is defined as follows:
+\begin{equation}
+	\begin{split}
+		\Pr( x_t | x_{t - 1},  x_{t - 2}, \dots,  x_n ) & = \Pr(x_t | x_{t - 1}) * \Pr(x_{t - 1}| x_{t - 2}) * \dots * \Pr(x_{t - n - 1}| x_{t - n}) * \Pr(x_t) \\
+		& =\prod_{1}^N \Pr(x_t | x_{t - 1:n})
+	\end{split}
+\end{equation}
 
-Feedforward networks like MLPs and CNNs do not have such a capability and can only map fixed-size input-data to their output labels. Recurrent Neural Networks (RNN) \unskip ~\citep{werbos1988generalization} solve this problem by generalising feedforward models to incorporate sequential dependencies. \par
+\noindent Feedforward networks like MLPs and CNNs do not have such a capability and can only map fixed-size input-data to their output labels. Recurrent Neural Networks (RNN) \unskip ~\citep{werbos1988generalization} solve this problem by generalising feedforward models to incorporate sequential dependencies. \par
 
 \noindent \textbf{Recurrent layers.} RNNs build context by generating a representation of a window of data samples. This context is called the state vector, and is used to used in regression tasks such as time-series estimation, as well as classification tasks such as language model word classification to augment input sample representations. RNN layers are composed of cells \unskip ~\citep{DLIndaba2018}, in contrast to nodes in MLPs and CNNs. Cells are modular units that take as input a self-generated state (context), and output from previous cells. They generate a new state and output as they process a data sample. An RNN cell can thus be modelled as follows: 
 \begin{equation}
