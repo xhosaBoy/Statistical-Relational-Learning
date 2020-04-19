@@ -214,23 +214,8 @@ Model over-parameterisation can lead to overfitting on in-sample data. This is b
 
 \noindent \textbf{Dropout.} During training, nodes in a deep model can generate redundant latent features that overfit to the training data. Dropout is a technique that is used during training to zero out a randomly selected proportion of neurons in the layer of a deep model \unskip ~\citep{srivastava2014dropout}. This has the effect of removing partial dependence between nodes deeper within the network, preventing complex co-adaptation of hidden layers, and resulting in more independent latent features \unskip ~\citep{hinton2012improving}. These features produce a more robust representation of the generative process of the data, allowing greater model generalisation to out-of-sample data. \par
 
-\noindent \textbf{Batch normalisation.} Deep models are composed of parameterised layers. These parameters are adjusted during training, resulting in a distribution shift of node output within each layer, a problem known as internal covariate shift. This distribution shift makes it difficult for the model to map the generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem \unskip ~\citep{ioffe2015batch}. Batch normalisation solves two other problems experienced during deep model training: nonlinearity saturation, and weight initialisation sensitivity, shortening the required training time. Batch normalisation works by computing the layer-specific moving average estimators of the batch mean and standard deviation. The normalised output is then scaled and shifted before being used as input for the following layer. Each layer's node output is then modified by these statistics before being passed onto the following layer. The training time batch statistics are then aggregated into global population statistics during test time. Batch normalisation during training time is thus defined as follows:
-\begin{subequations}
-	\begin{gather}
-		\hat{x_i} = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2}} \\
-		y_i = \gamma \hat{x_i} + \beta
-	\end{gather}
-\end{subequations}
-
-Batch normalisation during test time is thus defined as follows:
-\begin{subequations}
-	\begin{gather}
-		\hat{x} = \frac{x - E \left [ x \right ]}{\sqrt{VAR \left [ x \right ]}} \\
-		y = \gamma \hat{x} + \beta
-	\end{gather}
-\end{subequations}
-
-\noindent where $x$ is the normalised layer output, and $y$ is the scaled and shifted next layer input. 
+\noindent \textbf{Batch normalisation.} Deep models are composed of parameterised layers. When the parameters of these layers are adjusted during training using mini-batch optimisation, each data point within the batch contributes to the model output individually, however the error is aggregated across the entire batch. This results in a shift in the distribution of node output for each layer, a problem known as internal covariate shift. Covariate shift makes it difficult for the model to estimate the underlying generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem \unskip ~\citep{ioffe2015batch}. \newline
+Batch normalisation solves two other problems experienced during deep model training, namely nonlinearity saturation and weight initialisation sensitivity. It does this by computing layer-specific moving average estimators of the batch mean and standard deviation. Each layer's node output is then modified by these statistics before being passed onto the following layer. Batch statistics at training time are then aggregated into global population statistics during test time. Batch normalisation's application shortens the required model training time, and can result in better prediction performance. 
 
 
 %********************************** %Fourth Section  **************************************
