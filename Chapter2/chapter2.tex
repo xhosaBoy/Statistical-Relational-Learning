@@ -179,19 +179,19 @@ An IID dataset is order invariant, this is because the probability of seeing one
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\noindent \textbf{Backpropagation through time.} RNNs a trained using a method called backpropagation through time (BPTT) for recurrent parameters, and backpropagation for non-recurrent parameters. BPTT is a gradient-based process that computes parameter updates by chaining first order derivative cell outputs through sequence step. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backpropagated through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \par
+\noindent \textbf{Backpropagation through time.} RNNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps, and computing parameter gradients at each step with respect to the error generated at the prediction step. The error signal generated is backpropagated through the RNN layer to adjust the cell state, hidden and bias parameters, by computing their first order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
 
-\noindent Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
+\noindent Assuming a loss function $ E_t $, the gradient of the loss $E_t$ at time $t$ with respect to $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
 \begin{equation}
 	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
 \end{equation}
 
 \noindent One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
 \begin{equation}
-	\frac{\partial h_t} {\partial h_k} = \prod_J\frac{\partial h_j} {\partial h_{j-1}}
+	\frac{\partial h_t} {\partial h_k} = \prod_{j=k+1}^t\frac{\partial h_j} {\partial h_{j-1}}
 \end{equation}
 
-\noindent for $j$ from $k + 1$ to $t$. This multiplicative operation causes small gradients to become progressively smaller as the sequence window become larger, or become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as Long Short-Term Memory \unskip ~\citep{hochreiter1997long} and Gated Recurrent Units \unskip ~\citep{cho2014learning}.
+\noindent This multiplicative operation causes small gradients to becomes progressively smaller as the sequence window become larger, or large gradients to become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
 
 %********************************** %Third Section  **************************************
