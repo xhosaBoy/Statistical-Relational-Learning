@@ -151,11 +151,11 @@ MLPs suffer from an explosion of parameters  ~\citep{krizhevsky2012imagenet}. In
 
 \subsection{Recurrent networks}
 
-An IID dataset is order invariant, this is because the probability of seeing one data point in no way influences the probability of seeing another data point. Practically, this means shuffling the data when training a model has no influence on prediction performance. Some data is however non-IID, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is dependent on the steps before it. \par
+An IID dataset is order invariant, this is because the probability of seeing one data point in no way influences the probability of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance. Some data is however non-IID, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is dependent on the steps before it. \par
 
 \noindent An example of non-IID data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is dependent on the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. If we try to predict the temperature one day into the future, it is reasonable to believe that if the daily high on day $ t - 2 $ was mild, and the daily high on day $ t - 1 $ was warm, the daily high on day $ t $ may be hot. The probability of daily high on day $ t $ is thus dependent on the temperature on day $ t - 1$ and $ t - 2$. \par
  
-\noindent Text expressed in natural language is another example of non-IID data. This data is arranged in sentences which are comprised of a sequence of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the word at $t -1$ and $t - 2$. For example in the sentence, "I think, therefore I ...", we would want to predict "am" as the next word. \par
+\noindent Text expressed in natural language is another example of non-IID data. This data is arranged in sentences which are comprised of sequences of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the word at $t -1$ and $t - 2$. For example in the sentence, "I think, therefore I ...", we would want to predict "am" as the next word. \par
 
 \noindent In the task of one step ahead prediction, we build models that attempt to estimate a probability distribution over a sequence. This distribution estimates the likelihood of seeing a data point given a seeing a preceding sequence, formally we estimate a conditional distribution given a joint distribution over a sequence. The conditional distribution is defined as follows:
 \begin{equation}
@@ -174,12 +174,12 @@ An IID dataset is order invariant, this is because the probability of seeing one
 	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b)
 \end{equation}
 
-\noindent where $h_t$ is the cell output, and added to the state vector as context for following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ are the recurrent parameters, $W_{xh}$ are the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction, which is given by:
+\noindent where $h_t$ is the cell output, and added to the state vector as context for following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ contains the recurrent parameters, $W_{xh}$ contains the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction, which is given by:
 \begin{equation}
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\noindent \textbf{Backpropagation through time.} Back-propagation through time (BPTT) is a gradient-based process that computes parameter updates by chaining first order derivative cell outputs through sequence-time. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \par
+\noindent \textbf{Backpropagation through time.} RNNs a trained using a method called backpropagation through time (BPTT) for recurrent parameters, and backpropagation for non-recurrent parameters. BPTT is a gradient-based process that computes parameter updates by chaining first order derivative cell outputs through sequence step. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backpropagated through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \par
 
 \noindent Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
 \begin{equation}
