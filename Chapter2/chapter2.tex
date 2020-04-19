@@ -149,36 +149,49 @@ MLPs suffer from an explosion of parameters  ~\citep{krizhevsky2012imagenet}. In
 
 %********************************** %Recurrent Networks **************************************
 
-\subsection{Recurrent Networks}
+\subsection{Recurrent networks}
 
-Not all datasets are IID. Non-IID data presents itself in the form of sequences. Natural language is a good example of this, where sentences are comprised of a sequence of words. If we had to try to predict the next word from a set of sequence words, it may be useful to have memory of what came before. Feedforward networks like MLPs and CNNs do not have such a capability and can only map fixed-size input-data to their output labels. Recurrent Neural Networks (RNN) ~\citep{werbos1988generalization} solve this problem by generalising feedforward models to incorporate sequential dependencies. \bigskip
+An IID dataset is order invariant, this is because the probability of seeing one data point in no way influences the probability of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance. Some data is however non-IID, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is dependent on the steps before it. \par
 
-\textbf{Recurrent Layers.} RNNs build context by generating a representation of a window of data samples. This context is called the state vector, and is used to used in regression tasks such as time-series estimation, as well as classification tasks such as language model word classification to augment input sample representations. RNN layers are composed of cells ~\citep{DLIndaba2018}, in contrast to nodes in MLPs and CNNs. Cells are modular units that take as input a self-generated state (context), and output from previous cells. They generate a new state and output as they process a data sample. An RNN cell can thus be modelled as follows: 
+\noindent An example of non-IID data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is dependent on the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. If we try to predict the temperature one day into the future, it is reasonable to believe that if the daily high on day $ t - 2 $ was mild, and the daily high on day $ t - 1 $ was warm, the daily high on day $ t $ may be hot. The probability of daily high on day $ t $ is thus dependent on the temperature on day $ t - 1$ and $ t - 2$. \par
+ 
+\noindent Text expressed in natural language is another example of non-IID data. This data is arranged in sentences which are comprised of sequences of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the word at $t -1$ and $t - 2$. For example in the sentence, "I think, therefore I ...", we would want to predict "am" as the next word. \par
 
+\noindent In the task of one step ahead prediction, we build models that attempt to estimate a probability distribution over a sequence. This distribution estimates the likelihood of seeing a data point given a seeing a preceding sequence, formally we estimate a conditional distribution given a joint distribution over a sequence. The conditional distribution is defined as follows:
+\begin{equation}
+	\begin{split}
+		\Pr( x_t | x_{t - 1},  x_{t - 2}, \dots,  x_n ) & = \Pr(x_t | x_{t - 1}) * \Pr(x_{t - 1}| x_{t - 2}) * \dots * \Pr(x_{t - n - 1}| x_{t - n}) * \Pr(x_t) \\
+		& =\prod_{1}^N \Pr(x_t | x_{t - 1:n})
+	\end{split}
+\end{equation}
+
+\noindent Recurrent neural networks (RNNs) estimate the conditional distribution of dependent data points from non-IID data by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps which are combined with a recurrent parameter matrix using a multiplication operator \unskip ~\citep{werbos1988generalization}. RNNs thus extend feedforward networks like MLPs and CNNs by directly incorporating sequential dependencies between data in the model. \par
+
+\noindent Additional context applied to RNN prediction is made at the expense of a higher number of model parameters. The increase is parameters is linear in the number of sequence steps considered in the context summary. Practically this means a truncated sequence is used to provide context during training, to keep computation tractable. In the following we discuss the RNN forward pass. \par
+
+\noindent \textbf{Recurrent layers.} RNNs build context by generating a representation of a window of data samples. This representation is defined as a state vector, which is added to a hidden vector and bias of a layer within the network. The layer output is then passed through a nonlinear activation before being passed to the proceeding layer. RNN layers are comprised of cells, which contain an internal state, hidden output and a bias \unskip ~\citep{DLIndaba2018}. An RNN cell can thus be defined as follows: 
 \begin{equation}
 	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b)
 \end{equation}
 
-where $h_t$ the cell output, and used as the state vector for input received as the next sequence entry. $\sigma$ is a nonlinear activation function, $W_{hh}$ are the state vector input parameters, $W_{xh}$ are the input parameters, $x_t$ is the input and $b$ is the bias. $h_t$ could then be used to predict the word for the next sequence entry, which would be given by:
-
+\noindent where $h_t$ is the cell output, and added to the state vector as context for following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ contains the recurrent parameters, $W_{xh}$ contains the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction, which is given by:
 \begin{equation}
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\textbf{Backpropagation Through Time.} Back-propagation through time (BPTT) is a gradient-based process that computes parameter updates by chaining first order derivative cell outputs through sequence-time. An error signal is computed at the current sequence-time, and the first order derivative is computed against all sequence entries in a specific window, using the relative sequence-time-specific output. That time-specific error is then backprograted through the RNN layer to adjust the cell state and input parameters. A fixed sequence length is decided upfront for updating cell parameters. This is called truncated BPTT and has both training algorithm as well as compute resource advantages. \newpage
-Assuming a loss function $L$, the gradient of the loss $E_t$ at time $t$ on $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
+\noindent \textbf{Backpropagation through time.} RNNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps, and computing parameter gradients at each step with respect to the error generated at the prediction step. The error signal generated is backpropagated through the RNN layer to adjust the cell state, hidden and bias parameters, by computing their first order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
 
+\noindent Assuming a loss function $ E_t $, the gradient of the loss $E_t$ at time $t$ with respect to $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
 \begin{equation}
 	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
 \end{equation}
 
-One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
-
+\noindent One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
 \begin{equation}
-	\frac{\partial h_t} {\partial h_k} = \prod_J\frac{\partial h_j} {\partial h_{j-1}}
+	\frac{\partial h_t} {\partial h_k} = \prod_{j=k+1}^t\frac{\partial h_j} {\partial h_{j-1}}
 \end{equation}
 
-for $j$ from $k + 1$ to $t$. This multiplicative operation causes small gradients to become progressively smaller as the sequence window become larger, or become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as Long Short-Term Memory ~\citep{hochreiter1997long} and Gated Recurrent Units ~\citep{cho2014learning}.
+\noindent This multiplicative operation causes small gradients to becomes progressively smaller as the sequence window become larger, or large gradients to become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
 
 %********************************** %Third Section  **************************************
