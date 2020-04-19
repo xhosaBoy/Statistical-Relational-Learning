@@ -198,41 +198,24 @@ An IID dataset is order invariant, this is because the probability of seeing one
 
 \section{Regularisation}
 
-Model over parameterisation can lead to overfitting of in-sample data. This because the degrees of freedom available to estimate a function allow very complex nonlinear functions to be discovered, where these nonlinear functions are not representative of the generative process of the data. In fact, the model ends up modelling noise in the dataset. Overfitting results in poor generalisation across training, validation and testing datasets. This problem forms part of the broader bias/variance trade off, specifically high model variance due to over parameterisation. Deep learning models are particularly sensitive to overfitting given the high number of parameters present within the model. Regularisation techniques are used to improve the generalisation capability of deep models across training and test datasets. \bigskip
+Model over-parameterisation can lead to overfitting on in-sample data. This is because the degrees of freedom available to estimate a function allow very complex nonlinear functions to be discovered, where these nonlinear functions are not representative of the generative process of the data. In fact, the model may end up fitting to the noise in the dataset. Overfitting results in poor generalisation to new data. This problem forms part of the broader bias/variance trade off, specifically high model variance due to over parameterisation. Deep learning models are particularly sensitive to overfitting given the high number of parameters present within the model. Regularisation techniques are used to improve the generalisation capability of deep models. \par
 
-\textbf{L1 and L2 Regularisation.} Lasso (L1) ~\citep{tibshirani1996regression} and Ridge (L2) ~\citep{hoerl1970ridge} regression are two common approaches used in regularisation. These approaches prevent overfitting by adding a term to the loss that penalizes the model if it becomes too complex. They ares defined as follows:
-
+\noindent \textbf{L1 and L2 regularisation.} Lasso (L1) \unskip ~\citep{tibshirani1996regression} and Ridge (L2) \unskip ~\citep{hoerl1970ridge} regression are two common approaches to prevent overfitting, by adding a term to the loss that penalises the model if it becomes too complex. They are defined as follows:
 \begin{subequations}
 	\begin{gather}
 		loss_{L1} = loss + \lambda\sum_i\abs{w_i}  \\
-		loss_{L2} = loss + \lambda\sum_iw^2
+		loss_{L2} = loss + \lambda\sum_iw_i^2
 	\end{gather}
 \end{subequations}
 
-L1 regularization has the effect of forcing some parameters to shrink to 0, effectively removing them from the model. L2 regularization has the effect of preventing any of the parameters from becoming too large and overpowering the others. \newline
-\textbf{Early Stopping.} As deep models are trained using a supervised learning paradigm, the model training accuracy gradually increases. As training continues, the model validation accuracy gradually increases, and then begins decreasing. In this scenario the model has begun overfitting the training data. If the model continues training, the validation accuracy may continue decreasing, and should the model then be tested, the resulting test accuracy may be lower than the training accuracy. Early stopping ~\citep{prechelt1998early} is a technique used to try to prevent overfitting. Once the training and validation accuracies begin to diverge, training continues for a few more epoch, and if the divergence persists, training is terminated. \newline
-\textbf{Dropout.} During training, nodes in a deep model can generate redundant latent features that overfit training data. Dropout is a technique that is used to zero out a proportion of neurons in the layer of a deep model ~\citep{srivastava2014dropout}. This has the effect of removing partial dependence between nodes deeper within the network, a form of principal component analysis generating independent latent features. These latent features result in a simpler model representation of the generative process of the data, and therefore allow it to generalise better across datasets. \newline
-\textbf{Batch Normalisation.} Deep models are composed of parameterised layers. These parameters are adjusted during training, resulting in a distribution shift of node output within each layer, a problem known as internal covariate shift. This distribution shift makes it difficult for the model to map the generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem ~\citep{ioffe2015batch}. Batch normalisation solves two other problems experienced during deep model training: nonlinearity saturation, and weight initialisation sensitivity, shortening the required training time. \newline
-Batch normalisation works by computing the layer-specific moving average estimators of the batch mean and standard deviation. The normalised output is then scaled and shifted before being used as input for the following layer. Each layer's node output is then modified by these statistics before being passed onto the following layer. The training time batch statistics are then aggregated into global population statistics during test time. \newline
-Batch normalisation during training time is thus defined as follows:
+\noindent L1 regularisation has the effect of forcing some parameters to shrink to 0, effectively removing them from the model. L2 regularisation has the effect of preventing any of the parameters from becoming too large and overpowering the others. \par
 
-\begin{subequations}
-	\begin{gather}
-		\hat{x_i} = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2}} \\
-		y_i = \gamma \hat{x_i} + \beta
-	\end{gather}
-\end{subequations}
+\noindent \textbf{Early stopping.} As deep models are trained using a supervised learning paradigm, the model training accuracy gradually increases. As training continues, the model validation accuracy gradually increases, and then begins decreasing. At this point the model has begun overfitting the training data. If the model continues training, the validation accuracy may continue decreasing, and should the model then be tested, the resulting test accuracy may be lower than the training accuracy. Early stopping \unskip ~\citep{prechelt1998early} is a technique used to try to prevent overfitting. Once the training and validation accuracies begin to diverge, training continues for a few more epochs, and if the divergence persists, training is terminated. \par
 
-Batch normalisation during test time is thus defined as follows:
+\noindent \textbf{Dropout.} During training, nodes in a deep model can generate redundant latent features that overfit to the training data. Dropout is a technique that is used during training to zero out a randomly selected proportion of neurons in the layer of a deep model \unskip ~\citep{srivastava2014dropout}. This has the effect of removing partial dependence between nodes deeper within the network, preventing complex co-adaptation of hidden layers, and resulting in more independent latent features \unskip ~\citep{hinton2012improving}. These features produce a more robust representation of the generative process of the data, allowing greater model generalisation to out-of-sample data. \par
 
-\begin{subequations}
-	\begin{gather}
-		\hat{x} = \frac{x - E \left [ x \right ]}{\sqrt{VAR \left [ x \right ]}} \\
-		y = \gamma \hat{x} + \beta
-	\end{gather}
-\end{subequations}
-
-where $x$ is the normalised layer output, and $y$ is the scaled and shifted next layer input. 
+\noindent \textbf{Batch normalisation.} Deep models are composed of parameterised layers. When the parameters of these layers are adjusted during training using mini-batch optimisation, each data point within the batch contributes to the model output individually, however the error is aggregated across the entire batch. This results in a shift in the distribution of node output for each layer, a problem known as internal covariate shift. Covariate shift makes it difficult for the model to estimate the underlying generative distribution of the data, and batch normalisation has been proposed as a technique to compensate for this problem \unskip ~\citep{ioffe2015batch}. \newline
+Batch normalisation solves two other problems experienced during deep model training, namely nonlinearity saturation and weight initialisation sensitivity. It does this by computing layer-specific moving average estimators of the batch mean and standard deviation. Each layer's node output is then modified by these statistics before being passed onto the following layer. Batch statistics at training time are then aggregated into global population statistics during test time. Batch normalisation's application shortens the required model training time, and can result in better prediction performance. 
 
 
 %********************************** %Fourth Section  **************************************
