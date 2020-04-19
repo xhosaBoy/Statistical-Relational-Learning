@@ -165,14 +165,16 @@ An IID dataset is order invariant, this is because the probability of seeing one
 	\end{split}
 \end{equation}
 
-\noindent Feedforward networks like MLPs and CNNs do not have such a capability and can only map fixed-size input-data to their output labels. Recurrent Neural Networks (RNN) \unskip ~\citep{werbos1988generalization} solve this problem by generalising feedforward models to incorporate sequential dependencies. \par
+\noindent Recurrent neural networks (RNNs) estimate the conditional distribution of dependent data points from non-IID data by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps which are combined with a recurrent parameter matrix using a multiplication operator \unskip ~\citep{werbos1988generalization}. RNNs thus extend feedforward networks like MLPs and CNNs by directly incorporating sequential dependencies between data in the model. \par
 
-\noindent \textbf{Recurrent layers.} RNNs build context by generating a representation of a window of data samples. This context is called the state vector, and is used to used in regression tasks such as time-series estimation, as well as classification tasks such as language model word classification to augment input sample representations. RNN layers are composed of cells \unskip ~\citep{DLIndaba2018}, in contrast to nodes in MLPs and CNNs. Cells are modular units that take as input a self-generated state (context), and output from previous cells. They generate a new state and output as they process a data sample. An RNN cell can thus be modelled as follows: 
+\noindent Additional context applied to RNN prediction is made at the expense of a higher number of model parameters. The increase is parameters is linear in the number of sequence steps considered in the context summary. Practically this means a truncated sequence is used to provide context during training, to keep computation tractable. In the following we discuss the RNN forward pass. \par
+
+\noindent \textbf{Recurrent layers.} RNNs build context by generating a representation of a window of data samples. This representation is defined as a state vector, which is added to a hidden vector and bias of a layer within the network. The layer output is then passed through a nonlinear activation before being passed to the proceeding layer. RNN layers are comprised of cells, which contain an internal state, hidden output and a bias \unskip ~\citep{DLIndaba2018}. An RNN cell can thus be defined as follows: 
 \begin{equation}
 	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b)
 \end{equation}
 
-\noindent where $h_t$ the cell output, and used as the state vector for input received as the next sequence entry. $\sigma$ is a nonlinear activation function, $W_{hh}$ are the state vector input parameters, $W_{xh}$ are the input parameters, $x_t$ is the input and $b$ is the bias. $h_t$ could then be used to predict the word for the next sequence entry, which would be given by:
+\noindent where $h_t$ is the cell output, and added to the state vector as context for following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ are the recurrent parameters, $W_{xh}$ are the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction, which is given by:
 \begin{equation}
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
