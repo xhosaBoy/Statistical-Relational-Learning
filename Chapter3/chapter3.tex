@@ -2,7 +2,7 @@
 %*******************************************************************************
 %****************************** Third Chapter **********************************
 %*******************************************************************************
-\chapter{Neural Tensor Factorisation}
+\chapter{Neural tensor factorisation}
 
 % **************************** Define Graphics Path **************************
 
@@ -13,9 +13,13 @@
 \fi
 
 
-Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach aims to rank plausible relationships between entities by using using trainable embedding representaitons. Previous latent feature models have focused on limiting the number of parameters so as to be able to scale to large KBs, at a cost of complex entity-relational interaction modelling. \newline
-Neural tensor networks (NTN), An extension to tensor factorisation was the first successful approach at taking advantage of expressiveness of deep models. It relied on adding a recursive network (RCN) representation to the bilnear tensor product, and wrapping that representation in a fully connected layer to then compute a relational score. Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches by applying the convolutional operation in modelling entity-relational interactions, before completing a factorisation to compute a relational score. Hypernetworks were then applied to the ConvE model (HypER) to add further expressive power by pre-computing relational filter representations for subsequent use in a neural tensor factorisation. \newline
-In this chapter we examine the NTN model, and attempt a simple improvement by applying adaptive moment estimation optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
+Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  \unskip ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach computes unnormalised scores for potential relationships between entities, and then uses the sigmoid function to produce a probability of plausibility in the interval $ (0, 1)$ for each relational score. These probabilities are then sorted in descending order to rank potential relationships with the highest confidence. \par
+
+\noindent Previous latent feature models have focused on limiting the number of parameters, at the expense of complex entity-relational interaction modelling, in order to scale to large KBs. The neural tensor network (NTN), an extension of tensor factorisation, was the first successful approach to link prediction at taking advantage of expressiveness of deep models. It relies on adding a recursive network (RCN) \unskip ~\citep{pollack1990recursive} representation to the bilinear tensor product, and then using a fully connected layer to compute a relational score, an unnormalised measure of confidence of a potential relationship between two entities. \par
+
+\noindent Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches, by applying the convolutional operation in modelling subject entity-relational interactions, and then using the multiplication operator between the generated representation and object entity, to compute a relational score. Hypernetworks were then used to extend the ConvE model (HypER) to add further expressive power, by performing a nonlinear transformation of relational filter representations, which are then used for entity-relational interaction modelling. \newpage
+
+\noindent In this chapter we examine the NTN model, and attempt a simple improvement by applying adaptive moment estimation (Adam) optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension of the HypER model which compensates for covariate shift introduced by nonlinear transformations of relational filters. Finally, we extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
 
 
 % **************************** First Section **************************
