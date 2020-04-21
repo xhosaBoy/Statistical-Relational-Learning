@@ -27,17 +27,14 @@ Open domain question answering is an area of research concerned with reasoning a
 \section{Neural Tensor Networks}
 
 \subsection{Neural Tensor Factorisation}
-RESCAL introduced the bilinear tensor product for relational scoring ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
-
+RESCAL introduced the bilinear tensor product for relational scoring \unskip ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 \begin{equation}
 	f_{i, j, k}^{RESCAL} := e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}w_{a,b,k}e_{ia}e_{jb}
 \end{equation}
 
-where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \bigskip
+\noindent where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \par
 
-A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. \newline
-The model is defined as follows:
-
+\noindent A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) \unskip ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. The model is defined as follows:
 \begin{subequations}
 	\begin{gather}
 		n_{ik}^{j} = e_i^TW_ke_j \\
@@ -46,32 +43,32 @@ The model is defined as follows:
 	\end{gather}
 \end{subequations}
 
-where $n$ is the relational score, $\sigma$ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $S$ and $O$ indexed by relation $R$. This model introduces non-linear entity-relational interaction modelling to tensor factorisation. 
+\noindent where $n$ is the relational score, $\sigma$ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $S$ and $O$ indexed by relation $R$. This model introduces non-linear entity-relational interaction modelling to tensor factorisation. 
 
 \subsection{Recursive Neural Tensor Factorisation}
-Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score ~\citep{socher2013reasoning}. Recursive networks (RCN) try to capture the rules for word combinations by constructing compositional representations of two words ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN extended nonlinear tensor factorisation model is defined as follows:
-
+Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score \unskip ~\citep{socher2013reasoning}. Recursive networks (RCN) try to capture the rules for word combinations by constructing compositional representations of two words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN extended nonlinear tensor factorisation model is defined as follows:
 \begin{equation}
 	g(e_1, R, e_2) =  u_R^Tf(e_1^TW_R^{\left [1:k\right ]}e_2 + V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ] + b_R)
 \end{equation}
 
-where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias. \newline
+\noindent where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias. \par
 
-The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample - a fact present in the KB, and a confidence magnitude on a corrupt sample - a randomly generated fact not present in the KB. The correct and corrupt samples are used by the objective as follows:
-
+\noindent The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample - a fact present in the KB, and a confidence magnitude on a corrupt sample - a randomly generated fact not present in the KB. The correct and corrupt samples are used by the objective as follows:
 \begin{equation}
 	J(\si{\ohm}) =  \sum_{i=1}^N\sum_{c=1}^Cmax(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda\left\lVert \si{\ohm} \right\rVert_2^2
 \end{equation}
 
-where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \bigskip
+\noindent where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
 
-The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \bigskip
+\noindent The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \par
 
-\textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \bigskip
+\noindent \textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise \unskip ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \par
 
-Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \bigskip
+\noindent Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \par
 
-\textbf{Training Algorithm.} (Doss et al. 2015) reimplement the NTN model in Tensorflow ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: \bigbreak
+\noindent \textbf{Training Algorithm.} (Doss et al. 2015) reimplement the NTN model in Tensorflow \unskip ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: 
+
+\medskip
 
 \begin{algorithm}[H]
 	\textbf{loop} // repeat for $N$ experiments using random uniform hyperparameter configuration \\
@@ -87,7 +84,7 @@ Setting model hyperparameters remains a challenge in deep model training. A simp
 		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
 	\textbf{end loop}
 	\caption{Updated NTN Training Algorithm}
-\end{algorithm} \newpage
+\end{algorithm} 
 
 
 % **************************** Second Section **************************
