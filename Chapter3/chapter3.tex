@@ -7,27 +7,45 @@
 % **************************** Define Graphics Path **************************
 
 \ifpdf
-    \graphicspath{{Chapter3/Figs/Raster/}{Chapter3/Figs/PDF/}{Chapter3/Figs/}}
+     \graphicspath{{Figs/Chapter3/}}
 \else
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
 
 
-Open domain question answering is concerned with reasoning about knowledge expressed in natural language. In the task of open domain question answering, the knowledge graph (KG) framework has proved useful in encoding information about a domain. The resource description framework (RDF) formalism, subject-predicate-object, which is especially useful in representing dyadic relationships between entities expressed as KG nodes and edges. Link prediction can be used as a paradigm to the task of open domain question answering, where general questions can be posed as as potential relationships between nodes of a KG. \par
+Open domain question answering is concerned with reasoning about knowledge expressed in natural language. The Knowledge graphs (KG) framework has proved useful in encoding information about a domain that can be used for reasoning. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in representing dyadic relationships between entities expressed as KG nodes and edges. Link prediction can be used as a paradigm for solving the task of open domain question answering, where general questions can be posed as as potential relationships between nodes of a KG. Figure 3.1 shows how a KG can be used to answer a question like "In which country is the city of Cape Town?". 
 
-% Open domain question answering using a knowledge graph %
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth]{Open_domain_question_answering_using_a_knowledge_graph.png}
+	\caption{Open domain question answering using a knowledge graph.}
+\end{figure}
 
-\noindent Tensor factorisation has shown promise as a machine learning approach to temporal modeling of social networks, and in domains that are high-dimensional and sparse, such as singular value decomposition for recommender systems \unskip ~\citep{koren2009matrix}. Tensor factorisation is also compute efficient, and lends itself the GPU computation common in modern machine learning workloads. This approach decomposes entity-relational tensors into latent feature representations of entities and relations using an entity matrix and relational tensor respectively. The entity matrix is composed of entity vectors, and the relational tensor is composed of relational matrix slices which correspond to all the set of relation types in the KG, see figure 5. The product of the entity matrix, a relational matrix slice and transposed entity matrix is the bilinear tensor product. The operation generates an entity-relational tensor with unormalised scores of potential relationships between entities, indexed by relation. A probability of relation in the interval $ (0, 1) $ is then computed for each score using a sigmoid function. These probabilities are sorted in descending order to rank the plausibility of potential relationships. \par
+\noindent The black edges indicate that the Cape Town is the capital of the Western Cape, and that the Western Cape is in South Africa. Similarly the capital of Gauteng is Johannesburg, and Johannesburg is in the same country as Gauteng. This information can be used to infer that Cape Town may also be in South Africa, indicated by the red edge. \par
 
-% Entity relational tensor & tensor decomposition %
+\noindent Tensor factorisation has shown promise as a machine learning approach to temporal modeling of social networks, and in domains that are high-dimensional and sparse, such as singular value decomposition for recommender systems \unskip ~\citep{koren2009matrix}. Tensor factorisation is also compute efficient, and lends itself the GPU computation common in modern machine learning workloads. This approach decomposes entity-relational tensors into latent feature representations of entities and relations using an entity matrix and relational tensor respectively. The entity matrix is composed of entity vectors, and the relational tensor is composed of relational matrix slices which correspond to all the set of relation types in the KG, see figure 5. The product of the entity matrix, a relational matrix slice and transposed entity matrix is the bilinear tensor product. The operation generates an entity-relational tensor with unormalised scores of potential relationships between entities, indexed by relation. A probability of relation in the interval $ (0, 1) $ is then computed for each score using a sigmoid function. These probabilities are sorted in descending order to rank the plausibility of potential relationships. 
 
-\noindent  Previous latent feature approaches focused on limiting the total number of model parameters in order to scale to large knowledge bases (KBs), the representation of KG facts as RDF triples. This approach was often at the expense of complex entity-relational interaction modelling. The neural tensor network (NTN), a nonlinear extension of tensor factorisation, was the first successful link prediction technique to take advantage of the expressiveness of neural compositional models. It relies on adding a recursive network (RCN) \unskip ~\citep{pollack1990recursive} representation to the bilinear tensor product, and then using a fully connected layer to compute a relational score as a measure of confidence in a potential relationship between two entities. \par
+\begin{figure}[H]
+	\parbox{.45\linewidth}{
+   		\centering
+    		\includegraphics[width=0.4\textwidth, height=0.4\textwidth]{entity_relational_tensor.png}
+		\caption{Entity relational tensor $ X $of size $ n \; x \; n $ with unnormalised relational scores.}
+	}
+	\hfill
+	\parbox{.45\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.4\textwidth]{factorised_entity_relational_tensor_ARAt.png}
+		\caption{Factorised entity relational tensor decomposed into entity matrix $ A $ of size $ n \; x \; r $, relational matrix $ R $ of size $ r \; x \; r $, and transposed entity matrix $ A^T $ of size $ r \; x \; n $.}
+	}
+\end{figure}
+
+\noindent Previous latent feature approaches focused on limiting the total number of model parameters in order to scale to large knowledge bases (KBs), the representation of KG facts as RDF triples. This approach was often at the expense of complex entity-relational interaction modelling. The neural tensor network (NTN), a nonlinear extension of tensor factorisation, was the first successful link prediction technique to take advantage of the expressiveness of neural compositional models. It relies on adding a recursive network (RCN) \unskip ~\citep{pollack1990recursive} representation to the bilinear tensor product, and then using a fully connected layer to compute a relational score as a measure of confidence in a potential relationship between two entities. \par
 
 \noindent Convolutional entity-relational modelling (ConvE) was similarly effective at extending tensor factorisation. ConvE concatenates a latent subject entity and relation vector into an entity-relational matrix, and then applies a 2-dimensional convolution operation on this matrix. A product is then taken between the generated representation and latent object entity to compute a relational score. Once again a sigmoid function is applied to produce a probability of relational plausibility between the two entities, indexed by relation. \par 
 
 \noindent An alternative approach of applying convolution to neural tensor factorisation is the HypER model. HypER models entity-relational interactions by using a hypernetwork to generate 2-dimensional relation-specific convolutional filters. A 2-dimensional convolution is then taken between a latent subject entity and relational filter. Finally a product is taken between the generated entity-relational vector and a latent object entity, which computes a relational score. A sigmoid function is used to generate a probability of relational plausibility between the subject and object entity, indexed by relation. \par
 
-\noindent In this chapter we assess the NTN model and attempt a simple improvement by applying adaptive moment estimation (Adam) optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension of the HypER model which compensates for covariate shift introduced by hypernetwork generated relation-specific convolutional filters. Finally we extend HypER+ to make use of pre-trained GloVe word embeddings and address the problem of entity interaction sparsity in KGs.
+\noindent In this chapter we assess the NTN model and attempt a simple improvement by applying adaptive moment estimation (Adam) optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension of the HypER model which compensates for covariate shift introduced by hypernetwork generated relation-specific convolutional filters. Finally we extend HypER+ to make use of pre-trained GloVe word embeddings and attempt semantic enhancement of entities and relations. 
 
 
 % **************************** First Section **************************
