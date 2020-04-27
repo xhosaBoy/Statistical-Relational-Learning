@@ -2,88 +2,123 @@
 %*******************************************************************************
 %****************************** Third Chapter **********************************
 %*******************************************************************************
-\chapter{Neural Tensor Factorisation}
+\chapter{Neural tensor factorisation}
 
 % **************************** Define Graphics Path **************************
 
 \ifpdf
-    \graphicspath{{Chapter3/Figs/Raster/}{Chapter3/Figs/PDF/}{Chapter3/Figs/}}
+     \graphicspath{{Figs/Chapter3/}}
 \else
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
 
 
-Open domain question answering is an area of research concerned with reasoning about knowledge expressed in natural language. Knowledge base (KB) link prediction using latent feature modelling is an approach that has been applied to this task, with varying degrees of success  ~\citep{nguyen2017novel, diefenbach2018wdaqua, kristiadi2019incorporating}. This approach aims to rank plausible relationships between entities by using using trainable embedding representaitons. Previous latent feature models have focused on limiting the number of parameters so as to be able to scale to large KBs, at a cost of complex entity-relational interaction modelling. \newline
-Neural tensor networks (NTN), An extension to tensor factorisation was the first successful approach at taking advantage of expressiveness of deep models. It relied on adding a recursive network (RCN) representation to the bilnear tensor product, and wrapping that representation in a fully connected layer to then compute a relational score. Convolutional entity representations (ConvE) were similarly effective at extending tensor factorisation approaches by applying the convolutional operation in modelling entity-relational interactions, before completing a factorisation to compute a relational score. Hypernetworks were then applied to the ConvE model (HypER) to add further expressive power by pre-computing relational filter representations for subsequent use in a neural tensor factorisation. \newline
-In this chapter we examine the NTN model, and attempt a simple improvement by applying adaptive moment estimation optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension to the HypER model which compensates covariate shift introduced by augmenting relational filters with a hypernetwork. We then extend HypER+ to make use of pre-trained GloVe word embeddings, and address the problem of entity interaction sparsity in KBs.
+Open domain question answering is concerned with reasoning about knowledge expressed in natural language. The Knowledge graphs (KG) framework has proved useful in encoding information about a domain that can be used for reasoning. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in representing dyadic relationships between entities expressed as KG nodes and edges. Link prediction can be used as a paradigm for solving the task of open domain question answering, where general questions can be posed as as potential relationships between nodes of a KG. Figure 3.1 shows how a KG can be used to answer a question like "In which country is the city of Cape Town?". 
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth]{Open_domain_question_answering_using_a_knowledge_graph.png}
+	\caption{Open domain question answering using a knowledge graph.}
+\end{figure}
+
+\noindent The black edges indicate that the Cape Town is the capital of the Western Cape, and that the Western Cape is in South Africa. Similarly the capital of Gauteng is Johannesburg, and Johannesburg is in the same country as Gauteng. This information can be used to infer that Cape Town may also be in South Africa, indicated by the red edge. \par
+
+\noindent Tensor factorisation has shown promise as a machine learning approach to temporal modeling of social networks, and in domains that are high-dimensional and sparse, such as singular value decomposition for recommender systems \unskip ~\citep{koren2009matrix}. Tensor factorisation is also compute efficient, and lends itself the GPU computation common in modern machine learning workloads. This approach decomposes entity-relational tensors into latent feature representations of entities and relations using an entity matrix and relational tensor respectively. The entity matrix is composed of entity vectors, and the relational tensor is composed of relational matrix slices which correspond to all the set of relation types in the KG, see figure 5. The product of the entity matrix, a relational matrix slice and transposed entity matrix is the bilinear tensor product. The operation generates an entity-relational tensor with unormalised scores of potential relationships between entities, indexed by relation. A probability of relation in the interval $ (0, 1) $ is then computed for each score using a sigmoid function. These probabilities are sorted in descending order to rank the plausibility of potential relationships. 
+
+\begin{figure}[H]
+	\parbox{.45\linewidth}{
+   		\centering
+    		\includegraphics[width=0.4\textwidth, height=0.4\textwidth]{entity_relational_tensor.png}
+		\caption{Entity relational tensor $ X $of size $ n \; x \; n $ with unnormalised relational scores.}
+	}
+	\hfill
+	\parbox{.45\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.4\textwidth]{factorised_entity_relational_tensor_ARAt.png}
+		\caption{Factorised entity relational tensor decomposed into entity matrix $ A $ of size $ n \; x \; r $, relational matrix $ R $ of size $ r \; x \; r $, and transposed entity matrix $ A^T $ of size $ r \; x \; n $.}
+	}
+\end{figure}
+
+\noindent Previous latent feature approaches focused on limiting the total number of model parameters in order to scale to large knowledge bases (KBs), the representation of KG facts as RDF triples. This approach was often at the expense of complex entity-relational interaction modelling. The neural tensor network (NTN), a nonlinear extension of tensor factorisation, was the first successful link prediction technique to take advantage of the expressiveness of neural compositional models. It relies on adding a recursive network (RCN) \unskip ~\citep{pollack1990recursive} representation to the bilinear tensor product, and then using a fully connected layer to compute a relational score as a measure of confidence in a potential relationship between two entities. \par
+
+\noindent Convolutional entity-relational modelling (ConvE) was similarly effective at extending tensor factorisation. ConvE concatenates a latent subject entity and relation vector into an entity-relational matrix, and then applies a 2-dimensional convolution operation on this matrix. A product is then taken between the generated representation and latent object entity to compute a relational score. Once again a sigmoid function is applied to produce a probability of relational plausibility between the two entities, indexed by relation. \par 
+
+\noindent An alternative approach of applying convolution to neural tensor factorisation is the HypER model. HypER models entity-relational interactions by using a hypernetwork to generate 2-dimensional relation-specific convolutional filters. A 2-dimensional convolution is then taken between a latent subject entity and relational filter. Finally a product is taken between the generated entity-relational vector and a latent object entity, which computes a relational score. A sigmoid function is used to generate a probability of relational plausibility between the subject and object entity, indexed by relation. \par
+
+\noindent In this chapter we assess the NTN model and attempt a simple improvement by applying adaptive moment estimation (Adam) optimisation and hyperparameter random search to the training algorithm. We then introduce HypER+, an extension of the HypER model which compensates for covariate shift introduced by hypernetwork generated relation-specific convolutional filters. Finally we extend HypER+ to make use of pre-trained GloVe word embeddings and attempt semantic enhancement of entities and relations. 
 
 
 % **************************** First Section **************************
 
-\section{Neural Tensor Networks}
+\section{Neural tensor networks}
 
-\subsection{Neural Tensor Factorisation}
-RESCAL introduced the bilinear tensor product for relational scoring ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
-
+\subsection{Neural tensor factorisation}
+RESCAL introduced the bilinear tensor product for relational scoring \unskip ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 \begin{equation}
-	f_{i, j, k}^{RESCAL} := e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}w_{a,b,k}e_{ia}e_{jb}
+	f_{i, j, k} = e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}W_{a,b,k}e_{ia}e_{jb}
 \end{equation}
 
-where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. This model linearly models entity-relational interactions by using the dot product operator to construct a latent subject-relation representaiton, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \bigskip
+\noindent where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. his is a linear model for entity-relational interactions that uses the dot product operator to construct a latent subject-relation representation, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \par
 
-A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by (Jenatton et al. 2012) ~\citep{jenatton2012latent}.This model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. \newline
-The model is defined as follows:
-
+\noindent A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}.Their model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. The model is defined as follows:
 \begin{subequations}
 	\begin{gather}
-		n_{ik}^{j} = e_i^TW_ke_j \\
-		\sigma(t) = \frac{1}{1 + e^-t} \\
+		n_{i,j,k} = e_i^TW_ke_j \\
 		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{ik}^{j})
 	\end{gather}
 \end{subequations}
 
-where $n$ is the relational score, $\sigma$ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $S$ and $O$ indexed by relation $R$. This model introduces non-linear entity-relational interaction modelling to tensor factorisation. 
+\noindent where $ n_{i,j,k} $ is the relational score, $ \sigma(t) = 1/(1 + e^{-t}) $ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $ S_i $ and $ O_k $ indexed by relation $ R_j $. This model introduces nonlinear entity-relational interaction to tensor factorisation. 
 
-\subsection{Recursive Neural Tensor Factorisation}
-Socher and Chen et al (2013) extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score ~\citep{socher2013reasoning}. Recursive networks (RCN) try to capture the rules for word combinations by constructing compositional representations of two words ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN extended nonlinear tensor factorisation model is defined as follows:
+\subsection{Recursive neural tensor factorisation}
 
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
+	\caption{Recursive neural tensor network.}
+\end{figure}
+
+Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing compositional representations of two words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN-extended nonlinear tensor factorisation model is defined as follows:
 \begin{equation}
-	g(e_1, R, e_2) =  u_R^Tf(e_1^TW_R^{\left [1:k\right ]}e_2 + V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ] + b_R)
+	g_{i,j,k} =  u_j^Tf(e_i^TW_j^{\left [1:m \right ]} e_k + V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ] + b_j)
 \end{equation}
 
-where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, a value in the range $\in \left [ -1, 1 \right ]$, $e_1^TW_R^{\left [1:k\right ]}e_2 $ is the bilinear tensor product, $V_R\left [ \begin{matrix} e_1 \\ e_2 \end{matrix} \right ]$ is the recursive composition of the subject and object, and $b$ is the bias. \newline
+\noindent where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, $e_i^TW_j^{\left [1:m \right ]} e_k $ is the bilinear tensor product, $V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ]$ is the recursive composition, a concatenation of the subject and object entity vectors, where a product is taken with a relational matrix $ V_j $ where rows correspond to respective relations, and $ b_j $ is the bias. \par
 
-The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample - a fact present in the KB, and a confidence magnitude on a corrupt sample - a randomly generated fact not present in the KB. The correct and corrupt samples are used by the objective as follows:
-
+\noindent The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample (a fact present in the KB), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KB). The correct and corrupt samples are used by the objective as follows:
 \begin{equation}
-	J(\si{\ohm}) =  \sum_{i=1}^N\sum_{c=1}^Cmax(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda\left\lVert \si{\ohm} \right\rVert_2^2
+	J(\si{\ohm}) =  \sum_{i=1}^N \sum_{c=1}^C \max(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda \left \lVert \si{\ohm} \right \rVert_2^2
 \end{equation}
 
-where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b, and E$, $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $g(T^{(i)}$ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}$ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \bigskip
+\noindent where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
 
-The NTN model training algorithm also makes use of pre-trained word vectors developed by (Turian et al. 2010) ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated by the set of words that represent an entity. For example for the entity \textit{homo sapien}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapien})$. These word vectors are trainable, and updated using backpropagation, producing a distributed word representation that aligns with the KB. \bigskip
+\noindent The NTN model training algorithm also makes use of pre-trained word vectors developed by Turian et al. \unskip ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$. These word vectors are trainable, and updated using backpropagation, to produce a distributed word representation that aligns with the KB. \par
 
-\textbf{Modern Optimisation.} Deep model training loops can suffer from noise such as data subsampling, and regularisation techniques such as ridge regression and dropout. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this this noise ~\citep{kingma2014adam}. Adam computes the first and second order gradients of the loss and add them to the loss, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates parameter update magnitude size, accelerating toward local optima and remaining small in sparse regions. \bigskip
+\noindent \textbf{Modern optimisation.} Deep model training can suffer from noisy gradient signals when using stochastic gradient descent, mini batch optimisation and regularisation techniques such as dropout. Deep models can also suffer from insufficient signal to update parameters, a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this noise \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first and second order moments of the gradient, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates the size of parameter updates, accelerating toward local optima and remaining small in regions with a small gradient signal, sparse regions. \par
 
-Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. Hyperparameter random search takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \bigskip
+\noindent Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. It takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \par
 
-\textbf{Training Algorithm.} (Doss et al. 2015) reimplement the NTN model in Tensorflow ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: \bigbreak
+\noindent \textbf{Training algorithm.} Doss et al. reimplement the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model severely underperforms compared to the original model, relying on AdaGrad optmisation and the same hyperparameters. We apply Adam optimsation as well as hyperparameter random search, in an attempt to improve its performance. The new training algorithm is as follows: 
+
+\medskip
 
 \begin{algorithm}[H]
-	\textbf{loop} // repeat for $N$ experiments using random uniform hyperparameter configuration \\
+	\For{Epoch}{ // repeat for $N$ experiments using random uniform hyperparameter configuration \\
 		\SetAlgoLined
 		\textbf{Input} 
-		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
+		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, of samples and labels\;
   		\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
 	 	\For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     			\begin{math} y_{correct} \gets predict(x, \; y_{correct}) \end{math} // predict label for sample \\
-			\begin{math} y_{corrupt} \gets predict(x, \; y_{corrupt}) \end{math} // predict label for sample \\
-			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}) \end{math} // compute error
-     			}
+     			\begin{math} y^{'}_{correct} \gets predict(x) \end{math} // predict label for sample \\
+			\begin{math} y^{'}_{corrupt} \gets predict(x) \end{math} // predict label for sample \\
+			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}, \; y^{'}_{correct}, \;  y^{'}_{corrupt}) \end{math} // compute error
+     		}
 		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
-	\textbf{end loop}
-	\caption{Updated NTN Training Algorithm}
-\end{algorithm} \newpage
+	}
+	\caption{Updated NTN training algorithm}
+\end{algorithm} 
+
+\newpage
 
 
 % **************************** Second Section **************************
