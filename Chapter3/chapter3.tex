@@ -187,31 +187,13 @@ Hypernetworks are meta networks that generate parameters for a main network \uns
 \noindent \textbf{HypER covariate shift}. We make the observation that hypernetworks may also suffer from covariate shift. Relational filters form inputs to the main convolutional network. During training, the latent parameters of the relations change, altering the input distribution of the generated relational filters. We consider whether this distribution shift makes it hard for the hpernetwork to learn parameters good at creating relational filters, given an input signal not representative of the underlying training dataset distribution. We further consider that given the relational filters are used early (upstream) in the main network, the effect of their suboptimal representations is amplified. \par
 
 \noindent To address this problem, we introduce relational input batch normalisation. This operation performs normalisation on relational input mini-batches during training, such that each batch has zero mean and unit variance, regulating hypernetwork input. Population mean and variance are used to regulate input during inference. We adjust the HypER model accordingly, and call the adjusted model HypER+. \par
-
-\noindent \textbf{Training algorithm}. HypER+ is trained using the binary cross-entropy objective. We use the same hyperparameters as the original HypER model, as well as the Adam optimiser. The HypER+ training algorithm is as follows: 
-
-\medskip
-
-\begin{algorithm}[H]
-	\SetAlgoLined
-	\textbf{Input} 
-	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
-  	\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
-	 \For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     		\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
-		\begin{math} e \gets y' - y \end{math} // compute error
-     		}
-	Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
-	\caption{HypER+ Training Algorithm}
-\end{algorithm} \bigskip
  
-\noindent \textbf{Pre-trained word vectors}. We then apply pre-trained GloVe word vectors \unskip ~\citep{pennington2014glove} to the HypER+ training algorithm. We use these word vectors to initialise  200-dimensional embeddings, which are aggregated by the set of words that represent an entity or relation, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation.  
+\noindent \textbf{Pre-trained word vectors}. We then pre-trained GloVe word vectors \unskip ~\citep{pennington2014glove} to the HypER+ training algorithm. We use these word vectors to initialise  200-dimensional embeddings, which are aggregated from the set of words that represent an entity or relation, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation.  
 
 
 %********************************** %Third Section  **************************************
 
 \section{Summary}
 
-In this chapter we've discussed: \newline
-\textbf{Neural Tensor Networks.} An early successful attempt at using the expressive power of neural networks for link prediction. This model also makes use of RCNs, which try to model semantic compositionality, and this model makes use of pre-trained word vectors to improve link prediction performance. We apply modern stochastic and hyperparameter optimsiation techniques to the NTN training algorithm, namely Adam and hyperparameter random search. \newpage
-\textbf{Hypernetwork Tensor Factorisation.}  Hypernetworks can be used to generate parameters for other networks. This approach has the effect of applying a configuration to a neural network, and changing its behaviour given indexing input. A hypernetworks were used to generate parameters for a convolutional network in the model HypER. Concretely, HypER generates relation-specific convolutional filters which are used in a neural factorisation approach to link prediction. We adjust HypER to compensate for the covariate shift caused by the hypernetwork and introduce HypER+. We then extend HypER+ to make use of GloVe pre-trained word vectors by initialising entities and relations using these embeddings. \newline
+Neural tensor networks constitute an early successful attempt at using the expressive power of neural networks for link prediction. This model also makes use of RCNs, which try to model semantic compositionality, and makes use of pre-trained word vectors to improve link prediction performance. We apply modern stochastic and hyperparameter optimisation techniques to the NTN training algorithm, namely Adam and hyperparameter random search. \newline
+Hypernetworks can be used to generate parameters for other networks. This approach has the effect of applying a configuration to a neural network, and changing its behaviour given indexing input. Hypernetworks were used to generate parameters for a convolutional network in the model HypER. Concretely, HypER generates relation-specific convolutional filters which are used in a neural factorisation approach to link prediction. We adjust HypER to compensate for the covariate shift caused by the hypernetwork and introduce HypER+. We then extend HypER+ to make use of GloVe pre-trained word vectors by initialising entities and relations using these embeddings. \newline
