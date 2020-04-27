@@ -129,10 +129,10 @@ Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear te
 
 ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using 2-dimensional convolutions, which are particularly effective at modelling the interactions of entities involved in a large number of relations. ConvE concatenates subject and predicate matrices along the row axis, creating a 2-dimensional entity-relational matrix. Convolutional filters are then applied to this representation, producing feature maps which are flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, computing an unnormalised relational score between the subject and object, before a sigmoid function is applied to produce a probability of relational plausibility. The model is defined as follows:
 \begin{equation}
-	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \overline{r_r} \right ]*w))W)e_o
+	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \; \overline{r_r} \right ]*w))W)e_o
 \end{equation}
 
-\noindent where $ \psi_r $ is the relational score, $ e_s $ is the subject, $ e_o $ is the object, and $ r $ is the predicate. $ f $ is the concatenation operation between the subject and predicate, $ w $ contains the 2-dimensional convolutional filters, $ vec $ reshapes the feature map tensor into a vector which is passed through a fully connected layer parameterised by $ W $. $ g $ is a ReLU nonlinearity applied to the fully connected layer output. ConvE is thus a convolutional tensor factorisation. 
+\noindent where $ \psi_r $ is the relational score, $ e_s $ is the subject, $ e_o $ is the object, and $ r $ is the predicate. $ f $ is the concatenation operation between the subject and predicate, $ w $ contains the 2-dimensional convolutional filters, and $ * $ is the convolutional operator. $ vec $ reshapes the feature map tensor into a vector which is passed through a fully connected layer parameterised by $ W $, and then $ g $, a ReLU nonlinearity. ConvE is thus a convolutional tensor factorisation. 
 
 \begin{figure}[H]
    	\centering
@@ -142,10 +142,9 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \newpage
 
-The computed relational probability is defined as follows: 
-
+\noindent The computed relational probability is defined as follows: 
 \begin{equation}
-	\mathbb{P} = \sigma(\psi_r(e_s,e_o)) 
+	\mathbb{P} = \sigma(\psi_r(e_s, \; e_o)) 
 \end{equation}
 
 \noindent The binary cross-entropy objective is minimised during training. This objective is particularly effective as we expect only a single true class (a single object from the set of all entities) during inference, modelled as $1$, and every other class to be false, $0$. The objective is defined as follows:
@@ -157,19 +156,20 @@ The computed relational probability is defined as follows:
 
 \subsection{Hypernetwork factorisation}
 
-Hypernetworks are meta networks that generate parameters for a main network \unskip ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that describes the entire weights of a given layer. This configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction, it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwoirk model can be defined as follows: 
+Hypernetworks are meta networks that generate parameters for a main network \unskip ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that describes all the weights of a given layer. The configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwork model can be defined as follows: 
 \begin{equation}
-	K^j = g(z^j), \quad \forall j = 1, \dots, D
+	K_j = g(z_j), \quad \forall j = 1, \dots, D
 \end{equation}
 
-\noindent where $ K $ are the layer parameters, $ g $ is the hypernetwork composition, and $ z $ is the hypernetwork input. \par
+\noindent where $ K_j $ contains the parameters of layer $ j $, $ g $ is the hypernetwork composition, and $ z_j $ is the hypernetwork input. \par
 
-\noindent HypER is inspired by ConvE, and implements a convolutional operator that models entity-relational interactions \unskip ~\citep{balazevic2019hypernetwork}. HypER makes use of a hypernetwork to generate relation-specific convolutional filter. The subject and relational-filter are then used in a convolution operation to generate latent representation which is then flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows: 
+\noindent HypER is inspired by ConvE, and implements a convolutional operator that models entity-relational interactions \unskip ~\citep{balazevic2019hypernetwork}. It makes use of a hypernetwork to generate relation-specific convolutional filters. The subject and relational filter are then used in a convolution operation to generate latent representations which are flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows: \newpage
+
 \begin{equation}
-	\phi_r(e_1, \; e_2) = f(vec(e_1 * (vec^{-1}(w_rH)))W)e_2
+	\phi_r(e_s, \; e_o) = f(vec(e_s * (vec^{-1}(w_rH)))W)e_o
 \end{equation}
 
-\noindent where $ \phi_r $ is the relational score, $ e_1 $ is the subject, and $ e_2 $ is the object. $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters, $ w $ is the predicate input and $ H $ is the parameterised matrix of the fully connected layer of the hypernetwork. $ f $ is a ReLU non-linearity applied to the fully connected layer output of the main network. HypER is thus a hypernetwork factorisation composition. 
+\noindent where $ \phi_r $ is the relational score, $ e_s $ is the subject, and $ e_o $ is the object. $ w_r $ is the predicate input and $ H $ is the parameterised matrix of the fully connected layer of the hypernetwork, $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters. $ * $ is the convolutional operator, $ vec $ reshapes the feature map tensor into a vector which is passed through a fully connected layer parameterised by $ W $, and then $ f $, a ReLU nonlinearity. HypER is thus a hypernetwork convolutional tensor factorisation. 
 
 \begin{figure}[H]
    	\centering
@@ -177,9 +177,9 @@ Hypernetworks are meta networks that generate parameters for a main network \uns
 	\caption{Hypernetwork convolutional entity representations.}
 \end{figure}
 
-The computed relational probability is defined as follows: 
+\noindent The computed relational probability is defined as follows: 
 \begin{equation}
-	p = \sigma(\phi_r(e_1,e_2)) 
+	\mathbb{P} = \sigma(\phi_r(e_s, \; e_o)) 
 \end{equation}
 
 \noindent The HypER training algorithm minimises the binary cross-entropy objective. HypER entities and relations are intialised using Xavier initialisation \unskip ~\citep{glorot2010understanding}, drawn from a distribution with zero mean and finite variance. \par
