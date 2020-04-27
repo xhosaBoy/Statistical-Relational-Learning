@@ -72,18 +72,18 @@ RESCAL introduced the bilinear tensor product for relational scoring \unskip ~\c
 
 \subsection{Recursive neural tensor factorisation}
 
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
-	\caption{Recursive neural tensor network.}
-\end{figure}
-
 Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing compositional representations of two words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN-extended nonlinear tensor factorisation model is defined as follows:
 \begin{equation}
 	g_{i,j,k} =  u_j^Tf(e_i^TW_j^{\left [1:m \right ]} e_k + V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ] + b_j)
 \end{equation}
 
 \noindent where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, $e_i^TW_j^{\left [1:m \right ]} e_k $ is the bilinear tensor product, $V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ]$ is the recursive composition, a concatenation of the subject and object entity vectors, where a product is taken with a relational matrix $ V_j $ where rows correspond to respective relations, and $ b_j $ is the bias. \par
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
+	\caption{Recursive neural tensor network.}
+\end{figure}
 
 \noindent The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample (a fact present in the KB), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KB). The correct and corrupt samples are used by the objective as follows:
 \begin{equation}
@@ -123,28 +123,32 @@ Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear te
 
 % **************************** Second Section **************************
 
-\section{Hypernetwork Tensor Factorisation}
+\section{Hypernetwork tensor factorisation}
 
-\subsection{Convolutional Factorisation}
-ConvE introduced the convolutional operator to link prediction model composition ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in subject-predicate interaction modelling by using 2-dimensional instead of 1-dimensional convolutions, being particularly effective at modelling knowledge graph (KG) nodes with high indegree. ConvE concatenates subject and predicate vectors, creating a 2-dimensional representation. Convolutional filters are then applied to this representation before it is flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, producing a measure of confidence in the relation, before a logistic sigmoid is applied to compute a probability of plausibility. The model is defined as follows:
-
+\subsection{Convolutional factorisation}
+ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using 2-dimensional convolutions, which are particularly effective at modelling the interactions of entities involved in a large number of relations. ConvE concatenates subject and predicate matrices along the row axis, creating a 2-dimensional entity-relational matrix. Convolutional filters are then applied to this representation, producing feature maps which are flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, computing an unnormalised relational score between the subject and object, before a sigmoid function is applied to produce a probability of relational plausibility. The model is defined as follows:
 \begin{equation}
 	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \overline{r_r} \right ]*w))W)e_o
 \end{equation}
 
-where $\psi_r$ is the relational score, $e_s$ is the subject, $e_r$ is the object, and $r_r$ is the predicate. $f$ is the concatenation operation between the subject and predicate, $w$ are the 2-dimensional convolutional filters and $W$ is the parameterised matrix of the fully connected layer. $g$ is a ReLU non-linearity applied to the fully connected layer output. ConvE is thus a convolutional factorisation composition. The computed relational probability is defined as follows: 
+\noindent where $ \psi_r $ is the relational score, $ e_s $ is the subject, $ e_o $ is the object, and $ r $ is the predicate. $ f $ is the concatenation operation between the subject and predicate, $ w $ contains the 2-dimensional convolutional filters, $ vec $ reshapes the feature map tensor into a vector which is passed through a fully connected layer parameterised by $ W $. $ g $ is a ReLU nonlinearity applied to the fully connected layer output. ConvE is thus a convolutional tensor factorisation. The computed relational probability is defined as follows: 
 
 \begin{equation}
-	p = \sigma(\psi_r(e_s,e_o)) 
+	\mathbb{P} = \sigma(\psi_r(e_s,e_o)) 
 \end{equation}
 
-The binary cross-entropy objective is minimised during training. This objective is particularly effective as during we expect only a single true class during inference, modelled as $1$, and every other class to be false, $0$. The objective is defined follows:
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{convolutional_entity_representations}
+	\caption{Convolutional entity representations.}
+\end{figure}
 
+\noindent The binary cross-entropy objective is minimised during training. This objective is particularly effective as we expect only a single true class (a single object from the set of all entities) during inference, modelled as $1$, and every other class to be false, $0$. The objective is defined as follows:
 \begin{equation}
-	L(p, \; t) =  -\frac{1}{N}\sum_i(t \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i))
+	L(p, \; t) =  -\frac{1}{N}\sum_i(t_i \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i))
 \end{equation}
 
-where $L$ is the loss value, $p$ is the relational probability computed by the model, and $t$ is the target. $N$ is the number of entities, and $i$ is the batch sample number. \newpage
+\noindent where $ L $ is the loss value, $ p_i $ is the relational probability computed by the model, and $ t_i $ is the target. $ N $ is the batch size, and $ i $ is the sample index.
 
 \subsection{Hypernetwork Factorisation}
 
