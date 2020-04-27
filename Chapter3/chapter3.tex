@@ -98,25 +98,27 @@ Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear te
 
 \noindent Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. It takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \par
 
-\noindent \textbf{Training Algorithm.} (Doss et al. 2015) reimplement the NTN model in Tensorflow \unskip ~\citep{abadi2016tensorflow}. This model severely under performs the original model, relying on AdaGrad optmisation and the same hyperparaemeters. We apply Adam optimsation as well as hyperparameter optimisation using random search, in attempt to improve its performance. The new training algorithm is as follows: 
+\noindent \textbf{Training algorithm.} Doss et al. reimplement the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model severely underperforms compared to the original model, relying on AdaGrad optmisation and the same hyperparameters. We apply Adam optimsation as well as hyperparameter random search, in an attempt to improve its performance. The new training algorithm is as follows: 
 
 \medskip
 
 \begin{algorithm}[H]
-	\textbf{loop} // repeat for $N$ experiments using random uniform hyperparameter configuration \\
+	\For{Epoch}{ // repeat for $N$ experiments using random uniform hyperparameter configuration \\
 		\SetAlgoLined
 		\textbf{Input} 
-		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, samples and labels\;
+		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, of samples and labels\;
   		\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
 	 	\For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     			\begin{math} y_{correct} \gets predict(x, \; y_{correct}) \end{math} // predict label for sample \\
-			\begin{math} y_{corrupt} \gets predict(x, \; y_{corrupt}) \end{math} // predict label for sample \\
-			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}) \end{math} // compute error
-     			}
+     			\begin{math} y^{'}_{correct} \gets predict(x) \end{math} // predict label for sample \\
+			\begin{math} y^{'}_{corrupt} \gets predict(x) \end{math} // predict label for sample \\
+			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}, \; y^{'}_{correct}, \;  y^{'}_{corrupt}) \end{math} // compute error
+     		}
 		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
-	\textbf{end loop}
-	\caption{Updated NTN Training Algorithm}
+	}
+	\caption{Updated NTN training algorithm}
 \end{algorithm} 
+
+\newpage
 
 
 % **************************** Second Section **************************
