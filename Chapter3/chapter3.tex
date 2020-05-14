@@ -187,9 +187,29 @@ Hypernetworks are meta networks that generate parameters for a main network \uns
 \noindent \textbf{HypER covariate shift}. We make the observation that hypernetworks may also suffer from covariate shift. Relational filters form inputs to the main convolutional network. During training, the latent parameters of the relations change, altering the input distribution of the generated relational filters. We consider whether this distribution shift makes it hard for the hpernetwork to learn parameters good at creating relational filters, given an input signal not representative of the underlying training dataset distribution. We further consider that given the relational filters are used early (upstream) in the main network, the effect of their suboptimal representations is amplified. \par
 
 \noindent To address this problem, we introduce relational input batch normalisation. This operation performs normalisation on relational input mini-batches during training, such that each batch has zero mean and unit variance, regulating hypernetwork input. Population mean and variance are used to regulate input during inference. We adjust the HypER model accordingly, and call the adjusted model HypER+. \par
+
+\bigskip
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\textbf{Input} 
+	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, of input features and output labels\;
+	Intialise parameters $w \in \mathbb{R}$, for model \begin{math} M(w) \end{math} // e.g. random normal initialisation \\
+	\For{Epoch \begin{math} k = 1 \dots \; K  \end{math}}{
+  		\begin{math} B \gets sample(D, s) \end{math} // sample minibatch of size \begin{math} s \end{math} \\
+	 	\For{(x, y) \begin{math} \in B \end{math}}{
+			\begin{math} y'_j = BN_{\gamma_j,\beta_j, \mu_{Bj}, s_{Bj}}(x_j) \end{math} // Transformation of inputs to layer $ j $ for batch $ B $ \\
+     			\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
+			\begin{math} e \gets y' - y \end{math} // compute loss
+     			}
+		\begin{math} w \gets w - \lambda * \hat{\nabla}_{w} J_{e} (w) \end{math} // partial derivative update of model with respect to cost $e$ \\
+		\begin{math} \theta \gets \theta \; \cup \;  \{\gamma_j, \beta_j\}  \end{math} // Optimize batch normalisation parameters for layer $ j $
+	}
+	\begin{math} E[x] \gets E[\mu_B]  \end{math}, \begin{math} E[\sigma] \gets E[s_B]  \end{math} // Average $ \mu $ and $ s $ over mini-batches B 
+	\caption{Training HypER+ with batch normalisation}
+\end{algorithm} \bigbreak
  
 \noindent \textbf{Pre-trained word vectors}. We then pre-trained GloVe word vectors \unskip ~\citep{pennington2014glove} to the HypER+ training algorithm. We use these word vectors to initialise  200-dimensional embeddings, which are aggregated from the set of words that represent an entity or relation, the same method of aggregation used for pre-trained word vectors used during NTN training. Similarly, these word vectors are trainable, and updated using backpropagation.  
-
 
 %********************************** %Third Section  **************************************
 

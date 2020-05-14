@@ -58,9 +58,9 @@ The supervised learning training algorithm is expressed as follows: \par
 	\textbf{Input} 
 	Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, of input features and output labels\;
 	Intialise parameters $w \in \mathbb{R}$, for model \begin{math} M(w) \end{math} // e.g. random normal initialisation \\
-	\For{Epoch \begin{math} k,  k \in [1, K]  \end{math}}{
-  		\begin{math} S_{batch} \gets sample(D, b) \end{math} // sample minibatch of size \begin{math} b \end{math} \\
-	 	\For{(x, y) \begin{math} \in S_{batch} \end{math}}{
+	\For{Epoch \begin{math} k =  1 \dots \; K  \end{math}}{
+  		\begin{math} B \gets sample(D, s) \end{math} // sample minibatch of size \begin{math} s \end{math} \\
+	 	\For{(x, y) \begin{math} \in B \end{math}}{
      			\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
 			\begin{math} e \gets y' - y \end{math} // compute loss
      			}
