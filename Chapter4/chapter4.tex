@@ -12,7 +12,7 @@
     \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
 \fi
 
-This chapter discusses three hypotheses examined in the dissertation including the application of modern deep learning techniques to the training algorithm of recursive neural tensor networks, compensating for covariate shift introduced by a hypernetwork for convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
+This chapter discusses three hypotheses examined in the dissertation including the application of modern deep learning techniques to the training algorithm of recursive neural tensor networks (NTNs), compensating for covariate shift introduced by a hypernetwork for convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
 
 
 %********************************** %Recursive Neural Tensor Networks  **************************************
@@ -20,7 +20,7 @@ This chapter discusses three hypotheses examined in the dissertation including t
 \section{Recursive neural tensor networks}
 
 \subsection{Baseline training algorithm}
-\textbf{Model summary.} This model is inspired by recursive neural networks (RCNs). The recursive neural tensor network (NTN) is a bilinear tensor product between the subject, predicate and object, added to a RCN compositional representation between the subject and object. This model generates a relational score between two entities. 
+\textbf{Model summary.} This model is inspired by recursive neural networks (RCNs). The NTN is a bilinear tensor product between the subject, predicate and object, added to a RCN compositional representation between the subject and object. This model generates a relational score between two entities. 
 
 \noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for a the same subject and predicate, where a non-related entity is randomly selected, and presented as a corrupt object. Relational scores in the range $ (0,1) $ are produced for the target and corrupt objects respectively. The training task is to generate a large value for the target score, and small value for the corrupt score. The computed loss is back propagated through the network to update model parameters. \par
 
@@ -242,14 +242,14 @@ This chapter discusses three hypotheses examined in the dissertation including t
 
 \subsection{Optimised training algorithm}
 
-\noindent We change the training algorithm optimiser from AdaGrad to Adam, and implement model hyperparameter optimisation using random grid search. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \bigskip
+\noindent We update the NTN training algorithm to make use of the Adam optimiser \citep{kingma2014adam}, and use random grid search for hyperparameter optimisation \citep{bergstra2012random}. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
 
 \noindent \textbf{Code to reproduce} \newline
 Updated NTN:  \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \newline
 Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks}
 
-\subsubsection{Link Prediction Results}
-The link prediction accuracy results of the RNTN model, a neural factorisation model compared against linear factorisation models, are presented in table 5.1:
+\subsubsection{Model training results}
+The cost and accuracy results of NTN model training with the original baseline training algorithm, compared to the optimised training algorithm are presented below.
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
@@ -288,11 +288,12 @@ The link prediction accuracy results of the RNTN model, a neural factorisation m
   		Hadamard Model & .800 & .688 & .744 \\
   		Single Layer Model & .760 & .853 & .807 \\
   		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  		NTN & .562 & .535 & .549 \\
+  		NTN Baseline & .562 & .535 & .549 \\
   		\hline
-  		Updated NTN & .674 & .548 & .611 \\
+  		NTN with Optimised Training & .674 & .548 & .611 \\
+		&
 	\end{tabular}
-	\caption{Link prediction accuracy on Wordnet and Freebase}
+	\caption{Link prediction cost and accuracy on Wordnet and Freebase KGs}
 \end{table}
 
 
