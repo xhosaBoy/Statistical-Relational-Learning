@@ -293,7 +293,7 @@ The cost and accuracy results of NTN model training with the original baseline t
   		NTN with Optimised Training & .674 & .548 & .611 \\
 		&
 	\end{tabular}
-	\caption{Link prediction cost and accuracy on Wordnet and Freebase KGs}
+	\caption{Test cost and accuracy on Wordnet and Freebase KGs}
 \end{table}
 
 
@@ -648,7 +648,7 @@ Baseline: \url{https://github.com/xhosaBoy/HypER-baseline}
   			HypER+ (ours) & .957 & .953 & .945 & 599 & .949 \\
 		\end{tabular}
 		}
-		\caption{Link prediction results on WN18}
+		\caption{Test results on WN18}
 	}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -670,7 +670,7 @@ Baseline: \url{https://github.com/xhosaBoy/HypER-baseline}
   			HypER+ (ours) & \textbf{.894} & \textbf{.856} & \textbf{.790} & 79 & \textbf{.829} \\
 		\end{tabular}
 		}
-		\caption{Link prediction results on FB15k}
+		\caption{Test results on FB15k}
 	}
 \end{table}
 
@@ -708,54 +708,48 @@ Baseline: \url{https://github.com/xhosaBoy/HypER-baseline}
 		}
 \end{figure}
 
+\newpage
+
 
 %********************************** %HypER+ with Pre-Trained Word Embeddings  **************************************
 
-\section{HypER+ with Pre-Trained Word Vectors}
+\section{HypER+ with pre-trained word vectors}
 
-\subsubsection{Model Summary} 
-We extend HypER+ to make use of pre-trained GloVe word vectors. This model replaces Xavier initailised entity and relation embeddings with aggregated GloVe embeddings. \newline
-HypER+ is also trained using the binary cross entropy loss.
+\textbf{Model summary.} We extend HypER+ to make use of pre-trained GloVe word vectors. This model replaces Xavier initailised entity and relation embeddings with aggregated GloVe embeddings. 
+HypER+ is also trained using the binary cross entropy loss. \par
 
-\subsubsection{Experimental Setup} 
-
-We use the following benchmark datasets: WN18RR is a subset of WN18, created by Dettmers et al. by removing the inverse relations from WN18. WN18RR contains 40,943 entities and 11 relations. FB15k-237 - was created by Toutanova et al., noting that the validation and test sets of FB15k and WN18 contain the inverse of many relations present in the training set, making it easy for simple models to do well. FB15k-237 is a subset of FB15k with the inverse relations removed. It contains 14,541 entities and 237 relations. \newpage
-
-Visualisations of the respective knowledge graphs are presented below:
+\noindent \textbf{Experimental setup.} We use the following benchmark datasets: WN18RR is a subset of WN18, created by Dettmers et al. by removing the inverse relations from WN18. WN18RR contains 40,943 entities and 11 relations. FB15k-237 - was created by Toutanova et al., noting that the validation and test sets of FB15k and WN18 contain the inverse of many relations present in the training set, making it easy for simple models to do well. FB15k-237 is a subset of FB15k with the inverse relations removed. It contains 14,541 entities and 237 relations. Visualisations of the respective knowledge graphs are presented below. 
 
 \begin{figure}[H]
-  	\caption{WN18RR Entities and Relations Graphplot}
    	\centering
     	\includegraphics[width=\textwidth]{WN18RR_Graph}
+	\caption{WN18RR Entities and Relations Graphplot}
 \end{figure}
 
 \begin{figure}[H]
-  	\caption{FB15k-237 Entity and Relations Graphplot}
    	\centering
     	\includegraphics[width=\textwidth]{FB15k-237_Graph}
-\end{figure} \newpage
+	\caption{FB15k-237 Entity and Relations Graphplot}
+\end{figure}
 
-We used the Pytorch framework to develop our model. This model is built on top of the HypER+ model introduced by (Magangane, Luyolo, and Brink, Wille 2019).  Glove pre-trained word vectors are used to initialise entity and relational embeddings for model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. \bigskip
-
-Property counts for the respective knowledge graphs are presented below:
+\noindent We used the Pytorch framework to develop our model. This model is built on top of the HypER+ model introduced by Magangane and Brink.  Glove pre-trained word vectors are used to initialise entity and relational embeddings for model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Property counts for the respective knowledge graphs are presented below. \par
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Property Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth]{WN18RR_Counts}
+		\caption{WN18RR Property Barplot}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Property Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth]{FB15k-237_Counts}
+		\caption{FB15k-237 Property Barplot}
 		}
 \end{figure}
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{WN18RR Property Counts}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
@@ -763,11 +757,12 @@ Property counts for the respective knowledge graphs are presented below:
   			Entities & 40,943  \\
   			Relations & 11  \\
   			Triples & 93,003 \\
+			&
 		\end{tabular}
+		\caption{WN18RR Property Counts}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Property Counts}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
@@ -775,31 +770,32 @@ Property counts for the respective knowledge graphs are presented below:
   			Entities & 14,541   \\
   			Relations & 237  \\
   			Triples & 310,116  \\
+			&
 		\end{tabular}
+		\caption{FB15k-237 Property Counts}
 		}
 \end{table}
 
-Summary statistics of the respective knowledge graphs Resource Description Framework (RDF) decomposition - subject, predicate, object - are presented below:
-
 %********************************** %Predicate **************************************
+
+\noindent Summary statistics of the respective KG RDF formalism are presented below.
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Predicate Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Predicate_Counts}
+		\caption{WN18RR Predicate Barplot}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Predicate Barplot}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Predicate_Counts}
+		\caption{FB15k-237 Predicate Barplot}
 		}
 \end{figure}
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{WN18RR Predicate Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -809,11 +805,12 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 86 \\
   			Median & 3150  \\
   			IQR & 5433.5  \\
+			&
 		\end{tabular}
+		\caption{WN18RR Predicate Statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Predicate Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -823,7 +820,9 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 45  \\
   			Median & 426  \\
   			IQR & 819 \\
+			&
 		\end{tabular}
+		\caption{FB15k-237 Predicate Statistics}
 		}
 \end{table}
 
@@ -831,22 +830,20 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Subject Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Subject_Counts}
+		\caption{WN18RR Subject Barplot}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Subject Barplot}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Subject_Counts}
+		\caption{FB15k-237 Subject Barplot}
 		}
 \end{figure}
 
-
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{WN18RR Subject Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -856,11 +853,12 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 1 \\
   			Median & 2 \\
   			IQR & 2 \\
+			&
 		\end{tabular}
+		\caption{WN18RR Subject Statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Subject Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -870,7 +868,9 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 1 \\
   			Median & 16 \\
   			IQR & 20 \\
+			&
 		\end{tabular}
+		\caption{FB15k-237 Subject Statistics}
 		}
 \end{table}
 
@@ -878,22 +878,21 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Object Barplot}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Object_Counts}
+		\caption{WN18RR Object Barplot}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Object Barplot}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Object_Counts}
+		\caption{FB15k-237 Object Barplot}
 		}
 \end{figure}
 
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{WN18RR Object Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -903,11 +902,12 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 1 \\
   			Median & 1 \\
   			IQR & 2 \\
+			&
 		\end{tabular}
+		\caption{WN18RR Object Statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Object Statistics}
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -917,56 +917,41 @@ Summary statistics of the respective knowledge graphs Resource Description Frame
 			Min & 1 \\
   			Median & 10 \\
   			IQR & 16 \\
+			&
 		\end{tabular}
+		\caption{FB15k-237 Object Statistics}
 		}
 \end{table}
 
-For WN18RR, it can be seen that relations are skewed toward the relations "hypernym" and "derivationally related from", with a maximum of 37,221 occurrences, with an IQR of 5433.5 and 819 respectively. FB15k-237 are skewed toward film relations. We would expect reasonable performance across this type of relation for the knowledge graph. \newline
-WN18R and FB15k-237 subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 16 respectively, and with an IQR of 2 and 20 respectively. 
-WN18RR object occurrences are somewhat uniform. FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 1 and an interquartile range of 10,
-and an IQR of 2 and 16 respectively. Such high variance in FB15k-237 suggests poor potential model performance for FB15k-237 relative to WN18RR.  
+\noindent For WN18RR, it can be seen that relations are skewed toward the relations "hypernym" and "derivationally related from", with a maximum of 37,221 occurrences, with an IQR of 5433.5 and 819 respectively. FB15k-237 are skewed toward film relations. We would expect reasonable performance across this type of relation for the knowledge graph. WN18R and FB15k-237 subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 16 respectively, and with an IQR of 2 and 20 respectively. WN18RR object occurrences are somewhat uniform. FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 1 and an interquartile range of 10,
+and an IQR of 2 and 16 respectively. Such high variance in FB15k-237 suggests poor potential model performance for FB15k-237 relative to WN18RR. 
+
 
 %********************************** %Pre-Trained Word Embeddings **************************************
 
-\subsubsection{HypER+ with Glove Word Embeddings}
+\subsection{HypER+ with glove word embeddings}
 
-HypER+ here is implemented using Glove pre-trained word embeddings. \newline
-The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. We evaluate the model using standard link prediction benchmarks. \newline 
+HypER+ here is implemented using Glove pre-trained word embeddings. The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. We evaluate the model using standard link prediction benchmarks. \par 
 
-\textbf{Code to reproduce} \newline
+\noindent \textbf{Code to reproduce} \newline
 HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vectors} \newline
-Baseline: \url{https://github.com/xhosaBoy/HypER-baseline} \newpage
+Baseline: \url{https://github.com/xhosaBoy/HypER-baseline} 
 
-\subsubsection{Link Prediction Results}
-The link prediction benchmark results of the HypER+ with pre-trained embeddings model, compared against other link prediction models, are presented below:
+\noindent {Link prediction results.} The link prediction benchmark results of the HypER+ with pre-trained embeddings model, compared against other link prediction models, are presented below.
 
 %********************************** %Cost **************************************
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Cost}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Cost_Results}
+		\caption{WN18RR Cost}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Cost}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Cost_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Cost Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Cost_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Cost Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Cost_Results_Clipped}
+		\caption{FB15k-237 Cost}
 		}
 \end{figure}
 
@@ -974,29 +959,15 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@10}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_10_Results}
+		\caption{WN18RR Hits@10}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@10}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_10_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@10 Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_10_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@10  Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_10_Results_Clipped}
+		\caption{FB15k-237 Hits@10}
 		}
 \end{figure}
 
@@ -1004,29 +975,15 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@3}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_3_Results}
+		\caption{WN18RR Hits@3}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@3}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_3_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@3 Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_3_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@3  Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_3_Results_Clipped}
+		\caption{FB15k-237 Hits@3}
 		}
 \end{figure}
 
@@ -1034,29 +991,15 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@1}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_1_Results}
+		\caption{WN18RR Hits@1}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@1}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_1_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Hits@1 Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_1_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Hits@1  Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_1_Results_Clipped}
+		\caption{FB15k-237 Hits@1}
 		}
 \end{figure}
 
@@ -1064,29 +1007,15 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Mean Rank}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_rank_Results}
+		\caption{WN18RR Mean Rank}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Mean Rank}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_rank_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Mean Rank Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_rank_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Mean Rank Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_rank_Results_Clipped}
+		\caption{FB15k-237 Mean Rank}
 		}
 \end{figure}
 
@@ -1094,29 +1023,15 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
-   		\caption{WN18RR Mean Reciprocal Rank}
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_reciprocal_rank_Results}
+		\caption{WN18RR Mean Reciprocal Rank}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Mean Reciprocal Rank}
    		\centering
 		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_reciprocal_rank_Results}
-		}
-\end{figure}
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\caption{WN18RR Mean Reciprocal Rank Clipped View}
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_reciprocal_rank_Results_Clipped}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-		\caption{FB15k-237 Mean Reciprocal Rank Clipped View}
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_reciprocal_rank_Results_Clipped}
+		\caption{FB15k-237 Mean Reciprocal Rank}
 		}
 \end{figure}
 
@@ -1124,9 +1039,8 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
-		\caption{Link prediction results on WN18RR}
 		\centering
-		\resizebox{0.5\columnwidth}{!}{%
+		\resizebox{0.5\columnwidth}{!}{
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
@@ -1138,13 +1052,16 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 			HypER (Bala\v{z}evi\'c et al. 2019) & .522 & .477 & \textbf{.436} & 5798 & .465 \\
   			\hline
   			HypER+ (ours) & \textbf{.552} & \textbf{.481} & .432 & \textbf{1586} & \textbf{.471} \\
-		\end{tabular}%
-		}}
+			&
+		\end{tabular}
+		}
+		\captionsetup{justification=centering}
+		\caption{Test results on WN18RR}
+	}
 	\hfill
 	\parbox{.5\linewidth}{
-	\caption{Link prediction results on FB15k-237}
 		\centering
-		\resizebox{0.5\columnwidth}{!}{%
+		\resizebox{0.5\columnwidth}{!}{
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
@@ -1156,15 +1073,50 @@ The link prediction benchmark results of the HypER+ with pre-trained embeddings 
 			HypER (Bala\v{z}evi\'c et al. 2019) & .520 & \textbf{.376} & \textbf{.252} & 250 & \textbf{.341} \\
   			\hline
   			HypER+ (ours) & \textbf{.522} & \textbf{.376} & \textbf{.252} & \textbf{215} & \textbf{.341} \\
-		\end{tabular}%
-		}}
+			&
+		\end{tabular}
+		}
+		\captionsetup{justification=centering}
+		\caption{Test results on FB15k-237}
+	}
 \end{table}
+
+%********************************** %Test Result Decomposition **************************************
+
+\begin{table}[H]
+	\centering
+	\resizebox{0.5\columnwidth}{!}{
+	\begin{tabular}{lllllllllll}
+  		\textbf{Subject} & \textbf{Predicate} & \textbf{Object Target} & \textbf{Object Prediction} \\
+  		\hline
+  		usa & has part & colorado & missouri river \\
+  		spain & has part & cadiz & jerez de la frontera \\
+  		kilobyte & has part & computer memory unit & word \\
+		electromagnetic spectrum & has part & actinic ray & radio spectrum \\
+		systema respiratorium & has part & respiratory tract & respiratory organ \\
+		respiratory organ & has part & nsa & defense advanced research projects agency \\
+		africa & has part & nigeria & senegal \\
+  		antigen & has part & substance & epitope \\
+		amphitheatre & has part & theatre & tiered seat \\
+		indian ocean & has part & mauritius & antarctic ocean \\
+		&
+	\end{tabular}
+	}
+	\caption{Qualitative Hit@1 Test results on WN18RR}
+\end{table}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth, height=0.2\textheight]{WN18RR_relational_performance_results}
+	\captionsetup{justification=centering}
+	\caption{WN18RR Hit@ 1 Predicate Performance}
+\end{figure}
+
 
 %********************************** %Chapter Summary  **************************************
 
 \section{Summary}
 
-In this chapter we've discussed: \newline
-\textbf{NTN with Modern Deep Learning Techniques.} We've attempted a simple improvement in the NTN model by appplying modern deep learning training techniques, including Adam and hyperparameter random search. The results indicate there potential performance gains by deep models simply by updating their respective training algorithms with modern methods. In this instance, we see an accuracy gain of 6.2\%, for the Wordnet and Freebase datasets. \newline
-\textbf{HypER+.}  Here we compensate for the covariate shift introduced by the hypernetwork in convolutional factorisation. The distributional drift is pronounced enough that we are able to improve the Hit@1 accuracy on of the original HypER model on average by 2.7\%, for the WN18 and FB15k datasets.\newline
-\textbf{HypER+. with GloVe} Finally we extend HypER+ to make use of pre-trained GloVe word vectors. The semantic information inherent in these embeddings somewhat overpower the structural information present in the knowledge graph. The resultant model on average decreases the Hit@1 accuracy on of the original HypER model on average by 0.4\%, for the WN18RR and FB15k-237 datasets. \newline
+\textbf{NTN with optimised training algorithm.} We've attempted a simple improvement in the NTN model by appplying modern deep learning training techniques, including Adam and hyperparameter random search. The results indicate there potential performance gains by deep models simply by updating their respective training algorithms with modern methods. In this instance, we see an accuracy gain of 6.2\%, for the Wordnet and Freebase datasets. \newline
+\noindent \textbf{HypER+.}  Here we compensate for the covariate shift introduced by the hypernetwork in convolutional factorisation. The distributional drift is pronounced enough that we are able to improve the Hit@1 accuracy on of the original HypER model on average by 2.7\%, for the WN18 and FB15k datasets.\newline
+\noindent \textbf{HypER+ with GloVe.} Finally we extend HypER+ to make use of pre-trained GloVe word vectors. The semantic information inherent in these embeddings somewhat overpower the structural information present in the knowledge graph. The resultant model on average decreases the Hit@1 accuracy on of the original HypER model on average by 0.4\%, for the WN18RR and FB15k-237 datasets. \newline
