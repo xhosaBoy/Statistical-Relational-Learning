@@ -23,14 +23,15 @@
 
 \noindent Artificial intelligence (AI) is the imitation of human-level intelligence by machines. Human beings are capable of extracting information from a passage of text, and transforming that information into a mental model of objects and relationships between those objects. As stated by Nyalleng Moorosi, the model is only as good as the data data available for training, and this is true for both human mental models as well as machine constructed models. \par
 
-\noindent Human models are often confined to a finite domain \unskip~\citep{staab2010handbook}, for example the entertainment industry. The entertainment industry contains objects such as films, actors, actresses, characters and awards. These objects have relationships between them, such as "stared in", "worked along side", "a character in", and "was nominated for". Humans can develop a mental model to easily reason about new relationships between the objects that were not mentioned in a given passage of text. For example the text may say that Chadwick Boseman stared in a movie called Black Panther, and using that information we can reason that Chadwick Boseman "is an" actor. \par
+\noindent Human models can be confined to a single domain \unskip~\citep{staab2010handbook}, for example the entertainment industry. The entertainment industry contains objects such as films, actors, actresses, characters and awards. These objects have relationships between them, such as "stared in", "worked along side", "a character in", and "was nominated for". Humans can develop a mental model to easily reason about new relationships between the objects that were not mentioned in a given passage of text. For example the text may say that Chadwick Boseman starred in a film called Black Panther and played the character Black Panther. Using that information we can reason that Chadwick Boseman "is an" actor. \par
 
-\noindent We use such models to read and understand other passages of text, in conversations with other people, and to help us answer questions. The set of objects and the relationships between them, within a domain, can be thought of as knowledge. Figure 1.1. shows what knowledge about the entertainment industry might look like. \newline
+\noindent We use such models to read and understand other passages of text, in conversations with other people, and to help us answer questions. The set of objects and the relationships between them, within a domain, can be thought of as knowledge. Figure 1.1. shows what knowledge about the entertainment industry might look like. 
 
-\begin{figure}
+\begin{figure} [H]
    	\centering
-    	\includegraphics[width=\textwidth]{Objects_and_the_Relationships_Between_Them}
-	\caption{Objects in the entertainment industry, and relationships between them.}
+    	\includegraphics[width=0.8\textwidth, height=0.4\textheight]{Entities_and_the_Relationships_Between_Them}
+	\captionsetup{justification=centering}
+	\caption{Objects and relationships between them. We see Chadwick Boseman starred in the Black Panther film and played the Black Panther character. We also see that the character was played by an actor, and can reason that Chadwick Boseman may thus be an actor.}
 \end{figure}
 
 \subsection{Challenges} 
@@ -75,7 +76,7 @@ Reasoning about knowledge expressed in natural language is one of the strongest 
 
 We note the poor performance in open domain question answering i.e. inferring potential answers from know facts, currently achieved by SOTA neural factorisation models \unskip~\citep{balazevic2019hypernetwork, dettmers2018convolutional}. A sensible implementation of AGI would use heterogeneous information sources from the internet \unskip~\citep{angeli2013philosophers}. Extracting information from the web, constructing or expanding knowledge bases, and then answering questions \unskip~\citep{shalaby2019beyond} is currently the most successful paradigm for open domain question answering. Given that the most successful models using this paradigm have poor performance, there is an opportunity to refine existing techniques in an effort to make them more useful in answering questions in this way. Revolutionising existing methods that try to solve AI tasks by making use of deep learning techniques has seen tremendous progress in fields such as computer vision \unskip~\citep{hudson2018compositional}  and natural language processing \unskip~\citep{peters2018deep}. Neural factorisation approaches should attempt further integration of deep learning methods, with the adoption of practices from such fields applied to training, reasoning and knowledge representation. Given that deep learning itself is loosely modelled after the human mind, it seems sensible to try to bring SRL into closer alignment with methods of reasoning used by humans. 
 
-\subsection{Challenges of this approach} 
+\subsection{Challenges of tensor factorisation} 
 
 In order to answer open-domain questions, the domain in which the knowledge belongs needs to be defined. Facts about that domain then need to be populated. Typically this is achieved by scanning documents written in natural language on the internet \unskip~\citep{fader2011identifying, dong2014knowledge} and populating a knowledge base. Given the heterogeneity of these data sources, it can be difficult to consolidate the information into a central datastore which can then be used to perform inference.  Related to the problem of centralising knowledge, the number of facts within a domain can range from hundreds of thousands, to millions. This poses a sample scarcity or model density problem. In the former, it becomes a challenge to adequately model the probability distributions of plausible relations given the frequency in observations of facts about a particular subject. In the latter, large parameterisation of models is needed to encode knowledge within the domain. \par
 
