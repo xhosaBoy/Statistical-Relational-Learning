@@ -116,22 +116,19 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \end{figure}
 
 \begin{figure}[H]
-	\parbox{.4\linewidth}{
-   		\centering
-    		\includegraphics[width=0.3\textwidth, height=0.3\textwidth]{relational_tensor.png}
-		\captionsetup{justification=centering}
-		\caption{Knowledge graph structured data represented as a relational tensor of size $ n \; x \; n \; x \; m $ with relational scores $ S $ between nodes, indexed by $ Edge $.}
-	}
-	\hfill
-	\parbox{.6\linewidth}{
-   		\centering
-    		\includegraphics[width=0.5\textwidth, height=0.4\textwidth]{relational_tensor_decomposition}
-		\captionsetup{justification=centering}
-		\caption{Relational tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R} \; m $,  $ B \in \mathbb{R} \; n $ and $ C \in \mathbb{R} \; p $. The inner product of these vectors computes the relational tensor.}
-	}
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{relational_tensor_decomposition}
+	\captionsetup{justification=centering}
+	\caption{Relational tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R}^m $,  $ B \in \mathbb{R}^n $ and $ C \in \mathbb{R}^p $. The inner product of these vectors computes the relational tensor.}
 \end{figure}
 
-\noindent Each of these matrices contain rows where e used to generate entity and relational representations, RESCAL \unskip~\citep{nickel2011three}. This a model that uses the bilinear tensor product to model interactions where entities are expressed as vectors and and the relation between them is represented as a full rank matrix \unskip~\citep{nickel2012factorizing}. The triple is then scored by computing the product of pairwise interactions between latent features of the respective representations \unskip~\citep{nickel2015review} and producing a measure of confidence in the fact. RESCAL uses the values of the relational matrix to model block structure patterns (groups of entities that have similar relationships to other groups), homophily patterns (the tendency of entities to be related to other entities with similar characteristics), and anticorrelations (the tendency of entities with different characteristics to produce antirelations). \par
+\noindent RESCAL decomposes a relational tensor $ T_k $ into an entity matrix $ E  \in \mathbb{R}^{n x r} $, a set of relational matrices $ R_k \in \mathbb{R}^{rxr}$ \unskip~\citep{nickel2011three}. The bilinear tensor product is the inner product between $ E $ and a slice $ k $ of $ R_k $, where the inner product of the result is taken with a transposed matrix $ E^T \in \mathbb{R}^{r x n} $, see equation 1.1.
+
+\begin{equation}
+	T_k \approx ER_kE^T
+\end{equation}
+
+\noindent Entity matrix $ E $ is composed of entity vectors $ e \in \mathbb{R}^r $ and a relation matrix $ k $ of the relational tensor $ R_k $ is represented as a full rank matrix $ W_k \in \mathbb{R}^{rxr} $ \unskip~\citep{nickel2012factorizing}. An inner product between an entity $ e_i $ and relational matrix $ W_k $, followed by an inner product with entity vector $ e_j $ generates a relational score $ n_{i,j,k} $. When adopting the RDF formalism, $ e_i $ is the subject, $ W_k $ is the predicate, and $ e_j $ is the object. This set comprises an RDF triple, used to encode a KG fact. Entities $ e_i $, and $ e_j $ and relation $ W_k $ have unknown latent representations, and the task is to learn the most optimal representations that can be used for relation prediction. The training algorithm minimises the squared error loss, and the model achieves competitive performance on various datasets. \par
 
 \noindent Translating the embeddings (TransE) of entities by Bordes et al. \unskip~\citep{bordes2013translating} was another approach tried to model entity-relational interactions. The motivation for this approach was that a lot of KB facts are presented in hierarchies, therefore a translation of the subject by the predication should produce an embedding close to the object. The model translation is thus the natural transformation of the entity and can be used to model hierarchies, along with embedding equivalence with the null transformation. \par
 
