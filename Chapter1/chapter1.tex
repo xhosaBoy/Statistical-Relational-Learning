@@ -50,7 +50,7 @@ Reasoning about knowledge expressed in natural language \unskip~\citep{minervini
 
 \subsection{Encouraging progress} 
 
-The task of QA can be extended to an open-domain setting \unskip~\citep{chen2017reading}, where the task is extended from answering questions from a single domain to a multiple domains. In this setting, a KG contains data from multiple domains and more complex knowledge discovery chains be constructed. There has been encouraging progress in SRL to modelling this problem, and link prediction is now often used as a paradigm for knowledge discovery \unskip~\citep{kristiadi2019incorporating, ebisu2018toruse, nguyen2017novel}. Latent feature modelling using tensor factorisation \unskip~\citep{harshman1978models, kolda2009tensor} is an approach to link prediction that has seen some promising results \unskip~\citep{bordes2011learning, jenatton2012latent, nickel2016holographic}. \par 
+The task of QA can be extended to an open-domain setting \unskip~\citep{chen2017reading}, where the task is extended from answering questions from a single domain to a multiple domains. In this setting, a KG contains data from multiple domains and more complex knowledge discovery chains be constructed. There has been encouraging progress in SRL to modelling this problem, and link prediction, inferring a plausible edge (relationship) between two KG nodes (entities), is now often used as a paradigm for knowledge discovery \unskip~\citep{kristiadi2019incorporating, ebisu2018toruse, nguyen2017novel}. Latent feature modelling using tensor factorisation \unskip~\citep{harshman1978models, kolda2009tensor} is an approach to link prediction that has seen some promising results \unskip~\citep{bordes2011learning, jenatton2012latent, nickel2016holographic}. \par 
 
 \noindent The first major milestone was demonstrating the bilinear tensor product as a promising model to link prediction \unskip~\citep{nickel2011three}. In this model, the multiplication is taken between a subject vector and a predicate matrix, producing a entity-relational vector. The dot product is then taken between the entity-relational vector and an object vector, which generates a relational score between the subject and object entities. \par
 
@@ -103,9 +103,35 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \subsection{Reasoning about facts} 
 
-\noindent This thesis aims to extend research that aspires to give computers the capability of human-like reasoning \unskip~\citep{bordes2011learning} in open domain question answering \unskip~\citep{hakimov2019evaluating}. Early work in this area focused on learning deterministic logical concepts based on symbolic frameworks \unskip~\citep{hohenecker2017deep} which were used for formal reasoning. Later, attempts to relax formal reasoning and make use of more flexible embedding representations of natural language inspired research in SRL \unskip~\citep{koller2007introduction}. Link prediction is an SRL approach to human-like reasoning that makes use of knowledge bases \unskip~\citep{balazevic2019hypernetwork, dettmers2018convolutional, socher2013reasoning}. \par
+% machine learning focused on relational learning using logic-based representation. Move to machine learning focused on statistical methods using attribute value-based representation.
+\noindent This thesis aims to extend research that aspires to give machines the capability of human-like reasoning \unskip~\citep{bordes2011learning} in open-domain question answering \unskip~\citep{hakimov2019evaluating}. Early work in this area focused on using relational data to learn deterministic logical rules based on symbolic representations, which were used for formal reasoning  \unskip~\citep{hohenecker2017deep}. This approach gave rise to the inductive logic programming (ILP) paradigm, however due to finite domain utility, scalability issues and poor performance, research in reasoning shifted to statistical methods focused on attribute representation, which were increasingly successful in prediction tasks, particularly in computer vision and natural language processing (NLP) \unskip~\citep{koller2007introduction}. SRL is the hybridisation of these two approaches, learning statistical correlations between concept dependencies by leveraging structural information in relational data. \par
 
-\noindent Early approaches to reasoning over facts in KBs were attempted using tensor factorisation \unskip~\citep{nickel2011three} to model entity-relational interactions. Nickel et al. implemented RESCAL, a model that uses the bilinear tensor product to model interactions where entities are expressed as vectors and and the relation between them is represented as a full rank matrix \unskip~\citep{nickel2012factorizing}. The triple is then scored by computing the product of pairwise interactions between latent features of the respective representations \unskip~\citep{nickel2015review} and producing a measure of confidence in the fact. RESCAL uses the values of the relational matrix to model block structure patterns (groups of entities that have similar relationships to other groups), homophily patterns (the tendency of entities to be related to other entities with similar characteristics), and anticorrelations (the tendency of entities with different characteristics to produce antirelations). \par
+\noindent SRL is comprised of three paradigms, latent feature modelling, graph modelling and tensor factorisation \unskip~\citep{nickel2015review}. The rest of this dissertation is concerned with the analysis of approaches to latent feature modelling. Tensor factorisation has become one of the most popular approaches to latent feature modelling, where a decomposition of relational data represented as a tensor, is used to generate a set of constituent vectors, see Figure 1.2, and Figure 1.3. \par
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textheight]{relational_tensor.png}
+	\captionsetup{justification=centering}
+	\caption{Knowledge graph structured data represented as a relational tensor of size $ n \; x \; n \; x \; m $ with relational scores $ S $ between nodes, indexed by $ Edge $. $ S_{N1\_N2} $ is the relational score between node $ N1 $ and node $ N2 $ for $ Edge_1 $, in the range $ \in (0, 1] $. If an edge is present between these two nodes in the data, the score is $ 1.0 $.}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.4\linewidth}{
+   		\centering
+    		\includegraphics[width=0.3\textwidth, height=0.3\textwidth]{relational_tensor.png}
+		\captionsetup{justification=centering}
+		\caption{Knowledge graph structured data represented as a relational tensor of size $ n \; x \; n \; x \; m $ with relational scores $ S $ between nodes, indexed by $ Edge $.}
+	}
+	\hfill
+	\parbox{.6\linewidth}{
+   		\centering
+    		\includegraphics[width=0.5\textwidth, height=0.4\textwidth]{relational_tensor_decomposition}
+		\captionsetup{justification=centering}
+		\caption{Relational tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R} \; m $,  $ B \in \mathbb{R} \; n $ and $ C \in \mathbb{R} \; p $. The inner product of these vectors computes the relational tensor.}
+	}
+\end{figure}
+
+\noindent Each of these matrices contain rows where e used to generate entity and relational representations, RESCAL \unskip~\citep{nickel2011three}. This a model that uses the bilinear tensor product to model interactions where entities are expressed as vectors and and the relation between them is represented as a full rank matrix \unskip~\citep{nickel2012factorizing}. The triple is then scored by computing the product of pairwise interactions between latent features of the respective representations \unskip~\citep{nickel2015review} and producing a measure of confidence in the fact. RESCAL uses the values of the relational matrix to model block structure patterns (groups of entities that have similar relationships to other groups), homophily patterns (the tendency of entities to be related to other entities with similar characteristics), and anticorrelations (the tendency of entities with different characteristics to produce antirelations). \par
 
 \noindent Translating the embeddings (TransE) of entities by Bordes et al. \unskip~\citep{bordes2013translating} was another approach tried to model entity-relational interactions. The motivation for this approach was that a lot of KB facts are presented in hierarchies, therefore a translation of the subject by the predication should produce an embedding close to the object. The model translation is thus the natural transformation of the entity and can be used to model hierarchies, along with embedding equivalence with the null transformation. \par
 
