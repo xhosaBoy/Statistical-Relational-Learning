@@ -137,7 +137,23 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 
 \noindent Convolutional networks (CNs) have been developed to overcome both the above mentioned problems experienced by MLPs. CNs make use of the convolutional operator instead of the inner product operator by using a filter, a $ 2D $ matrix with trainable parameters. This process generates a latent feature map which is used in subsequent layers in the network, see Figure 2.4. Latent feature maps may capture structural patterns in data, building simple intermediate representations. CNs compose these representations into more sophisticated representations in subsequent layers. \par 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution1}\hfill
+	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution2}\hfill
+	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution3}
+	\captionsetup{justification=centering}
+	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step computes a summary of that location as a single value.}
+\end{figure}
+
 \noindent The convolutional operator allows CNs to capture translation invariance in inputs, due to filter parameter sharing \unskip ~\citep{simonyan2014very}. Translation invariance is achieved when a CN layer generates an intermediate representation that is consistent under transformation. For example, if a different image of  car is used as input, and the car is located in a different position, that would lead to a consistent feature map representation being generated, see Figure 2.5. This property allows CNs to model the distribution of features using fewer parameters and smaller datasets. \par 
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{translation_invariance}
+	\captionsetup{justification=centering}
+	\caption{Two images of the same object, in different locations. Filter parameter sharing enables input translation invariance. The CN should predict "car" on both occasions.}
+\end{figure}
 
 \noindent The trade off one makes when using CNs is reduced flexibility in modelling complex decision boundaries. To mitigate this trade off, CNs are often implemented with a final set of fully connected layers, which enable the expressiveness required for accurate prediction. \par
 
