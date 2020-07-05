@@ -155,33 +155,79 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 	\caption{Two images of the same object, in different locations. Filter parameter sharing enables input translation invariance. The CN should predict "car" on both occasions.}
 \end{figure}
 
-\noindent The trade off one makes when using CNs is reduced flexibility in modelling complex decision boundaries. To mitigate this trade off, CNs are often implemented with a final set of fully connected layers, which enable the expressiveness required for accurate prediction. \par
+\noindent The trade off one makes when using CNs is reduced flexibility in modelling complex decision boundaries. To mitigate this trade off, CNs are often implemented with a final set of fully connected layers, which enable the expressiveness required for accurate prediction, see Figure 2.6. \par
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
+	\captionsetup{justification=centering}
+	\caption{A basic CN consisting of an input, convolutional layer, fully-connected layer and output layer.}
+\end{figure}
 
 \noindent In the following we discuss the CN forward pass. \par
 
 \noindent \textbf{Convolutional layers.} Convolutional layers rely on filters that are small spatially (along width and height), and extend through the full depth of an input volume. During the forward pass, each filter is convolved across the width and height of the input volume, where the element-wise dot product is computed between the entries of the filter and the input at a particular position. A $ 2D $ feature map is generated, that gives the responses of that filter at every spatial position of the input. Every convolutional layer has a set of filters, and each of them produces separate $ 2D $ feature maps, which are then stacked along the depth dimension to produce an output volume \unskip ~\citep{DLIndaba2017}. \par
 
-\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size (kernel), number of filters (channels), stride, padding, and dilation, see Figure 2.6. The filter size defines the width and height of the kernel, where the filter has the same depth as the input volume. The number of channels controls the output volume depth. The stride defines the number of entries by which the filter will move when convolving it along the input volume. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field. \par
+\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size (kernel), number of filters (channels), stride, padding, and dilation. The kernel size defines the width and height of the kernel, which is often square, and the filter is the set of kernels that is the same size as the depth of the input volume, see Figure 2.7. The number of channels controls the output volume depth. The stride defines the number of entries by which the filter will move when convolving it along the input volume, see Figure 2.8. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field, see Figure 2.9. \par
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{channels}
+	\captionsetup{justification=centering}
+	\caption{A $ 3D $ input image with 3 input channels. A kernel size of $ 2 $ is used, where the filter depth is the same as the number of input channels $ 3 $. Using $ 2 $ filters produces $ 2 $ output channels.}
+\end{figure}
+
+\begin{figure}[H]
+	\parbox{.5\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution1}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution2}
+		}
+	\captionsetup{justification=centering}
+	\caption{Convolution operation with a stride of 1.}
+	
+	\parbox{.5\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution1}
+		}
+	\hfill
+	\parbox{.5\linewidth}{
+   		\centering
+    		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{stride_of_2}
+		}
+	\captionsetup{justification=centering}
+	\caption{Convolution operation with a stride of 2.}
+\end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{padding_and_dilation}
+	\captionsetup{justification=centering}
+	\caption{An input image with a padding of $ 1 $, convolved with a filter with a dilation of $ 2 $.}
+\end{figure}
 
 \noindent Convolution of an input volume $ X $ with a single filter $ W $ is given by: 
 \begin{equation}
 	O_{ij}^{d} = b_d + \sum_{a=0}^{F - 1}\sum_{b=0}^{F - 1}\sum_{c=0}^{I - 1}W_{a,b,c,d}X_{i+a,j+b,c}^{pad}
 \end{equation}
 
-\noindent where $O_{ij}^d$ is the value of the output volume at position $(i,j,d)$, $b$ bias vector of shape $\left [ \begin{matrix} D \end{matrix} \right]$, $W$ is the weight tensor of shape $\left [ \begin{matrix} F \times F \times I \times D \end{matrix} \right]$, $X^{pad}$ is the padded input volume and $a, b, c$ are indices into the volume dimensions. \par
+\noindent where $ O_{ij}^d $ is the value of the output volume at position $ (i, \; j, \; d) $, $ b $ is a bias vector of shape $\left [ \begin{matrix} D \end{matrix} \right]$, $ W $ is the weight tensor of shape $ \left [ \begin{matrix} F \times F \times I \times D \end{matrix} \right] $, $ X^{pad} $ is the padded input volume and $ a, \; b, \; c $ are indices into the volume dimensions. \par
 
-\noindent \textbf{Pooling layers.} A pooling layer is used to reduce the spatial size of the representation, in order to reduce the number of parameters in the network. Pooling layers provide latent features deeper in the network with a larger receptive field. In particular, pooling gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some 2-dimensional aggregation operation (usually a max, but others like average may also be used) to local regions of the input volume. A pooling layer has no trainable parameters itself. \par
+\noindent \textbf{Pooling layers.} A pooling layer is used to reduce the spatial size of the representation, in order to reduce the number of parameters in the network. Pooling layers provide latent features deeper in the network with a larger receptive field. In particular, pooling gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some $ 2D $ aggregation operation (usually a max, but others like average may also be used) to local regions of the input volume. A pooling layer has no trainable parameters itself. \par
 
-\noindent \textbf{Fully connected layers.} In order to compute the output of a CNN, one or more fully connected layers are required to flatten the output volume of the last convolutional layer. These layers perform the same functions as an MLP to compute an output vector. \par
+\noindent \textbf{Fully connected layers.} In order to compute the output of a CN, one or more fully connected layers are required to flatten the output volume of the last convolutional layer. These layers perform the same functions as an MLP to compute an output vector. \par
 
-\noindent \textbf{Convolutional backpropagation.} Computing parameter updates for convolutional filters follows the same first order differential procedure used in backpropagation for MLPs. Assuming a loss function $ E $ and having computed the derivative of this loss up to the output of the convolutional layer, $ \frac{\partial E} {\partial O} $, in order to update the parameters the convolutional layer, we require the derivative of $ E $ with respect to the weights and biases of the convolutional layer. We also require the derivative with respect to the inputs of the layer $\frac{\partial E} {\partial X}$ in order to propagate the error back to the preceding layers. \par
+\noindent \textbf{Convolutional backpropagation.} Computing parameter updates for convolutional filters follows the same first order differential procedure used in backpropagation for MLPs. Assuming a loss function $ E $, and having computed the derivative of this loss up to the output of the convolutional layer, $ \frac{\partial E} {\partial O} $, in order to update the parameters the convolutional layer, we require the derivative of $ E $ with respect to the weights and biases of the convolutional layer. We also require the derivative with respect to the input to the current layer $\frac{\partial E} {\partial X}$, and use this when computing the error to pass back to the previous layer. \par
 
-\noindent The necessary derivatives are:
-\unskip
+\noindent The required derivatives are:
 \begin{subequations}
 	\begin{gather}
 		\frac{\partial E} {\partial b} = \frac{\partial E} {\partial O}\frac{\partial O} {\partial b} \\
-		\frac{\partial E} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial L} {\partial O_{ij}^{d}}X_{i+a,j+b,c}^{pad} \\
+		\frac{\partial E} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial E} {\partial O_{ij}^{d}}\frac{\partial O_{ij}^d} {\partial W_{a,b,c,d}} \\
 		\frac{\partial E} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial E} {\partial O_{ij}^{d}}
 	\end{gather}
 \end{subequations}
