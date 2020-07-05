@@ -168,7 +168,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 
 \noindent \textbf{Convolutional layers.} Convolutional layers rely on filters that are small spatially (along width and height), and extend through the full depth of an input volume. During the forward pass, each filter is convolved across the width and height of the input volume, where the element-wise dot product is computed between the entries of the filter and the input at a particular position. A $ 2D $ feature map is generated, that gives the responses of that filter at every spatial position of the input. Every convolutional layer has a set of filters, and each of them produces separate $ 2D $ feature maps, which are then stacked along the depth dimension to produce an output volume \unskip ~\citep{DLIndaba2017}. \par
 
-\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size (kernel), number of filters (channels), stride, padding, and dilation. The kernel size defines the width and height of the kernel, which is often square, and the filter is the set of kernels that is the same size as the depth of the input volume, see Figure 2.7. The number of channels controls the output volume depth. The stride defines the number of entries by which the filter will move when convolving it along the input volume, see Figure 2.8. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field, see Figure 2.9. \par
+\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size (kernel), number of filters (channels), stride, padding, and dilation. The kernel size defines the width and height of the kernel, which is often square, and the filter is the set of kernels that is the same size as the depth of the input volume, see Figure 2.7. The number of channels controls the output volume depth. The stride defines the number of entries by which the filter will move when convolving it along the input volume, see Figure 2.8 and Figure 2.9. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field, see Figure 2.10. \par
 
 \begin{figure}[H]
    	\centering
@@ -236,7 +236,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 
 \subsection{Recurrent networks}
 
-An IID dataset is order invariant, because the probability of seeing one data point in no way influences the event of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance. Some data is however dependent, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is influenced by the steps before it. \par
+An IID dataset is order invariant, because the probability of seeing one data point in no way influences the event of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance.\ Some data is however dependent, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is influenced by the steps before it. \par
 
 \noindent An example of dependent data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is influenced by the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. If we try to predict the temperature one day into the future, it is reasonable to believe that if the daily high on day $ t - 2 $ was mild, and the daily high on day $ t - 1 $ was warm, the daily high on day $ t $ may be hot. \par
  
@@ -252,7 +252,7 @@ An IID dataset is order invariant, because the probability of seeing one data po
 	\end{split}
 \end{equation}
 
-\noindent Recurrent networks (RNs) estimate the conditional distribution of dependent data points from sequential input by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps combined with a recurrent parameter matrix using an inner product operator \unskip ~\citep{werbos1988generalization}. RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, see Figure 2.10. \par
+\noindent Recurrent networks (RNs) estimate the conditional distribution of dependent data points from sequential input by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps combined with a recurrent parameter matrix using an inner product operator \unskip ~\citep{werbos1988generalization}.\ RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, see Figure 2.11. \par
 
 \begin{figure}[H]
    	\centering
@@ -265,29 +265,29 @@ An IID dataset is order invariant, because the probability of seeing one data po
 
 \noindent In the following we discuss the RN forward pass. \par
 
-\noindent \textbf{Recurrent layers.} RNNs build context by generating a representation of a window of data samples. This representation is defined as a state vector, which is added to a hidden vector and bias of a layer within the network. The layer output is then passed through a nonlinear activation before being passed to the proceeding layer. RNN layers are comprised of cells, which contain an internal state, hidden output and a bias \unskip ~\citep{DLIndaba2018}. An RNN cell can thus be defined as follows: 
+\noindent \textbf{Recurrent layers.} RNs build context by generating a representation of a window of data samples. This representation is defined as a state vector, which is added to a hidden vector and bias of a layer within the network. The layer output is then passed through a nonlinear activation before being passed to the next layer. RN layers are comprised of cells, which contain an internal state, hidden output and a bias \unskip ~\citep{DLIndaba2018}. An RN cell can thus be defined as follows: 
 \begin{equation}
 	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b)
 \end{equation}
 
-\noindent where $h_t$ is the cell output, and added to the state vector as context for following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ contains the recurrent parameters, $W_{xh}$ contains the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction, which is given by:
+\noindent where $h_t$ is the cell output, and added to the state vector as context for the following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ contains the recurrent parameters, $W_{xh}$ contains the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction at every step, which is given by:
 \begin{equation}
 	y_t = \sigma(W_{hy}h_{t} + b)
 \end{equation}
 
-\noindent \textbf{Backpropagation through time.} RNNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps, and computing parameter gradients at each step with respect to the error generated at the prediction step. The error signal generated is backpropagated through the RNN layer to adjust the cell state, hidden and bias parameters, by computing their first order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
+\noindent \textbf{Backpropagation through time.} RNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps.\ Parameter gradients are computed at each step with respect to the error generated at that prediction step. The error signal generated is backpropagated through the RN layer to adjust the cell state, hidden and bias parameters, by computing their first order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
 
-\noindent Assuming a loss function $ E_t $, the gradient of the loss $E_t$ at time $t$ with respect to $W_{hh}$ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $t$:  
+\noindent The gradient of the loss function $ E_t $ at time $ t $ with respect to $ W_{hh} $ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $ t $:  
 \begin{equation}
 	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
 \end{equation}
 
-\noindent One problem experienced by RNNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be expressed as:
+\noindent One problem experienced by RNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be seen in the following expression:
 \begin{equation}
 	\frac{\partial h_t} {\partial h_k} = \prod_{j=k+1}^t\frac{\partial h_j} {\partial h_{j-1}}
 \end{equation}
 
-\noindent This multiplicative operation causes small gradients to becomes progressively smaller as the sequence window become larger, or large gradients to become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RNN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
+\noindent This multiplicative operation causes small gradients to become progressively smaller as the sequence window becomes larger, or large gradients to become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
 
 %********************************** %Third Section  **************************************
