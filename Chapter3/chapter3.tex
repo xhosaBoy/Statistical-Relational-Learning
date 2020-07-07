@@ -12,16 +12,10 @@
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
 
-
-Open domain question answering is concerned with reasoning about knowledge expressed in natural language. The Knowledge graphs (KG) framework has proved useful in encoding information about a domain that can be used for reasoning. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in representing dyadic relationships between entities expressed as KG nodes and edges. Link prediction can be used as a paradigm for solving the task of open domain question answering, where general questions can be posed as as potential relationships between nodes of a KG. Figure 3.1 shows how a KG can be used to answer a question like "In which country is the city of Cape Town?". 
-
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=0.5\textwidth]{Open_domain_question_answering_using_a_knowledge_graph.png}
-	\caption{Open domain question answering using a knowledge graph.}
-\end{figure}
-
-\noindent The black edges indicate that the Cape Town is the capital of the Western Cape, and that the Western Cape is in South Africa. Similarly the capital of Gauteng is Johannesburg, and Johannesburg is in the same country as Gauteng. This information can be used to infer that Cape Town may also be in South Africa, indicated by the red edge. \par
+% Relational learning framework, links to old-school concept learning (a brief history of SRL)
+% What are we trying to do? Set of entity and relational vectors, we want to train those, to predict possible facts, create image to describe 
+% NTNs
+Knowledge graphs (KGs) are a framework used to represent logical structure in data \unskip ~\citep{koller2007introduction}. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in encoding the relational data representation by KGs, dyadic relationships between entities expressed nodes and edges. Recently approaches to combine statistical learning focused on feature representation of data, with relational data representation have been attempted in a KG link prediction setting \unskip~\citep{kazemi2018simple, chang2014typed, kang2012gigatensor}, statistical relational learning (SRL). Tensor factorisation has been explored as an approach to link prediction \unskip ~\citep{nickel2011three, bordes2013translating, trouillon2016complex}, and the following presents nonlinear tensor factorisation models. \par
 
 \noindent Tensor factorisation has shown promise as a machine learning approach to temporal modeling of social networks, and in domains that are high-dimensional and sparse, such as singular value decomposition for recommender systems \unskip ~\citep{koren2009matrix}. Tensor factorisation is also compute efficient, and lends itself the GPU computation common in modern machine learning workloads. This approach decomposes entity-relational tensors into latent feature representations of entities and relations using an entity matrix and relational tensor respectively. The entity matrix is composed of entity vectors, and the relational tensor is composed of relational matrix slices which correspond to all the set of relation types in the KG, see figure 5. The product of the entity matrix, a relational matrix slice and transposed entity matrix is the bilinear tensor product. The operation generates an entity-relational tensor with unormalised scores of potential relationships between entities, indexed by relation. A probability of relation in the interval $ (0, 1) $ is then computed for each score using a sigmoid function. These probabilities are sorted in descending order to rank the plausibility of potential relationships. 
 
