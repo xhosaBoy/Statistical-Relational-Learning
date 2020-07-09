@@ -37,35 +37,35 @@ Knowledge graphs (KGs) are a framework used to represent logical structure in da
 \section{Neural tensor networks}
 
 \subsection{Neural tensor factorisation}
-RESCAL introduced the bilinear tensor product for relational scoring \unskip ~\citep{nickel2011three}. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
+Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor product for relational scoring, in a model called RESCAL. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 \begin{equation}
 	f_{i, j, k} = e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}W_{a,b,k}e_{ia}e_{jb}
 \end{equation}
 
-\noindent where $f$ is the relational score, $e_i$ is the subject, $e_j$ is the object, and $W$ is the relational tensor. his is a linear model for entity-relational interactions that uses the dot product operator to construct a latent subject-relation representation, before computing a relational score using the dot product operator between the subject-relational representation and the object. RESCAL is thus a linear factorisation composition. \par
+\noindent where $ f $ is the relational score, $ e_i $ is the subject vector and $ e_j $ is the object vector, entity representations implemented as model embeddings. $ W $ is the predicate tensor where $ W_k $ is a matrix slice, a predicate representation implemented as a model embedding. Entity-relational interactions are modelled using the inner product between the subject vector and predicate matrix, generating a subject-predicate vector. A relational score is then computed by taking the inner product between the subject-predicate vector and the object vector. RESCAL is thus a linear tensor factorisation composition. \par
 
-\noindent A natural extension to this method is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}.Their model uses as sigmoid nonlinearity to compute a probability of relational plausibility from the relational score computed using the bilinear tensor product. The model is defined as follows:
+\noindent A natural extension to this model is to include a nonlinearity for entity-relational interaction modelling. This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}. Their model uses a sigmoid nonlinearity to generate a probability of a possible relationship from the relational score computed using the bilinear tensor product. The model is defined as follows:
 \begin{subequations}
 	\begin{gather}
 		n_{i,j,k} = e_i^TW_ke_j \\
-		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{ik}^{j})
+		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{i,j,k})
 	\end{gather}
 \end{subequations}
 
-\noindent where $ n_{i,j,k} $ is the relational score, $ \sigma(t) = 1/(1 + e^{-t}) $ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between $ S_i $ and $ O_k $ indexed by relation $ R_j $. This model introduces nonlinear entity-relational interaction to tensor factorisation. 
+\noindent where $ n_{i,j,k} $ is the relational score, $ \sigma(t) = 1/(1 + e^{-t}) $ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of relational plausibility between subject $ S_i $ and object $ O_k $, indexed by relation $ R_j $. This model introduces nonlinear entity-relational interaction to tensor factorisation. 
 
 \subsection{Recursive neural tensor factorisation}
 
-Socher and Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing compositional representations of two words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN-extended nonlinear tensor factorisation model is defined as follows:
+Chen et al.  \unskip ~\citep{socher2013reasoning} extend nonlinear tensor factorisation by introducing recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing compositional representations of two words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product and augmenting the nonlinear tensor factorisation. The RCN-extended nonlinear tensor factorisation model is defined as follows:
 \begin{equation}
-	g_{i,j,k} =  u_j^Tf(e_i^TW_j^{\left [1:m \right ]} e_k + V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ] + b_j)
+	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k)
 \end{equation}
 
-\noindent where $g$ is the relational score, $f$ is the hyperbolic sigmoid function, $e_i^TW_j^{\left [1:m \right ]} e_k $ is the bilinear tensor product, $V_j \left [ \begin{matrix} e_i \\ e_k \end{matrix} \right ]$ is the recursive composition, a concatenation of the subject and object entity vectors, where a product is taken with a relational matrix $ V_j $ where rows correspond to respective relations, and $ b_j $ is the bias. \par
+\noindent where $ g $ is the relational score and $ f $ is the hyperbolic sigmoid function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where the matrix product is taken between matrix $ V_k \in \mathbb{R}^{k \times 2n} $ and the concatenation of the subject and object vectors, where a row of matrix $ V_k $ corresponds to relation $ k $. $ b_k $ is the bias vector. \par
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
+    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
 	\caption{Recursive neural tensor network.}
 \end{figure}
 

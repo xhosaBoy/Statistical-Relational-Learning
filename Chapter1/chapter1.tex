@@ -86,7 +86,7 @@ One of the challenges facing KGQA is the there exists no standard benchmark of h
 
 \noindent The most appropriate paradigm for knowledge discovery is also still an open question. Graph modelling has the advantage of longer sequences with which to build dependencies between entities. Such an advantage allows the modelling of relational correlations between entities that is not possible in latent feature modelling. Latent feature modelling has the advantage of computational efficiency. No matter how large the KG, latent feature modelling approaches remain adept at handling this density. Both of these paradigms are stochastic however, and in certain scenerios more determinstic approaches may be required, a strength of IPLP. Explainability of logic rules with stochastic primitives \unskip~\citep{yang2017differentiable} may useful in safety-critical applications, or under decision-making understanding contexts. \par
 
-\noindent Knowledge discovery is currently fulfilled through the task of prediction.\ Two frameworks have been used to structure approaches to this task, probabilistic modelling and mathematical estimation of generative distributions (machine learning). Both of these frameworks rely on in-depth a priori structuring of a paradigm used as an approach to prediction, for example Bayesian inference, shallow models and deep models \unskip~\citep{murphy2012machine}. Each paradigm has given rise to a number of models and corresponding training algorithms with inherent strengths and weaknesses. The trend in prediction research however is simple models of ever increasing size, trained on very very large datasets.\ It is unclear whether careful curation of model definitions and training algorithms will be able to continue to compete with this more brute force alternative. Exploring the dissymmetric opposition of these two philosophies should guide the development of the most efficient solutions.
+\noindent Knowledge discovery is currently fulfilled through the task of prediction.\ Two machine learning (ML) paradigms have been used to structure approaches to this task, probabilistic modelling and mathematical estimation of generative distributions. Both of these paradigms rely on in-depth a priori structuring of a model used as an approach to prediction, for example Bayesian inference, shallow models and deep models \unskip~\citep{murphy2012machine}. Each paradigm has given rise to a number of models and corresponding training algorithms with inherent strengths and weaknesses. The trend in prediction research however is simple models of ever increasing size, trained on very very large datasets.\ It is unclear whether careful curation of model definitions and training algorithms will be able to continue to compete with this more brute force alternative. Exploring the dissymmetric opposition of these two philosophies should guide the development of the most efficient solutions.
 
 \subsection{Challenges of latent feature modelling} 
 
@@ -103,39 +103,48 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \section{Related work} %Section - 1.2 
 
-\subsection{Reasoning about facts} 
-
 \noindent This thesis aims to extend research that aspires to give machines the capability of human-like reasoning \unskip~\citep{bordes2011learning} in open-domain question answering \unskip~\citep{hakimov2019evaluating}. Early work in this area focused on using relational data to learn deterministic logical rules based on symbolic representations, which were used for formal reasoning \unskip~\citep{hohenecker2017deep}.\ This approach gave rise to the inductive logic programming (ILP) paradigm, however due to finite domain utility, scalability issues and poor performance, research in reasoning shifted to statistical methods focused on attribute representation, which were increasingly successful in prediction tasks, particularly in computer vision and natural language processing (NLP) \unskip~\citep{koller2007introduction}.\ SRL is the hybridisation of these two approaches, learning statistical correlations between concept dependencies by leveraging structural information in relational data. \par
 
-\noindent SRL is comprised of three paradigms, latent feature modelling, graph modelling and tensor factorisation \unskip~\citep{nickel2015review}. The rest of this dissertation is concerned with the analysis of approaches to latent feature modelling. Tensor factorisation has become one of the most popular approaches to latent feature modelling, where a decomposition of relational data represented as a tensor, is used to generate a set of constituent vectors, see Figure 1.2, and Figure 1.3. \par
+\noindent SRL is comprised of three paradigms, latent feature modelling, graph modelling and tensor factorisation \unskip~\citep{nickel2015review}. The rest of this dissertation is concerned with the analysis of approaches to latent feature modelling. Tensor factorisation has become one of the most popular approaches to latent feature modelling, where a decomposition of relational data represented as a tensor of relational scores, is used to generate a set of constituent vectors, see Figure 1.2, and Figure 1.3. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textheight]{relational_tensor.png}
 	\captionsetup{justification=centering}
-	\caption{Knowledge graph structured data represented as a relational tensor of size $ n \; x \; n \; x \; m $ with relational scores $ S $ between nodes, indexed by $ Edge $. $ S_{N1\_N2} $ is the relational score between node $ N1 $ and node $ N2 $ for $ Edge_1 $, in the range $ \in (0, 1] $. If an edge is present between these two nodes in the data, the score is $ 1.0 $.}
+	\caption{KG structured data represented as a relational score tensor of size $ n \times n \times m $ with relational scores $ S $ between nodes, indexed by $ Edge $. $ S_{N1\_N2} $ is the relational score between node $ N1 $ and node $ N2 $ for $ Edge_1 $, in the range $ \in (0, 1] $. If an edge is present between these two nodes in the data, the score is $ 1.0 $.}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{relational_tensor_decomposition}
 	\captionsetup{justification=centering}
-	\caption{Relational tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R}^m $,  $ B \in \mathbb{R}^n $ and $ C \in \mathbb{R}^p $. The inner product of these vectors computes the relational tensor.}
+	\caption{Relational score tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R}^m $,  $ B \in \mathbb{R}^n $ and $ C \in \mathbb{R}^p $. The inner product of these vectors generates the relational tensor.}
 \end{figure}
 
-\noindent RESCAL, by Nickel et al.  \unskip~\citep{nickel2011three}, decomposes a relational tensor $ T_k $ into an entity matrix $ E  \in \mathbb{R}^{n x r} $, a relational tensor $ R_k \in \mathbb{R}^{r x r x m}$ and the transpose of the entity matrix $ E^T \in \mathbb{R}^{r x n} $. The bilinear tensor product is the inner product between $ E $ and a slice $ k $ of $ R_k $, where the inner product of the result is taken with a transposed matrix $ E^T $, see equation 1.1.
-\begin{equation}
-	T_k \approx ER_kE^T
-\end{equation}
-
-\noindent Entity matrix $ E $ is composed of entity vectors $ e \in \mathbb{R}^r $ and a relation matrix $ k $ of the relational tensor $ R_k $ is represented as a full rank matrix $ W_k \in \mathbb{R}^{rxr} $ \unskip~\citep{nickel2012factorizing}.\ An inner product between an entity $ e_i $ and relational matrix $ W_k $, followed by an inner product with entity vector $ e_j $ generates a relational score $ n_{i,j,k} $, see Figure 1.4. When adopting the RDF formalism, $ e_i $ is the subject, $ W_k $ is the predicate, and $ e_j $ is the object.\ This set comprises an RDF triple used to encode a KG fact.\ Entities $ e_i $, and $ e_j $ and relation $ W_k $ have unknown latent representations (parameters), and the task is to learn the most optimal parameters that can be used for relation prediction. The training algorithm minimises the squared error loss, and the model achieves competitive performance on various datasets. \par
+\noindent RESCAL, by Nickel et al. \unskip~\citep{nickel2011three}, decomposes a relational score tensor $ S_k $ into an entity matrix $ E  \in \mathbb{R}^{n \times r} $, a relational tensor $ R_k \in \mathbb{R}^{r \times r \times m}$ and the transpose of the entity matrix $ E^T \in \mathbb{R}^{r \times n} $, illustrated in Figure 1.4. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.4\textwidth]{relational_tensor_entity_relational_factorisation}
 	\captionsetup{justification=centering}
-	\caption{Entity-relational tensor decomposition into entity matrix $ E  \in \mathbb{R}^{n x r} $,  relational tensor $ R_k \in \mathbb{R}^{r x r x m} $ and the transposed entity matrix $ E^T \in \mathbb{R}^{r x n} $. The inner product of these matrices and tensor compute the entity-relational tensor.}
+	\caption{Relational score tensor decomposition into entity matrix $ E  \in \mathbb{R}^{n \times r} $, relational tensor $ R_k \in \mathbb{R}^{r \times r \times m} $ and the transposed entity matrix $ E^T \in \mathbb{R}^{r \times n} $. The product between $ E $, $ R_k $, and $ E^T $ generates the entity-relational tensor.}
 \end{figure}
+
+\noindent The bilinear tensor product is the tensor product between entity matrix $ E $ and relational tensor $ R_k $, which generates an entity-relational tensor. The tensor product is then taken between it and the transposed entity matrix $ E^T $, see equation 1.1.
+\begin{equation}
+	S_k \approx ER_kE^T
+\end{equation}
+
+\noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{r \times 1} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1 \; \dots \; m \} $ is the set of KG relations.\ The matrix product between entity $ e_i $ and relational matrix $ W_k $, generates an entity-relational vector. The inner product between it and entity vector $ e_j \in \mathbb{R}^{1 \times r} $ generates a relational score $ s_{i,k,j} $, see Figure 1.5. 
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{relational_tensor_entity_relational_factorisation}
+	\captionsetup{justification=centering}
+	\caption{ The tensor product of these matrices and tensor compute the relational score tensor.}
+\end{figure}
+
+\noindent When adopting the RDF formalism, $ e_i $ is the subject, $ W_k $ is the predicate, and $ e_j $ is the object, where the set $ \{ e_i, \; W_k, \; e_j \} $ comprises an RDF triple used to encode a KG fact.\ $ \{ e_i, \; W_k, \; e_j \} $ have unknown latent representations (parameters), where the task is to learn the most optimal parameters that can be used for relation prediction. The RESCAL training algorithm minimises the squared error loss toward this task, and in doing so achieves competitive performance on standard link prediction benchmark datasets. \par
 
 \noindent Translating the embeddings (TransE) of entities is another model for relation prediction \unskip~\citep{bordes2013translating}. The motivation for this approach is that a lot of KG facts are presented in hierarchies, therefore a translation of the subject by the predicate should produce an embedding close to the object. The model translation is thus the natural transformation of the entity and can be used to model hierarchies, as well as modelling embedding equivalence with reverse transformations. \par
 
@@ -143,7 +152,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \noindent ComplEx, by Trouillon et al. \unskip~\citep{trouillon2016complex}, is the extension of DistMult into the complex domain. Entities are represented using complex vectors, and relations are represented using a diagonal matrix with complex entries.\ Complex valued embeddings extend the modelling of entity-relational interactions to include antisymmetric interactions. \par
 
-\noindent All these approaches rely on linear tensor factorisation for latent feature modelling, and aside from ComplEx, apply simple inner product operators for entity-relational interaction modelling. These representations scale well with large datasets but are limited in their expressiveness. Next we will discuss nonlinear models. \par
+\noindent All these approaches rely on linear tensor factorisation for latent feature modelling, applying linear product operators for entity-relational interaction modelling. These representations scale well with large datasets but are limited in their expressiveness. Next we will discuss nonlinear models. \par
 
 \noindent Neural tensor networks (NTN), by Chen et al. \unskip~\citep{socher2013reasoning}, extend the bilinear tensor product in two ways.\ Firstly, they make use of a recursive network (RCN) \unskip~\citep{socher2012semantic} to construct a composition between two entities and output a compositional score.\ This compositional score is then added to the output of the bilinear tensor product, generating a relational score. Secondly, the computed relational score is passed through a nonlinearity. The NTN achieves a higher level of relational expressiveness, significantly increasing relation prediction performance.  Chen et al. \unskip~\citep{socher2013reasoning} also assess the use of pre-trained word vectors on link prediction. They find pre-trained word vectors outperform random initialisation. \par
 
@@ -152,9 +161,9 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \noindent HolE, Nickel et al. \unskip~\citep{nickel2016holographic}, uses a circular correlation as an operator during relation prediction. The multiplication between subject $ s $ and object $ o $ features is taken by sliding the object over the subject, see equations 1.2a, 1.2b and 1.2c. 
 \begin{subequations}
 	\begin{gather}
-		c_0 =  (s_0*o_0 + s_1*o_1 + s_2*o_2) \\
-		c_1 =  (s_0*o_2 + s_1*o_0 + s_2*o_1) \\
-		c_2 =  (s_0*o_1 + s_1*o_2 + s_2*o_0) 
+		c_0 =  (s_0 \times o_0 + s_1 \times o_1 + s_2 \times o_2) \\
+		c_1 =  (s_0 \times o_2 + s_1 \times o_0 + s_2 \times o_1) \\
+		c_2 =  (s_0 \times o_1 + s_1 \times o_2 + s_2 \times o_0) 
 	\end{gather}
 \end{subequations}
 
