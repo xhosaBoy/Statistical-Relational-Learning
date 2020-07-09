@@ -36,7 +36,7 @@ Knowledge graphs (KGs) are a framework used to represent logical structure in da
 
 \section{Neural tensor networks}
 
-\subsection{Neural tensor factorisation}
+\subsection{Nonlinear latent feature modelling}
 Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor product for relational scoring, in a model called RESCAL. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 \begin{equation}
 	f_{i, k, j} = e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}W_{a,b,k}e_{ia}e_{jb}
@@ -73,11 +73,11 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k)
 \end{equation}
 
-\noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T $ is the vector of scores indexed by relation $ k $, and $ f $ is the hyperbolic tangent function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. \par
+\noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T \in \mathbb{R}^{1 \times m} $ is an output layer of trainable prameters, and $ f $ is the hyperbolic tangent function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. The output of a subject $ i $ and object $ j $ input, $ \{ e_i, \; e_j \} $, is a vector of relational scores $ \{ s_{i,1,j}, \; \dots, \; s_{i,m,j} \} $ for all predicates $ W_k $ of the KG. 
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
+    	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
 	\captionsetup{justification=centering}
 	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias to compute a relational score between the entities. The final result is squashed using a hyperbolic tangent function.}
 \end{figure}
@@ -91,31 +91,43 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 
 \noindent The NTN model training algorithm also makes use of pre-trained word vectors, from a language model by Turian et al. \unskip ~\citep{turian2010word}, to initialise entity embeddings. These are 100-dimensional vectors, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting entity embedding is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$. These entity embeddings are trainable, and updated using backpropagation to generate a distributed representation of words that aligns with the KG of the particular application. \par
 
-\noindent \textbf{Training algorithm optimisation.} Deep model training can suffer from noisy gradient signals when using stochastic gradient descent, mini batch optimisation and regularisation techniques such as dropout. Deep models can also suffer from insufficient signal to update parameters, a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this noise \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first and second order moments of the gradient, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates the size of parameter updates, accelerating toward local optima and remaining small in regions with a small gradient signal, sparse regions. \par
+\subsection{Training algorithm optimisation} 
 
-\noindent Setting model hyperparameters remains a challenge in deep model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}. This approach improves on grid search by matching or exceeding model performance in a fraction of the compute time. It takes advantage of the fact that for most datasets only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive brute force search over a large combinatorial search space. \par
+Overfitting can be a concern for models with large numbers of parameters. This problem results in poor generalisation to testing data by the model. It can occur when training has progressed beyond the optimal point, and the model parameters begin to bias toward the training data. High model bias is revealed by good model performance on training data, and poor performance on validation data. Early stopping \unskip~\citep{prechelt1998early} is often used to prevent this and encourage generalisation. \par
 
-\noindent \textbf{Training algorithm.} Doss et al. reimplement the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model severely underperforms compared to the original model, relying on AdaGrad optmisation and the same hyperparameters. We apply Adam optimsation as well as hyperparameter random search, in an attempt to improve its performance. The new training algorithm is as follows: 
+\noindent Neural model training can suffer from slow convergence when using stochastic gradient descent, mini-batch optimisation, and regularisation techniques such as dropout. Neural models can also suffer from insufficient signal to update parameters, a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for these problems \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first and second order moments of the gradient, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates the size of parameter updates, accelerating toward local optima, and remaining small in sparse regions and where the gradient signal is small. \par
+
+\noindent Setting model hyperparameters remains a challenge in neural model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}, the process of defining intervals for model hyperparameters, and randomly sampling from those intervals for a finite number of training runs (experiments). This approach improves on grid search, a brute force process that iterates through combinations of hyperparameter intervals, as models often match or exceed performance in a fraction of the training time. It takes advantage of the fact that for most datasets, only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive search over a large combinatorial space. \par
+
+\subsection{Training algorithm}
+
+Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model underperforms compared to the original model, relying on AdaGrad optimisation and the same hyperparameters. We apply early stopping, Adam optimisation as well as hyperparameter random search, in an attempt to improve performance. The new training algorithm is as follows: 
 
 \medskip
 
 \begin{algorithm}[H]
-	\For{Epoch}{ // repeat for $N$ experiments using random uniform hyperparameter configuration \\
+	Repeat for $ Z $ experiments using random uniform hyperparameter configuration \\
+	\For{Epoch}{ 
 		\SetAlgoLined
 		\textbf{Input} 
-		Training set \begin{math} D = \{(x_i, y_i)\}_{i=1}^N \end{math}, of samples and labels\;
-  		\begin{math} S_{batch} \gets sample(S, b) \end{math} // sample a minibatch of size \begin{math} b \end{math} \\
-	 	\For{(x, y) \begin{math} \in S_{batch} \end{math}}{
-     			\begin{math} y^{'}_{correct} \gets predict(x) \end{math} // predict label for sample \\
-			\begin{math} y^{'}_{corrupt} \gets predict(x) \end{math} // predict label for sample \\
-			\begin{math} e \gets contrast(y_{correct}, \; y_{corrupt}, \; y^{'}_{correct}, \;  y^{'}_{corrupt}) \end{math} // compute error
-     		}
-		Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
+		Training set \begin{math} D = \{(x_i, \; y_i)\}_{i=1}^N \end{math}, of samples and labels\;
+  		\begin{math} S \gets sample(D, \; b) \end{math} // sample a mini-batch of size $ b $ from training set $ D $\\
+		\For{S}{
+	 		\For{(x, y) $ \in S $}{
+     				$ y^{'}_{correct} \gets predict(x) $ \\ // for $ \{ e_i, e_{jt} \} $ predict relational score $ g(T^{(i)}) $ for sample \\
+				$ y^{'}_{corrupt} \gets predict(x) $ \\ // for $ \{ e_i, e_{jc} \} $ predict relational score $ g(T_c^{(i)}) $ for sample \\
+				$ e \gets contrast(y^{'}_{correct}, \;  y^{'}_{corrupt}) $ // compute error
+     			}
+			Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
+			\For{Validation}{
+				Check validation score at previous iteration, $ vScore_{t - 1} $ \\
+				If  $ vScore_{t} < vScore_{t - 1} $ \\
+					Stop training. // early stopping
+			}
+		}
 	}
-	\caption{Updated NTN training algorithm}
+	\caption{Optimised NTN training algorithm}
 \end{algorithm} 
-
-\newpage
 
 
 % **************************** Second Section **************************
