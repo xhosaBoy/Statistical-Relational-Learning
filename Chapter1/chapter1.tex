@@ -135,7 +135,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 	S_k \approx ER_kE^T
 \end{equation}
 
-\noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{1 \times r} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1 \; \dots \; m \} $ is the set of KG relations.\ The vector-matrix product between entity $ e_i $ and relational matrix $ W_k $, generates an entity-relational vector. The inner product between it and entity vector $ e_j \in \mathbb{R}^{r \times 1} $ generates a relational score $ s_{i,k,j} $, see Figure 1.5. 
+\noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{1 \times r} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1 \; \dots \; m \} $ is the set of KG relations.\ The vector-matrix product between entity $ e_i $ and relational matrix $ W_k $, generates an entity-relational vector $ h_{i,k} \in \mathbb{R}^{1 \times r} $. The inner product between $ h_{i,k} $ and entity vector $ e_j \in \mathbb{R}^{r \times 1} $ generates a relational score $ s_{i,k,j} $, see Figure 1.5. 
 
 \begin{figure}[H]
    	\centering

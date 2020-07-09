@@ -59,27 +59,37 @@ Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor pr
 
 \subsection{Recursive neural tensor factorisation}
 
-Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between two words, in a sequence of words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product, illustrated in Figure 3.2, and is defined as follows:
+Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between words, in a sequence of words \unskip ~\citep{socher2012semantic}, illustrated in figure 3.2. \par
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
+	\captionsetup{justification=centering}
+	\caption{Recursive network which constructs a composition tree between inputs. It begins with a full tree and is pruned during training to obtain the optimal structure.}
+\end{figure}
+
+\noindent The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product, illustrated in Figure 3.3, and is defined as follows:
 \begin{equation}
 	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k)
 \end{equation}
 
-\noindent where $ g_{i,k,j} $ is the relational score, $ u_k^T $ is the vector of scores indexed by relation $ k $, and $ f $ is the hyperbolic tangent function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where the matrix-vector product is taken between matrix $ V_k \in \mathbb{R}^{k \times 2n} $ and the concatenation of the subject and object vectors, where a row of matrix $ V_k $ corresponds to relation $ k $. $ b_k $ is the bias vector. \par
+\noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T $ is the vector of scores indexed by relation $ k $, and $ f $ is the hyperbolic tangent function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{recursive_neural_tensor_network.png}
-	\caption{Recursive neural tensor network.}
+	\captionsetup{justification=centering}
+	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias to compute a relational score between the entities. The final result is squashed using a hyperbolic tangent function.}
 \end{figure}
 
-\noindent The contrastive max-margin objective is minimised during training. This objective computes a confidence magnitude on a true correct sample (a fact present in the KB), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KB). The correct and corrupt samples are used by the objective as follows:
+\noindent The contrastive max-margin loss is minimised during training. This loss computes a confidence magnitude on a correct sample (a fact present in the KG), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KG). The correct and corrupt samples are used by the loss function as follows:
 \begin{equation}
 	J(\si{\ohm}) =  \sum_{i=1}^N \sum_{c=1}^C \max(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda \left \lVert \si{\ohm} \right \rVert_2^2
 \end{equation}
 
-\noindent where $J$ is the loss value, $\si{\ohm}$ are the model trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training triplets, $C$ is the number of randomly corrupted facts. $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
+\noindent where $J$ is the loss value, $\si{\ohm}$ contains the trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training sample triplets, and $ C $ is the number of randomly corrupted facts. $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
 
-\noindent The NTN model training algorithm also makes use of pre-trained word vectors developed by Turian et al. \unskip ~\citep{turian2010word}. These are 100-dimensional embeddings, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting word representation is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$. These word vectors are trainable, and updated using backpropagation, to produce a distributed word representation that aligns with the KB. \par
+\noindent The NTN model training algorithm also makes use of pre-trained word vectors, from a language model by Turian et al. \unskip ~\citep{turian2010word}, to initialise entity embeddings. These are 100-dimensional vectors, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting entity embedding is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$. These entity embeddings are trainable, and updated using backpropagation to generate a distributed representation of words that aligns with the KG of the particular application. \par
 
 \noindent \textbf{Modern optimisation.} Deep model training can suffer from noisy gradient signals when using stochastic gradient descent, mini batch optimisation and regularisation techniques such as dropout. Deep models can also suffer from insufficient signal to update parameters, a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for this noise \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first and second order moments of the gradient, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates the size of parameter updates, accelerating toward local optima and remaining small in regions with a small gradient signal, sparse regions. \par
 
