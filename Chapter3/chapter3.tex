@@ -23,7 +23,7 @@ Knowledge graphs (KGs) are a framework used to represent logical structure in da
 	\caption{Relation prediction between two entities. $ subject_1 $ and $ object_1 $ are two distinct entities, and $ predicate_1 $ is a relation from the set of relations in the KG. A product is taken between $ subject-predicate \; vector_1 $ and all $ objects $ in the KG.}
 \end{figure}
 
-\noindent Previous tensor factorisation approaches focused on limiting the total number of model parameters in order to scale to large KGs. This approach was often at the expense of complex entity-relational interaction modelling.\ The neural tensor network (NTN) \unskip~\citep{socher2013reasoning}, a nonlinear extension of tensor factorisation, was the first successful attempt to take advantage of the expressiveness of neural compositional models. It relies on using a recursive network (RCN) \unskip ~\citep{pollack1990recursive} to output a compositional score between two entities, adding that score to the bilinear tensor product, and passing the result through a nonlinearity to compute a relational score. A hyperbolic tangent function is then applied to generate a measure of confidence in a potential relationship between the two entities.\par
+\noindent Previous tensor factorisation approaches focused on limiting the total number of model parameters in order to scale to large KGs. This approach was often at the expense of complex entity-relational interaction modelling.\ The neural tensor network (NTN) \unskip~\citep{socher2013reasoning}, a nonlinear extension of tensor factorisation, was the first successful attempt to take advantage of the expressiveness of neural compositional models. It relies on using a recursive network (RCN) \unskip ~\citep{pollack1990recursive} to output a compositional score between two entities, adding that score to the bilinear tensor product, and passing the result through a hyperbolic tangent function. The product between the result and an output layer of relation parameters is then taken, which generates a measure of confidence in potential relations between the two entities.\par
 
 \noindent Convolutional entity-relational modelling (ConvE) \unskip~\citep{dettmers2018convolutional} was similarly effective at extending tensor factorisation.\ ConvE lengthwise concatenates a subject vector and predicate vector into an subject-predicate matrix, then applies a 2-dimensional ($ 2D $) convolution operation on this matrix, convolutional tensor factorisation. A product is then taken between the generated subject-predicate vector and an object vector, to compute a relational score.\ Here a sigmoid function is applied to generate a probability of a potential relationship between the two entities. \par 
 
@@ -79,7 +79,7 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
 	\captionsetup{justification=centering}
-	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias to compute a relational score between the entities. The final result is squashed using a hyperbolic tangent function.}
+	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias. The result is squashed using a hyperbolic tangent function, and then multiplied by an output vector of relation parameters.}
 \end{figure}
 
 \noindent The contrastive max-margin loss is minimised during training. This loss computes a confidence magnitude on a correct sample (a fact present in the KG), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KG). The correct and corrupt samples are used by the loss function as follows:
@@ -118,7 +118,7 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 				$ y^{'}_{corrupt} \gets predict(x) $ \\ // for $ \{ e_i, e_{jc} \} $ predict relational score $ g(T_c^{(i)}) $ for sample \\
 				$ e \gets contrast(y^{'}_{correct}, \;  y^{'}_{corrupt}) $ // compute error
      			}
-			Update model w.r.t. \begin{math}  e \end{math} // using Adam optimser \\
+			Update model w.r.t. \begin{math}  e \end{math} // using Adam optimiser \\
 			\For{Validation}{
 				Check validation score at previous iteration, $ vScore_{t - 1} $ \\
 				If  $ vScore_{t} < vScore_{t - 1} $ \\
