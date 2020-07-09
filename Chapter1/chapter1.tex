@@ -135,13 +135,13 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 	S_k \approx ER_kE^T
 \end{equation}
 
-\noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{r \times 1} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1 \; \dots \; m \} $ is the set of KG relations.\ The matrix product between entity $ e_i $ and relational matrix $ W_k $, generates an entity-relational vector. The inner product between it and entity vector $ e_j \in \mathbb{R}^{1 \times r} $ generates a relational score $ s_{i,k,j} $, see Figure 1.5. 
+\noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{1 \times r} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1 \; \dots \; m \} $ is the set of KG relations.\ The vector-matrix product between entity $ e_i $ and relational matrix $ W_k $, generates an entity-relational vector. The inner product between it and entity vector $ e_j \in \mathbb{R}^{r \times 1} $ generates a relational score $ s_{i,k,j} $, see Figure 1.5. 
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{relational_tensor_entity_relational_factorisation}
+    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{bilinear_tensor_product}
 	\captionsetup{justification=centering}
-	\caption{ The tensor product of these matrices and tensor compute the relational score tensor.}
+	\caption{Computing the bilinear tensor product for a single entry in a relational score matrix, where $ s_{i,k,j} $ is the relational score between entities $ e_i $ and $ e_j$ for relationship $ W_k $. }
 \end{figure}
 
 \noindent When adopting the RDF formalism, $ e_i $ is the subject, $ W_k $ is the predicate, and $ e_j $ is the object, where the set $ \{ e_i, \; W_k, \; e_j \} $ comprises an RDF triple used to encode a KG fact.\ $ \{ e_i, \; W_k, \; e_j \} $ have unknown latent representations (parameters), where the task is to learn the most optimal parameters that can be used for relation prediction. The RESCAL training algorithm minimises the squared error loss toward this task, and in doing so achieves competitive performance on standard link prediction benchmark datasets. \par
