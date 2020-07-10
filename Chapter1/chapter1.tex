@@ -44,7 +44,7 @@ Reasoning about knowledge expressed in natural language \unskip~\citep{minervini
 
 \noindent The third challenging task is organising information in such a way as to be able to reason about the knowledge it conveys. Humans build mental models using default reasoning \unskip~\citep{reiter1980logic}, believing that most objects A have some relationship X with objects B, with a small number of exceptions. For example, we could believe that films (object A) have not won (relationship X) an Oscar (object B). We will believe this is true for any given movie, unless we are familiar enough with movie history to identify the exceptions.\ Formally, the default beliefs we hold are facts, and this process of reasoning allows us to infer new facts in the form of plausible relationships between objects. \par
 
-\noindent In order to allow computers to use a similar method of reasoning, facts can be represented as graph-structured data.\ Such a representation is called a knowledge graph (KG) and models facts as entities (nodes) and the relations (edges) between them \unskip~\citep{nickel2015review}. The Resource Description formalism (RDF) is used to encode facts as triples in the form, subject-predicate-object, where the subject and object are entities, and the predicate is a relation between two entities \unskip~\citep{bizer2009dbpedia}. For example, a fact (triple) in an entertainment KG would be Black Panther (subject/entity) is a (predicate/relation) super hero (object/entity). \par
+\noindent In order to allow computers to use a similar method of reasoning, facts can be represented as graph-structured data.\ Such a representation is called a knowledge graph (KG) and models facts as entities (nodes) and the relations (edges) between them \unskip~\citep{nickel2015review}. The Resource Description formalism (RDF) is used to encode facts as triples in the form, subject-predicate-object, where the subject and object are entities, and the predicate is a relation between two entities \unskip~\citep{bizer2009dbpedia}. For example, a fact in a KG could be Black Panther (subject) is a (predicate) super hero (object). \par
 
 \noindent Question answering (QA) relies on knowledge discovery, the step-by-step deductive process used to infer possible facts given known facts.\ This is the process used above to infer that Chadwick Boseman is an actor, given other facts known about Chadwick Boseman and the Black Panther film. Statistical relational learning (SRL) solves the knowledge discovery problem by constructing models with measures of uncertainty in plausible facts not contained in KGs \unskip~\citep{koller2007introduction}.\par
 
@@ -56,9 +56,9 @@ The task of QA can be extended to an open-domain setting \unskip~\citep{chen2017
 
 \noindent The second milestone was the integration of the bilinear tensor product and neural networks \unskip~\citep{socher2013reasoning}. In this approach a recursive network \unskip~\citep{pollack1990recursive} computes a compositional score between the subject and object, which is then added to a bilinear tensor product score. The result is then passed through a nonlinearity which generates the final relational score. This approach effectively extended linear tensor factorisation techniques to nonlinear techniques, and simultaneously introduced the use of pre-trained word embeddings to initialise entity and relation vectors instead of random initialisation. In this one approach both decision making expressiveness as well as entity and relation semantic representations were improved. \par
 
-\noindent The third time a milestone was realised was with the use of complex valued embeddings for link prediction \unskip~\citep{trouillon2016complex}. This approach extended the bilinear tensor product by making use of the Hermitian dot product, which is the complex counterpart of the standard dot product between real vectors. It was proposed that complex vectors can effectively capture antisymmetric relations, "is not", while retaining the efficiency benefits of the dot product. This was achieved by using representations with complex embeddings, allowing the model to capture semantic meaning by computing a relational score dependent on the order of the entities in the triple. \par
+\noindent The third time a milestone was realised was with the use of complex valued embeddings for link prediction \unskip~\citep{trouillon2016complex}. This approach extended the bilinear tensor product by making use of the Hermitian dot product, which is the complex counterpart of the standard dot product between real vectors.\ It was proposed that complex vectors can effectively capture antisymmetric relations, "is not", while retaining the efficiency benefits of the dot product. This was achieved by using representations with complex embeddings, allowing the model to capture semantic meaning by computing a relational score dependent on the order of the entities in the triple. \par
  
-\noindent The above three milestones relied on shallow models that could scale to large datasets. Up until that point research in link prediction had focused on minimising the parameterisation of models. Convolutional networks are parameter efficient models, and major progress was again realised with the use of deep convolutional models for link prediction \unskip~\citep{dettmers2018convolutional}. The approach made use of 2D embedding representations which allowed the modelling of a large number of interactions between entities, achieving state-of-the-art (SOTA) link prediction performance as a result. \par
+\noindent The above three milestones relied on shallow models that could scale to large datasets. Up until that point research in link prediction had focused on minimising the parameterisation of models. Convolutional networks are parameter efficient models, and progress was again realised with the use of deep convolutional models for link prediction \unskip~\citep{dettmers2018convolutional}. This approach makes use of 2D entity and relation representations that undergo a convolution operation. This enables the modelling of a large number of interactions between them, and convolutional models have achieved state-of-the-art (SOTA) link prediction performance as a result. \par
 
 \subsection{Remaining challenges}
 
@@ -158,36 +158,36 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \noindent Hohenecker and Lukasiewicz \unskip~\citep{hohenecker2017deep} extend NTNs by pre-computing an object representation as an aggregation of all facts (triples) in which the object plays a part.\ They introduce the new model as a relational NTN (RTN). Dong et al. \unskip~\citep{dong2014knowledge} introduced ER-MLP, a two layer multilayer perceptron (MLP) which takes a triple as an input set of vectors, and passes this input to a fully-connected layer. The layer generates a hidden output vector which is passed through a nonlinearity, and finally through a second fully-connected layer.\ ER-MLP makes use of low-dimensional vectors for embedding representations. \par
 
-\noindent HolE, Nickel et al. \unskip~\citep{nickel2016holographic}, uses a circular correlation as an operator during relation prediction. The multiplication between subject $ s $ and object $ o $ features is taken by sliding the object over the subject, see equations 1.2a, 1.2b and 1.2c. 
+\noindent HolE, Nickel et al. \unskip~\citep{nickel2016holographic}, uses a circular correlation as an operator during relation prediction. The multiplication between subject $ e_i $ and object $ e_j $ features is taken by sliding the object over the subject, see equations 1.2a, 1.2b and 1.2c. 
 \begin{subequations}
 	\begin{gather}
-		c_0 =  s_0o_0 + s_1o_1 + s_2o_2 \\
-		c_1 =  s_0o_2 + s_1o_0 + s_2o_1 \\
-		c_2 =  s_0o_1 + s_1o_2 + s_2o_0 
+		c_0 =  e_{i0}e_{j0} + e_{i1}e_{j1} + e_{i2}e_{j2} \\
+		c_1 =  e_{i0}e_{j2} + e_{i1}e_{j0} + e_{i2}e_{j1} \\
+		c_2 =  e_{i0}e_{j1} + e_{i1}e_{j2} + e_{i2}e_{j0} 
 	\end{gather}
 \end{subequations}
 
-\noindent where $ c_0, \; c_1, \; c_2 $ are items of a correlation vector.\ An inner product is then taken with a predicate vector which generates a relational score.\ HolE is particularly adept at modelling antisymmetric interactions. \par
+\noindent where $ c_0, \; c_1, \; c_2 $ are items of a correlation vector.\ An inner product is then taken with a predicate vector which computes a relational score.\ HolE is particularly adept at modelling antisymmetric interactions. \par
 
-\noindent ConvE, Dettmers et al. \unskip~\citep{dettmers2018convolutional}, introduces the use of the convolutional operator in entity-relational modelling. The model lengthwise concatenates the subject vector $ S \in \mathbb{R}^{k} $ with itself, and then lengthwise concatenates a predicate vector $ P \in \mathbb{R}^{k} $ with itself, creating two matrices $ S \in \mathbb{R}^{2k} $ and $ P \in \mathbb{R}^{2k} $, where $ k $  is the vector length. $ S $ and $ P $ are then lengthwise concatenated to create an entity-relational matrix $ M \in \mathbb{R}^{4k} $, see equations 1.3.
+\noindent ConvE, by Dettmers et al. \unskip~\citep{dettmers2018convolutional}, introduces the use of the convolutional operator in entity-relational modelling. The model reshapes the subject vector $ e_i \in \mathbb{R}^{r} $ and the predicate vector $ w_k \in \mathbb{R}^{r} $, creating two matrices $ \overline{e_i} \in \mathbb{R}^{r_w \times r_h} $ and $ \overline{w_k} \in \mathbb{R}^{r_w \times r_h} $, where $ r = r_wr_h $. $ \overline{e_i} $ and $ \overline{w_k} $ are then lengthwise concatenated to create an entity-relational matrix $ m \in \mathbb{R}^{r_w \times 2r_h} $, see equations 1.3.
 \begin{equation}
 	(\begin{bmatrix}
-        		s & s & s \\
-           	s & s & s 
+        		e_i & e_i & e_i \\
+           	e_i & e_i & e_i 
        	\end{bmatrix}); \; (\begin{bmatrix}
-        					p & p & p \\
-           				p & p & p 
+        					w_k & w_k & w_k \\
+           	                         w_k & w_k & w_k 
        				\end{bmatrix}) = \begin{bmatrix}
-        								s & s & s \\
-           							s & s & s \\
-           							p & p & p \\
-           							p & p & p
+        								e_i & e_i & e_i \\
+           	                                                  e_i & e_i & e_i \\
+           							w_k & w_k & w_k \\
+           	                                                  w_k & w_k & w_k 
         			     				\end{bmatrix}
 \end{equation}
 
-\noindent A convolution is then performed on the $ M $ using a convolutional filter. The same filter is used for convolutions across all subject-predicate combinations, allowing for parameter sharing across triples. The convolution generates a feature map which is passed to a fully-connected layer that flattens it into an entity-relational hidden vector. Finally, the inner product of the hidden vector is taken with all object vectors, which generates a relational score for each object. The convolutional operator increases expressiveness by modelling entity-relational interactions around the entire concatenation line, enabling high levels of relation prediction performance. \par
+\noindent A convolution is then performed on the $ m $ using a set of convolutional filters. The same set of filters is used for convolutions across all subject-predicate combinations, allowing for parameter sharing across triples. The convolution generates a feature map which is reshaped and passed to a fully-connected layer that flattens it into a hidden vector. Finally, the inner product of the hidden vector is taken with all object vectors, which computes a relational score for each object. The convolutional operator increases expressiveness by modelling entity-relational feature interactions around the entire concatenation line, enabling high levels of relation prediction performance. \par
 
-\noindent The above approaches comprise nonlinear tensor factorisation for latent feature modelling. And all, excluding HolE, introduce neural tensor factorisation.\ Two other paradigms, graph modelling and IPLP, apply alternative approaches to link prediction.\ We refer the reader to \unskip~\citep{nickel2015review} for a recent review. \par
+\noindent The above approaches comprise nonlinear tensor factorisation for latent feature modelling, where ER-MLP and ConvE introduce neural tensor factorisation.\ Two other paradigms, graph modelling and IPLP, apply alternative approaches to link prediction.\ We refer the reader to \unskip~\citep{nickel2015review} for a recent review. \par
 
 
 %********************************** % Third Section  *************************************
