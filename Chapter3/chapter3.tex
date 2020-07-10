@@ -44,7 +44,7 @@ Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor pr
 
 \noindent where $ f_{i,k,j} $ is the relational score, $ e_i $ is the subject vector and $ e_j $ is the object vector, entity representations implemented as model embeddings. $ W_k $ is the predicate matrix for relation $ k $, a relation representation implemented as a model embedding. Entity-relational interactions are modelled using the vector-matrix product between the subject vector and predicate matrix, generating a subject-predicate vector. A relational score is then computed by taking the inner product between the subject-predicate vector and the object vector. RESCAL is thus a linear tensor factorisation composition. \par
 
-\noindent A natural extension to this model is to include a nonlinearity for relational scoring. This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}. Their model uses a sigmoid nonlinearity to generate a probability of a possible relationship from the relational score computed using the bilinear tensor product. The model is defined as follows:
+\noindent A natural extension to this model is to include a nonlinearity for relational scoring.\ This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}. Their model uses a sigmoid nonlinearity to generate a probability of a possible relationship from the relational score computed using the bilinear tensor product. The model is defined as follows:
 \begin{subequations}
 	\begin{gather}
 		n_{i,j,k} = e_i^TW_ke_j \\
@@ -87,9 +87,9 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 	J(\si{\ohm}) =  \sum_{i=1}^N \sum_{c=1}^C \max(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda \left \lVert \si{\ohm} \right \rVert_2^2
 \end{equation}
 
-\noindent where $J$ is the loss value, $\si{\ohm}$ contains the trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training sample triplets, and $ C $ is the number of randomly corrupted facts. $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
+\noindent where $J$ is the loss value, $\si{\ohm}$ contains the trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training sample triplets, and $ C $ is the number of randomly corrupted facts.\ $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
 
-\noindent The NTN model training algorithm also makes use of pre-trained word vectors, from a language model by Turian et al. \unskip ~\citep{turian2010word}, to initialise entity embeddings. These are 100-dimensional vectors, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting entity embedding is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$. These entity embeddings are trainable, and updated using backpropagation to generate a distributed representation of words that aligns with the KG of the particular application. \par
+\noindent The NTN model training algorithm also makes use of pre-trained word vectors, from a language model by Turian et al. \unskip ~\citep{turian2010word}, to initialise entity embeddings. These are 100-dimensional vectors, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting entity embedding is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$.\ These entity embeddings are trainable, and updated using backpropagation to generate a distributed representation of words that aligns with the KG of the particular application. \par
 
 \subsection{Training algorithm optimisation} 
 
