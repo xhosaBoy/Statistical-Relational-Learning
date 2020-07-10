@@ -161,9 +161,9 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \noindent HolE, Nickel et al. \unskip~\citep{nickel2016holographic}, uses a circular correlation as an operator during relation prediction. The multiplication between subject $ s $ and object $ o $ features is taken by sliding the object over the subject, see equations 1.2a, 1.2b and 1.2c. 
 \begin{subequations}
 	\begin{gather}
-		c_0 =  (s_0 \times o_0 + s_1 \times o_1 + s_2 \times o_2) \\
-		c_1 =  (s_0 \times o_2 + s_1 \times o_0 + s_2 \times o_1) \\
-		c_2 =  (s_0 \times o_1 + s_1 \times o_2 + s_2 \times o_0) 
+		c_0 =  s_0o_0 + s_1o_1 + s_2o_2 \\
+		c_1 =  s_0o_2 + s_1o_0 + s_2o_1 \\
+		c_2 =  s_0o_1 + s_1o_2 + s_2o_0 
 	\end{gather}
 \end{subequations}
 
