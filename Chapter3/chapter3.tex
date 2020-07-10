@@ -143,22 +143,25 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \; \overline{r_r} \right ]*w))W)e_o
 \end{equation}
 
-\noindent where $ \psi_r $ is the relational score, $ e_s \in \mathbb{R}^{n \times 1} $ is the subject, $ e_o \in \mathbb{R}^{n \times 1} $ is the object, and $ r \in \mathbb{R}^{n \times 1} $ is the predicate. $ \overline{e_s} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ e_s $, and similarly $ \overline{r_r} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ r_r $, where $ n = n_wn_h $. $ f $ is the lengthwise concatenation operation between $ \overline{e_s} $ and $ \overline{r_r} $, $ w $ contains the $ 2D $ convolutional filters, and $ * $ is the convolutional operator.  $ F \in \mathbb{R}^{m \times l \times b} $, where $ m $ are the number of $ 2D $ feature maps, and $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes $ F $ into a vector $ v \in \mathbb{R}^{mlb}$ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{mlb \times n} $, and generates a vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ g $ a ReLU nonlinearity. Finally the inner product is taken with this vector and $ e_o $ to compute a relational score. ConvE is thus a convolutional tensor factorisation. 
+\noindent where $ \psi_r $ is the relational score, $ e_s \in \mathbb{R}^{n \times 1} $ is the subject, $ e_o \in \mathbb{R}^{n \times 1} $ is the object, and $ r \in \mathbb{R}^{n \times 1} $ is the predicate. $ \overline{e_s} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ e_s $, and similarly $ \overline{r_r} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ r_r $, where $ n = n_wn_h $. $ f $ is the lengthwise concatenation operation between $ \overline{e_s} $ and $ \overline{r_r} $, $ w $ contains the $ 2D $ convolutional filters, and $ * $ is the convolutional operator.  $ F \in \mathbb{R}^{m \times l \times b} $, where $ m $ are the number of $ 2D $ feature maps, and $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes $ F $ into a vector $ v \in \mathbb{R}^{1 \times mlb}$ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{mlb \times n} $, and generates a vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ g $ a ReLU nonlinearity. Finally the inner product is taken with this vector and $ e_o $ to compute a relational score. ConvE is thus a convolutional tensor factorisation. Figure 3.4 illustrates the ConvE forward pass.
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{convolutional_entity_representations_final}
-	\caption{Convolutional entity representations.}
+	\captionsetup{justification=centering}
+	\caption{ConvE forward pass which computes a relational score $ s_{i,k,j} $ between subject $ i $, predicate $ k $ and object $ j $.}
 \end{figure}
 
 \newpage
 
-\noindent The computed relational probability is defined as follows: 
+\noindent The generated relational probability is defined as follows: 
 \begin{equation}
 	\mathbb{P} = \sigma(\psi_r(e_s, \; e_o)) 
 \end{equation}
 
-\noindent The binary cross-entropy objective is minimised during training. This objective is particularly effective as we expect only a single true class (a single object from the set of all entities) during inference, modelled as $1$, and every other class to be false, $0$. The objective is defined as follows:
+\noindent The binary cross-entropy loss is minimised during training. This loss function is particularly appropriate as we expect only a single object to belong to the fact (subject-predicate-object) and generate a probability close to $ 1 $, and every other object to not belong to the fact, generating a probability close to $ 0 $. \par
+
+\noindent The loss function is defined as follows:
 \begin{equation}
 	L(p, \; t) =  -\frac{1}{N}\sum_i(t_i \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i))
 \end{equation}
