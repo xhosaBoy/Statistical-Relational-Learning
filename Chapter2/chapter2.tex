@@ -131,7 +131,7 @@ Deep learning models have become popular for classification and regression tasks
 
 \subsection{Convolutional networks}
 
-MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagenet}. In an MLP layer, all features of an input vector are fully connected to all other features when computing the layer output. The outputs of a layer are then all fully connected to each other in the following layer. This interconnectedness causes the number of model parameters to grow exponentially in the number of input features. For example, a feed-forward network with two hidden layers consisting of $512$ and $256$ neurons respectively, an output size of $10$, and an input vector of shape $\left [ \begin{matrix} 200 \times 1 \end{matrix} \right] $, ends up with a total of $236,810$ parameters. This can cause a problem with high-dimensional input vectors such as images, where inputs may consist of a $ 3D $ input volume. MLPs may also need to be composed of a number of layers in order to produce satisfactory prediction performance when presented with high-dimensional inputs.\ In such a scenario, parameters can number in the millions, resulting in a model that is computationally inefficient to train. \par
+MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagenet}. In an MLP layer, all features of an input vector are fully connected to all other features when computing the layer output. The outputs of a layer are then all fully connected to each other in the following layer. This interconnectedness causes the number of model parameters to grow exponentially in the number of input features. For example, a feed-forward network with two hidden layers consisting of $ 512 $ and $ 256 $ neurons respectively, an output size of $10$, and an input vector of shape $ \left [ \begin{matrix} 200 \times 1 \end{matrix} \right] $, ends up with a total of $ 236,810 $ parameters. This can cause a problem with high-dimensional input vectors such as images, where inputs may consist of a $ 3D $ input volume. MLPs may also need to be composed of a number of layers in order to produce satisfactory prediction performance when presented with high-dimensional inputs.\ In such a scenario, parameters can number in the millions, resulting in a model that is computationally inefficient to train. \par
 
 \noindent MLPs are also not able to take direct advantage of structure in data.\ When images are represented as a matrix, common shapes (features) may appear in a regular composition. For example, different cars may appear regularly as a compositions of rectangles and circles. The inner product operator applied between the input (which is typically flattened into a vector) and layer parameters of an MLP, destroys the spatial information of the data, making the task of learning distributions of features harder. As a result, in order to possess sufficient learning capacity that adequately models variance in structural representations, MLPs need to be larger and despite this may still produce poor prediction performance. \par
 
@@ -161,7 +161,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
 	\captionsetup{justification=centering}
-	\caption{A basic CN consisting of an input, convolutional layer, fully-connected layer and output layer.}
+	\caption{A basic CN consisting of an input, convolutional layer, fully connected layer and output layer.}
 \end{figure}
 
 \noindent In the following we discuss the CN forward pass. \par
@@ -212,10 +212,10 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 
 \noindent Convolution of an input volume $ X $ with a single filter $ W $ is given by: 
 \begin{equation}
-	O_{ij}^{d} = b_d + \sum_{a=0}^{F - 1}\sum_{b=0}^{F - 1}\sum_{c=0}^{I - 1}W_{a,b,c,d}X_{i+a,j+b,c}^{pad}
+	O_{ij}^{d} = \sum_{a=0}^{f_w - 1}\sum_{b=0}^{f_h - 1}\sum_{c=0}^{d_i - 1}W_{a,b,c,d_o}X_{i+a,j+b,c}^{pad}  + b_{d_o} 
 \end{equation}
 
-\noindent where $ O_{ij}^d $ is the value of the output volume at position $ (i, \; j, \; d) $, $ b $ is a bias vector of shape $\left [ \begin{matrix} D \end{matrix} \right]$, $ W $ is the weight tensor of shape $ \left [ \begin{matrix} F \times F \times I \times D \end{matrix} \right] $, $ X^{pad} $ is the padded input volume and $ a, \; b, \; c $ are indices into the volume dimensions. \par
+\noindent where $ O_{ij}^d $ is the value of the output volume at position $ i, \; j $ of feature map $ d $. $ W_{a,b,c,d} \in \mathbb{R}^{f_wf_hd_id_o} $ is set of filters with kernel size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. $ X^{pad} $ is the padded input volume and $ a, \; b, \; c $ are indices into the volume dimensions. $ b \in \mathbb{R}^{d} $ is a bias vector. \par
 
 \noindent \textbf{Pooling layers.} A pooling layer is used to reduce the spatial size of the representation, in order to reduce the number of parameters in the network.\ Pooling layers provide latent features deeper in the network with a larger receptive field. In particular, pooling gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some $ 2D $ aggregation operation (usually a max, but others like average may also be used) to local regions of the input volume. A pooling layer has no trainable parameters itself. \par
 
