@@ -214,7 +214,7 @@ A hypernetwork is a meta network that generates parameters for a main network \u
 	\phi_k(e_i, \; e_j) = f(vec(e_i * (vec^{-1}(w_kH)))W)e_j
 \end{equation}
 
-\noindent where $ \phi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{n \times 1} $. $ H \in \mathbb{R}^{h \times d} $ are the fully connected layer parameters of the hypernetwork. $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters $ c_{ik} $. $ * $ is the convolutional operator that takes the convolution between $ e_i $ and $ c_{ik} $, generating a set of feature maps $ C_{ik} \in \mathbb{R}^{l \times b} $, where $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes the feature maps into a vector $ v \in \mathbb{R}^{1 \times lb} $ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{lb \times n} $, generating a hidden vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ f $, a ReLU nonlinearity. HypER is thus a hyper-convolutional tensor factorisation. 
+\noindent where $ \phi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{1 \times n} $. $ H \in \mathbb{R}^{n \times h} $ are the fully connected layer parameters of the hypernetwork. $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters $ c_{ik} $. $ * $ is the convolutional operator that takes the convolution between $ e_i $ and $ c_{ik} $, generating a set of feature maps $ C_{ik} \in \mathbb{R}^{l \times b} $, where $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes the feature maps into a vector $ v \in \mathbb{R}^{1 \times lb} $ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{lb \times n} $, generating a hidden vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ f $, a ReLU nonlinearity. HypER is thus a hyper-convolutional tensor factorisation. 
 
 \begin{figure}[H]
    	\centering
@@ -222,12 +222,12 @@ A hypernetwork is a meta network that generates parameters for a main network \u
 	\caption{Hypernetwork convolutional entity representations.}
 \end{figure}
 
-\noindent The computed relational probability is defined as follows: 
+\noindent The relational probability is computed as follows: 
 \begin{equation}
 	\mathbb{P} = \sigma(\phi_k(e_i, \; e_j)) 
 \end{equation}
 
-\noindent The HypER training algorithm minimises the binary cross-entropy objective. Entities and relations are intialised using Xavier initialisation \unskip ~\citep{glorot2010understanding}, drawn from a uniform distribution with zero mean. \par
+\noindent The HypER training algorithm minimises the binary cross-entropy loss. Entity and relation embeddings are intialised using Xavier initialisation \unskip ~\citep{glorot2010understanding}, from a uniform distribution with zero mean and varience of $ \frac{2}{n} $, where $ n $ is the embedding length. \par
 
 \noindent \textbf{HypER covariate shift}. We make the observation that hypernetworks may also suffer from covariate shift. Relational filters form inputs to the main convolutional network. During training, the latent parameters of the relations change, altering the input distribution of the generated relational filters. We consider whether this distribution shift makes it hard for the hpernetwork to learn parameters good at creating relational filters, given an input signal not representative of the underlying training dataset distribution. We further consider that given the relational filters are used early (upstream) in the main network, the effect of their suboptimal representations is amplified. \par
 
