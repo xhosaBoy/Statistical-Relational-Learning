@@ -176,32 +176,32 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \subsubsection{Hypernetworks}
 
-A hypernetwork is a meta network that generates parameters for a main network \unskip ~\citep{ha2016hypernetworks}.\ It compresses layer weights of a main network into an input embedding vector, which is analogous to a encoding a main network configuration. Hypernetworks are used to discover an efficient subset of main network parameters, reducing the total number of parameters without sacrificing performance. They are also used to enable parameter sharing across layers of a main network, without incurring the problem of vanishing and exploding gradients experienced by recurrent networks. \par
+A hypernetwork is a meta network that generates parameters for a main network \unskip ~\citep{ha2016hypernetworks}.\ It compresses layer weights of a main network into an input embedding vector, which is analogous to a encoding a main network configuration. Hypernetworks are used to discover an efficient subset of main network parameters, reducing the total number of parameters without sacrificing performance. They are also used to enable parameter sharing across layers of a main network similar to recurrent networks, however without incurring the problem of vanishing and exploding gradients. \par
 
-\noindent A standard tensor serves as input to a main network, for example an image or sequence of words, while an embedding vector serves as input to a hypernetwork, see Figure 3.5.\ The embedding vector size is determined by the hypernetwork layer sizes and main network weight sizes. Static embedding vector input can be used, as well as  dynamic embedding vector input. For dynamic input, different embedding vectors are input at each time step, and can be useful for adapting the main network to its input sequence. In both cases the embedding vector is learned during end-to-end training of the main network using backpropagation. \par
+\noindent A standard tensor serves as input to a main network, for example an image or sequence of words, while an embedding vector serves as input to a hypernetwork, see Figure 3.5.\ The embedding vector size and hypernetwork layer weights are used to determine the respective layer weight sizes of the main network. Static or dynamic embedding vectors  can be used as hypernetwork input. For the dynamic case, different embedding vectors are used at each time step, and can be useful for adapting the main network to its input sequence. Embedding vector parameters are learned during end-to-end training of the main network using backpropagation. \par
 
 \begin{figure} [H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
 	\captionsetup{justification=centering}
-	\caption{Hypernetwork generating convolutional filters for main network. The hypernetwork takes a static embedding vector as input, and the main network takes an image as input.}
+	\caption{Hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input, and the main network takes an image as input.}
 \end{figure}
 
-\noindent For a feedfoward convolutional network with $ D $ layers, the hypernetwork can be used to generate main network weight tensors $ K^j \in \mathbb{R}^{f_wf_hd_id_o} $ for each layer $ j = 1, \; \dots \; D $, where $ K^j $ is a set of filters with filter size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. The hypernetwork model can be defined as follows: 
+\noindent For a feedfoward convolutional network with $ D $ layers, the hypernetwork can be used to generate main network weight tensors $ K^j \in \mathbb{R}^{f_wf_hd_id_o} $ for each layer $ j = 1, \; \dots \; D $, where $ K^j $ is a set of filters with filter size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. The hypernetwork model can then be defined as follows: 
 \begin{equation}
 	K^j = g(z^j), \quad \forall j = 1, \dots, D
 \end{equation}
 
-\noindent where $ K_j $ contains the parameters of layer $ j $, $ g $ is the hypernetwork composition, and $ z_j \in \mathbb{R}^n $ is the embedding vector input. If the hypernetwork is a $ 2 $ layer multilayer perceptron (MLP) $ g(z^j) $ can be defined as follows:  
+\noindent where $ K_j $ contains the parameters of layer $ j $, $ g $ is the hypernetwork composition, and $ z_j \in \mathbb{R}^n $ is the embedding vector input. If the hypernetwork is a $ 2 $ layer multilayer perceptron (MLP), $ g(z^j) $ can be defined as follows:  
 \begin{subequations}
 	\begin{gather}
-		a_i^j = W_iz^j + B_i, \quad \forall i = 1, \dots, d_o, \forall j = 1, \dots, D \\
-		K_i^j = W_{out}a_i^j + B_{out}, \quad \forall i = 1, \dots, d_o, \forall j = 1, \dots, D \\
-		K^j = (K_1^j, \; K_2^j, \; \dots \;, \; K_{d_o}^j), \quad \forall j = 1, \dots, D
+		a_i^j = W_iz^j + B_i, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \\
+		K_i^j = W_{out}a_i^j + B_{out}, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \\
+		K^j = (K_1^j, \; K_2^j, \; \dots \;, \; K_{d_o}^j), \quad \forall j = 1, \; \dots, \; D
 	\end{gather}
 \end{subequations}
 
-\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ are the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is feature map $ i $ for main network layer $ j $. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ are second layer parameters, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. \par
+\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer of the hypernetwork, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ are the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is filter $ i $ for main network layer $ j $. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ are second layer parameters of the hypernetwork, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. Finally $ K^j $ is the set of filters for layer $ j $ of the main network. \par
 
 \subsubsection{HypER}
 
