@@ -77,7 +77,7 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
+    	\includegraphics[width=0.8\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
 	\captionsetup{justification=centering}
 	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias. The result is squashed using a hyperbolic tangent function, and then multiplied by an output vector of relation parameters.}
 \end{figure}
@@ -136,9 +136,9 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 
 \subsection{Convolutional factorisation}
 
-ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using $ 2D $ convolutions, which are particularly effective at modelling the interactions of entities involved in a large number of relations. This may be due to filter parameter sharing between entity-relational combinations, however perhaps more pertinently, the convolutional operator performs nonlinear modelling of entity-relational interactions when summarising regions of interactions between the respective representations, as opposed to the bilnear tensor product, which performs simple linear interaction modelling. \par
+ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using $ 2D $ convolutions, which are particularly effective at modelling the interactions of entities involved in a large number of relations. This may be due to filter parameter sharing between entity-relational combination features, however perhaps more pertinently, the convolutional operator performs nonlinear modelling of entity-relational feature interaction when summarising regions of interactions between the respective representations, as opposed to the bilinear tensor product, which performs simple linear interaction modelling. \par
 
-\noindent ConvE concatenates subject and predicate matrices along the row axis, creating an entity-relational matrix. Convolutional filters are then applied to this representation, producing feature maps which are flattened by a fully connected layer. The dot product of this generated representation is then taken with the object vector, to compute an unnormalised relational score between the subject and object, before a sigmoid function is applied to produce a probability of relational plausibility. The model is defined as follows:
+\noindent ConvE concatenates subject and predicate matrices along the row axis, creating an entity-relational matrix.\ Convolutional filters are then applied to this representation, producing feature maps which are flattened by a fully connected layer.\ The inner product of this generated representation is then taken with the object vector, to compute an unnormalised relational score between the subject and object, before a sigmoid function is applied to produce a probability of relational plausibility. The model is defined as follows:
 \begin{equation}
 	\psi_r(e_s, \; e_o) = g(vec(f(\left [ \overline{e_s}; \; \overline{r_r} \right ]*w))W)e_o
 \end{equation}
@@ -168,9 +168,23 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \noindent where $ L $ is the loss value, $ p_i $ is the relational probability computed by the model, and $ t_i $ is the target. $ N $ is the batch size, and $ i $ is the sample index.
 
+
+%********************************************* HypER ****************************************************************
+
 \subsection{Hypernetwork factorisation}
 
-Hypernetworks are meta networks that generate parameters for a main network \unskip ~\citep{ha2016hypernetworks}. The networks essentially index the parameters of a main network as a configuration given input. This input is typically in the form of an embedding vector that represents all the weights of a given layer. The configuration is learned given a scenario experienced by the main network, for example when performing sequence prediction it may be advantageous for the main network to change its behaviour (parameter configuration) depending on the sequence window. The hypernetwork model can be defined as follows: 
+A hypernetwork is a meta network that generates parameters for a main network \unskip ~\citep{ha2016hypernetworks}. It compresses layer weights of a main network into an input embedding vector, which is analogous to a encoding a main network configuration. Hypernetworks are used to discover an efficient subset of main network parameters, reducing the total number of parameters without sacrificing performance. They are also used to enable parameter sharing across layers of a main network, without incurring the problem of vanishing and exploding gradients experienced by recurrent networks. \par
+
+\noindent A standard tensor serves as input to a main network, for example an image or sequence of words, while an embedding vector serves as input to a hypernetwork, see Figure 3.5. The embedding vector size is determined by the hypernetwork layer sizes and main network weight sizes. Static embedding vector input can be used, as well as  dynamic embedding vector input. For dynamic input, different embedding vectors are input at each time step, and can be useful for adapting the main network to its input sequence. In both cases the embedding vector is learned during end-to-end training of the main network using backpropagation. \par
+
+\begin{figure} [H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
+	\captionsetup{justification=centering}
+	\caption{Recursive network which constructs a composition tree between inputs. It begins with a full tree and is pruned during training to obtain the optimal structure.}
+\end{figure}
+
+\noindent The hypernetwork model can be defined as follows: 
 \begin{equation}
 	K_j = g(z_j), \quad \forall j = 1, \dots, D
 \end{equation}
