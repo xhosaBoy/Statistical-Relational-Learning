@@ -24,7 +24,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 
 \noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for the same subject and predicate, along with a non-related entity randomly selected and presented as a corrupt object. Relational scores in the range $ (-1, \; 1) $ are produced for the target and corrupt objects respectively. The training task is to compute a large value for the target score, and small value for the corrupt score. The computed loss is backpropagated through the network to update model parameters. \par
 
-\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figures 4.1 to 4.4. Property counts for the respective KGs are presented in Tables 4.1 and 4.2. \par
+\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is - a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figures 4.1 to 4.4. Property counts for the respective KGs are presented in Tables 4.1 and 4.2. \par
 
 \begin{figure}[H]
    	\centering
@@ -91,20 +91,20 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 
 %********************************** %Predicate  **************************************
 
-\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.5, and Tables and 4.4. \par
+\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.5 to 4.7, and Tables 4.3 and 4.8. \par
 
 \bigskip
 
 \begin{figure}[H]
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Predicate_Counts}
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Wordnet_Predicate_Counts}
 		\captionsetup{justification=centering}
 		\caption{WordNet}
 	\end{subfigure}
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Predicate_Counts}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Freebase_Predicate_Counts}
 		\captionsetup{justification=centering}
 		\caption{Freebase}
 	\end{subfigure}
@@ -126,7 +126,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 				&
 		\end{tabular}
 		\captionsetup{justification=centering}
-		\caption{WordNet predicate statistics}
+		\caption{WordNet predicate statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -142,7 +142,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 				&
 		\end{tabular} 
 		\captionsetup{justification=centering}
-		\caption{Freebase predicate statistics}
+		\caption{Freebase predicate statistics.}
 		}
 \end{table}
 
@@ -152,13 +152,13 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 \begin{figure}[H]
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Subject_Counts}
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Wordnet_Subject_Counts}
 		\captionsetup{justification=centering}
 		\caption{WordNet}
 	\end{subfigure}
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Subject_Counts}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Freebase_Subject_Counts}
 		\captionsetup{justification=centering}
 		\caption{Freebase}
 	\end{subfigure}
@@ -179,7 +179,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{WordNet subject statistics}
+		\caption{WordNet subject statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -194,7 +194,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 4 \\
 				&
 		\end{tabular}
-		\caption{Freebase subject statistics}
+		\caption{Freebase subject statistics.}
 		}
 \end{table}
 
@@ -204,13 +204,13 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 \begin{figure}[H]
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Object_Counts}
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Wordnet_Object_Counts}
 		\captionsetup{justification=centering}
 		\caption{WordNet}
 	\end{subfigure}
 	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Object_Counts}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{Freebase_Object_Counts}
 		\captionsetup{justification=centering}
 		\caption{Freebase}
 	\end{subfigure}
@@ -231,7 +231,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{WordNet object statistics}
+		\caption{WordNet object statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -246,13 +246,13 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 6 \\
 				&
 		\end{tabular}
-		\caption{Freebase object Statistics}
+		\caption{Freebase object statistics.}
 		}
 \end{table}
 
-\noindent For WordNet, it can be seen that predicates are skewed toward "has instance" with $ 43, 312 $ occurrences, and "type of" with $ 36, 659 $ occurrences. We would expect poor performance from the model for out-of-sample data containing relations that are not "has instance" or "type of". Freebase predicates are somewhat more uniform, however four predicates have occurrences under $ 10, 000 $. We would expect reasonable performance across all predicates for this dataset. \par
+\noindent For WordNet, it can be seen that predicates are skewed toward "has instance" with $ 43, 312 $ occurrences, and "type of" with $ 36, 659 $ occurrences. Freebase predicates are somewhat more uniform, however four predicates have occurrences under $ 10, 000 $. \par
 
-\noindent WordNet and Freebase subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an interquartile range (IQR) of $ 2 $ and $ 4 $ respectively. These are thus sparse distributions, and the model will need to rely on similarity of subject features in order to enable sensible inference. WordNet object occurrences are somewhat uniform while Freebase object occurrences are skewed, with a single object, "male" occurring $ 59, 663 $ times, representing $15, 88\% $ of facts. This is in comparison to a median object occurrence of $ 3 $ and an IQR of $ 6 $. We would expect relatively poor performance from a Freebase link prediction model given this distribution of objects, compared to WordNet. \par
+\noindent WordNet and Freebase subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an interquartile range (IQR) of $ 2 $ and $ 4 $ respectively, making these sparse distributions. WordNet object occurrences are somewhat uniform while Freebase object occurrences are skewed, with a single object, "male" occurring $ 59, 663 $ times, representing $15, 88\% $ of facts. This is in comparison to a median object occurrence of $ 3 $ and an IQR of $ 6 $. \par
 
 \noindent The WordNet dataset is split into a training, validation and test set of $ 110, 362 \; (80.786 \%) $, $ 5, 215 \; (3.817 \%) $ and $ 21, 034 \; (15.397 \%) $ triples respectively.\ And the Freebase dataset is split into a training, validation and test set of $ 316, 232 \; (84.216 \%) $, $ 11, 815 \; (3.146 \%) $ and $ 47, 452 \; (12.637 \%) $ triples respectively. 
 
@@ -324,46 +324,48 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 
 %********************************** %HypER and Covariate Shift  **************************************
 
-\section{HypER and covariate shift}
+\section{HypER and HypER+}
 
 \subsection{Baseline training algorithm}
-\textbf{Model summary.} HypER is a model that uses relation-specific convolutional filters that are convolved with a subject entity, producing an intermediate entity-relational representation. This representation is then flattened and passed through a nonlinearity before the dot product taken with an object entity. This computation generates a relational score between the two entities, which is then passed through a logistic sigmoid to compute a probability of relational plausibility. \par
+\textbf{Model summary.} HypER is a model that takes the convolution between a predicate-specific filter and subject vector, generating a subject-predicate feature map. This map is flattened and passed through a nonlinearity, before an inner product is taken with an object vector. The result is a relational score which is passed through a logistic sigmoid to generate a probability of a potential relationship between the two entities. \par
 
-\noindent \textbf{Binary cross entropy loss.} The binary cross entropy loss is used to train HypER. Like the NTN model, the input consists of an subject-predicate pair, and an object is presented as a target to complete the triple. A relational score is generated for each sample and passed through through a logistic sigmoid. Loss is generated by comparing the produced likelihood with the expected likelihood, 0 or 1. The sum of all losses is aggregated and back propagated through the network for parameter update. \par
+\noindent \textbf{Binary cross-entropy loss.} The binary cross-entropy loss is used to train HypER. Like the NTN model, the input consists of a subject-predicate pair, and an object is presented as a target to complete the triple. A relational score is generated for each sample and passed through a logistic sigmoid. Loss is generated by comparing the produced likelihood with the expected likelihood, $ 0 $ or $ 1 $. The sum of losses in a batch of samples is aggregated and backpropagated through the network for parameter update. \par
 
-\noindent \textbf{Experimental setup.} We use the following link prediction benchmark datasets: WN18 \citep{bordes2013translating} is a subset of Wordnet, a database containing lexical relations between words. The knowledge graph contains 40,943 entities and 18 relations. FB15k \citep{bordes2013translating} is a subset of Freebase, a large database of facts about the real world. FB15k contains 14,951 entities and 1,345 relations. Visualisations of the respective knowledge graphs are presented below.
+\noindent \textbf{Experimental setup.} We use the following two link prediction benchmark datasets. WN18 \citep{bordes2013translating}, a subset of WordNet, is a database containing lexical relations between words. It contains $ 40, 943 $ entities and $ 18 $ relations. FB15k \citep{bordes2013translating}, a subset of Freebase, is a large database of facts about the real world. FB15k contains $ 14, 951 $ entities and $ 1, 345 $ relations. Visualisations of the respective KGs, as well as a sample of RDF triple encoded facts, is presented in Figures 4.10 to 4.13. Property counts for the respective KGs are presented in Tables 4.10 and 4.11. \par
 
 \bigskip
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=\textwidth]{WN18_Graph}
-	\caption{WN18 Entities and Relations Graphplot}
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{WN18_Graph}
+	\captionsetup{justification=centering}
+	\caption{A subset of WN18 facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple.}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=\textwidth]{FB15k_Graph}
-	\caption{FB15k Entity and Relations Graphplot}
+    	\includegraphics[width=0.9\textwidth, height=0.3\textwidth]{wn18_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the WN18 KG.}
 \end{figure}
-
-\noindent We used the Pytorch framework to develop our model. This model is built on top of the HypER model introduced by Balaˇzevi´c, et al. ~\citep{balazevic2019hypernetwork}. Randomly initialised entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the knowledge domain. Property counts for the respective knowledge graphs are presented below.
-
-\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{WN18_Counts}
-		\caption{WN18 Property Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{FB15k_Counts}
-		\caption{FB15k Property Barplot}
-		}
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{FB15k_Graph}
+	\captionsetup{justification=centering}
+	\caption{A subset of FB15k facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple.}
 \end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=1.0\textwidth, height=0.3\textwidth]{fb15k_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the FB15k KG.}
+\end{figure}
+
+\noindent Here we used the PyTorch framework to develop our model. This model is built on top of the HypER model introduced by Bala\u{z}ev\'{i}c et al. \unskip ~\citep{balazevic2019hypernetwork}. Random entity and relational embeddings are used to initialise model training. These embeddings are dynamically adjusted during the training process to generate latent representations specific to the KG.
+
+\bigskip
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -371,12 +373,13 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 40,943  \\
-  			Relations & 18  \\
-  			Triples & 151,442 \\
+  			subjects & 40,943  \\
+  			predicates & 18  \\
+  			triples & 151,442 \\
 			&
 		\end{tabular}
-		\caption{WN18 Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of WN18 KG elements.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -384,31 +387,33 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 14,951   \\
-  			Relations & 1,345  \\
-  			Triples & 592,213  \\
+  			subjects & 14,951   \\
+  			predicates & 1,345  \\
+  			triples & 592,213  \\
 			&
 		\end{tabular}
-		\caption{FB15k Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of FB15k KG elements.}
 		}
 \end{table}
 
+
 %********************************** %Predicate  **************************************
 
-\noindent Summary statistics of the respective KG RDF formalism are presented below.
+\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.14 to 4.16, and Tables 4.12 and 4.17. 
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Predicate_Counts}
-		\caption{WN18 Predicate Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Predicate_Counts}
-		\caption{FB15k Predicate Barplot}
-		}
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textheight]{WN18_Predicate_Counts}
+	\captionsetup{justification=centering}
+	\caption{WN18 predicate distribution in KG facts.}
+\end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=1.0\textwidth, height=0.3\textheight]{FB15k_Predicate_Counts}
+	\captionsetup{justification=centering}
+	\caption{FB15k predicate distribution in KG facts.}
 \end{figure}
 
 \begin{table}[H]
@@ -424,7 +429,7 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 6,190.75  \\
 			&
 		\end{tabular}
-		\caption{WN18 Predicate Statistics}
+		\caption{WN18 predicate statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -439,24 +444,27 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 166  \\
 			&
 		\end{tabular}
-		\caption{FB15k Predicate Statistics}
+		\caption{FB15k predicate statistics.}
 		}
 \end{table}
 
 %********************************** %Subject **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Subject_Counts}
-		\caption{WN18 Subject Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{WN18_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{WN18}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Subject_Counts}
-		\caption{FB15k Subject Barplot}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{FB15k_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{FB15k}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG subject distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -472,7 +480,7 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 2 \\
 			&
 		\end{tabular}
-		\caption{WN18 Subject Statistics}
+		\caption{WN18 subject statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -487,24 +495,27 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 32 \\
 			&
 		\end{tabular}
-		\caption{FB15k Subject Statistics}
+		\caption{FB15k subject statistics.}
 		}
 \end{table}
 
 %********************************** %Object  **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18_Object_Counts}
-		\caption{WN18 Object Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{WN18_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{WN18}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k_Object_Counts}
-		\caption{FB15k Object Barplot}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{FB15k_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{FB15k}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG object distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -520,7 +531,7 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 2 \\
 			&
 		\end{tabular}
-		\caption{WN18 Object Statistics}
+		\caption{WN18 object statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -535,11 +546,13 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
   			IQR & 30 \\
 			&
 		\end{tabular}
-		\caption{FB15k Object Statistics}
+		\caption{FB15k object statistics.}
 		}
 \end{table}
 
-\noindent For WN18, it can be seen that relations are skewed toward the relations "hyponym",  "hypernym", and "derivationally related from", with a maximum of 37,221 occurrences. FB15k relations are somewhat more uniform. We would expect reasonable performance across all relations for this knowledge graph. WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 27 respectively, and with an IQR of 2 and 32 respectively. WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 23.
+\noindent For WN18, it can be seen that relations are skewed toward the relations "hyponym",  "hypernym", and "derivationally related from", with a maximum of $ 37, 221 $ occurrences. FB15k relations are somewhat more uniform. WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurring entities, with the median number of occurrences being $ 3 $ and $ 27 $ respectively, and with an IQR of $ 2 $ and $ 32 $ respectively. WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of $ 3 $ and an IQR of 23.
+
+\noindent The WN18 dataset is split into a training, validation and test set of $ 141, 442 \; (93.397 \%) $, $ 5, 000 \; (3.302 \%) $ and $ 5, 000 \; (3.302 \%) $ triples respectively.\ And the FB15k dataset is split into a training, validation and test set of $ 483, 142 \; (81.582 \%) $, $ 50, 000 \; (8.443 \%) $ and $ 59, 071 \; (9.975 \%) $ triples respectively. 
 
 
 %********************************** %HypER+  **************************************
