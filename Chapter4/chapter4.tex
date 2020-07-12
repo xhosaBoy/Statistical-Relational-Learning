@@ -12,7 +12,7 @@
     \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
 \fi
 
-This chapter discusses three hypotheses examined in the dissertation including the application of modern deep learning techniques to the training algorithm of recursive neural tensor networks (NTNs), compensating for covariate shift introduced by a hypernetwork for convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
+This chapter discusses three hypotheses examined in the thesis, including the application of training algorithm optimisations to recursive neural tensor networks (NTNs), compensating for covariate shift introduced by hypernetworks during convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
 
 
 %********************************** %Recursive Neural Tensor Networks  **************************************
@@ -20,22 +20,40 @@ This chapter discusses three hypotheses examined in the dissertation including t
 \section{Recursive neural tensor networks}
 
 \subsection{Baseline training algorithm}
-\textbf{Model summary.} This model is inspired by recursive neural networks (RCNs). The NTN is a bilinear tensor product between the subject, predicate and object, added to a RCN compositional representation between the subject and object. This model generates a relational score between two entities. 
+\textbf{Model summary.} This model is inspired by recursive networks (RCNs). The NTN is a bilinear tensor product between the subject, predicate and object, added to a RCN composition of the subject and object. It computes a relational score between two entities. 
 
-\noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for a the same subject and predicate, where a non-related entity is randomly selected, and presented as a corrupt object. Relational scores in the range $ (0,1) $ are produced for the target and corrupt objects respectively. The training task is to generate a large value for the target score, and small value for the corrupt score. The computed loss is back propagated through the network to update model parameters. \par
+\noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for the same subject and predicate, along with a non-related entity randomly selected and presented as a corrupt object. Relational scores in the range $ (-1, \; 1) $ are produced for the target and corrupt objects respectively. The training task is to compute a large value for the target score, and small value for the corrupt score. The computed loss is backpropagated through the network to update model parameters. \par
 
-\noindent \textbf{Experimental setup.} We use the Wordnet and Freebase link prediction benchmark datasets. Wordnet is a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs) are presented below:
+\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figure 4.1 to Figure 4.4. \par
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=\textwidth]{Wordnet}
-	\caption{Wordnet Entities and Relations Graphplot}
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Wordnet}
+	\captionsetup{justification=centering}
+	\caption{WordNet facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple, subject (entity) - predicate (relation) - object (entity).}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=\textwidth]{Freebase}
-	\caption{Freebase Entity and Relations Graphplot}
+    	\includegraphics[width=0.9\textwidth, height=0.3\textwidth]{wordnet_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the WordNet KG.}
+\end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Freebase}
+	\captionsetup{justification=centering}
+	\caption{Freebase facts structured as a KG. Due to the size of Freebase, a subset of facts is presented, where "Michael Jackson" is the subject.}
+\end{figure}
+
+\noindent 
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.3\textwidth]{freebase_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the Freebase KG.}
 \end{figure}
 
 \noindent We used the TensorFlow framework to implement our updated NTN training algorithm.  This algorithm makes use of the NTN model introduced by (Socher and Chen, et al. 2013) \unskip ~\citep{socher2013reasoning} and re-implemented in TensorFlow by (Doss, LeNail and Liu 2015) \unskip ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings during model training. The embedding parameters are adjusted during training to generate latent representations specific to the knowledge domain. Property counts for the respective KGs are presented below:
