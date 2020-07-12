@@ -261,57 +261,64 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 
 \subsection{Optimised training algorithm}
 
-\noindent We update the NTN training algorithm to make use of the Adam optimiser \citep{kingma2014adam}, early stopping \citep{prechelt1998early}, and use random grid search for hyperparameter optimisation \citep{bergstra2012random}. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
+\noindent We update the NTN training algorithm to make of use of early stopping \unskip ~\citep{prechelt1998early}, the adaptive moment estimation (Adam) Adam optimiser \citep{kingma2014adam}, and use random search for hyperparameter optimisation \citep{bergstra2012random}. The model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD, and no GPU acceleration. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
 
-\noindent \textbf{Code to reproduce} \newline
-Updated NTN:  \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \newline
-Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks}
+\noindent \textbf{Code to reproduce.} In the interest of reproducibility, all code needed to train and test the models in this section can be found at the following links. \newline
+Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks} \newline
+Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \par
 
-\noindent \textbf{Link training results.} The cost and accuracy results of NTN model training with the original baseline training algorithm, compared to the optimised training algorithm are presented below.
+\noindent \textbf{Link training results.} The cost and accuracy results of NTN model trained using the original baseline training algorithm, compared to the optimised training algorithm are presented in Figures 4.8 and 4.9. as well as Table 4.9. All experiments were only able to complete a maximum of $ 12 $ epochs before overwhelming compute resources. The maximum epoch runs are presented in the aforementioned figures. \par
+
+\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Cost_Results_Early_Stopping}
-		\caption{Wordnet Cost}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Cost_Results_Early_Stopping}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Cost_Results}
-		\caption{Freebase Cost}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Cost_Results}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Cost versus epoch for the respective KG. The training set cost for the baseline algorithm clearly descends as epochs increase. The training cost for the optimised (experiment) algorithm is almost identical to the validation cost after the first epoch, demonstrating the effectiveness of the updates. }
 \end{figure}
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Accuracy_Results_Early_Stopping}
-		\caption{Wordnet Accuracy}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Accuracy_Results_Early_Stopping}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Accuracy_Results}
-		\caption{Freebase Accuracy}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Accuracy_Results}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Accuracy versus epoch for the respective KG. The optimised algorithm (experiment) accuracy is significantly higher than the baseline algorithm. Once again demonstrating the effectiveness of the updates.}
 \end{figure}
 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{lllllllllll}
-  		\textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
+  		\textbf{Model} & \textbf{WordNet} & \textbf{Freebase} & \textbf{Avg} \\
   		\hline
-  		Distance Model & .683 & .610 & .647 \\
-  		Hadamard Model & .800 & .688 & .744 \\
-  		Single Layer Model & .760 & .853 & .807 \\
-  		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  		NTN Baseline & .562 & .535 & .549 \\
+  		Distance Model \unskip ~\citep{bordes2011learning} & .683 & .610 & .647 \\
+  		Original NTN \unskip ~\citep{socher2013reasoning} & \textbf{.862} & \textbf{.90} & \textbf{.881} \\
+  		Reimplimented NTN Baseline  \unskip ~\citep{Doss2015} & .562 & .535 & .549 \\
   		\hline
-  		NTN with Optimised Training & .674 & .548 & .611 \\
+  		Optimised NTN (Ours) & .674 & .548 & .611 \\
 		&
 	\end{tabular}
-	\caption{Test cost and accuracy on Wordnet and Freebase KGs}
+	\captionsetup{justification=centering}
+	\caption{Cost and accuracy on WordNet and Freebase KG test sets. Our reimplimented NTN with optimised training algorithm out performs the baseline NTN across both cost and accuracy measurements. The original NTN algorithm however significantly outperforms all models. This may be due to differences other training algorithm properties such as number of epochs, batch size, and hyperparameter values.}
 \end{table}
 
 
