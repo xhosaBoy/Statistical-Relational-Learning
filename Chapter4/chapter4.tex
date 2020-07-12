@@ -12,7 +12,7 @@
     \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
 \fi
 
-This chapter discusses three hypotheses examined in the dissertation including the application of modern deep learning techniques to the training algorithm of recursive neural tensor networks (NTNs), compensating for covariate shift introduced by a hypernetwork for convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
+This chapter discusses three hypotheses examined in the thesis, including the application of training algorithm optimisations to recursive neural tensor networks (NTNs), compensating for covariate shift introduced by hypernetworks during convolutional tensor factorisation, and finally the intialisation of entity and relation embeddings using pre-trained word vectors. 
 
 
 %********************************** %Recursive Neural Tensor Networks  **************************************
@@ -20,41 +20,43 @@ This chapter discusses three hypotheses examined in the dissertation including t
 \section{Recursive neural tensor networks}
 
 \subsection{Baseline training algorithm}
-\textbf{Model summary.} This model is inspired by recursive neural networks (RCNs). The NTN is a bilinear tensor product between the subject, predicate and object, added to a RCN compositional representation between the subject and object. This model generates a relational score between two entities. 
+\textbf{Model summary.} This model is inspired by recursive networks (RCNs). The NTN is a bilinear tensor product between the subject, predicate and object, added to a RCN composition of the subject and object. It computes a relational score between two entities. 
 
-\noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for a the same subject and predicate, where a non-related entity is randomly selected, and presented as a corrupt object. Relational scores in the range $ (0,1) $ are produced for the target and corrupt objects respectively. The training task is to generate a large value for the target score, and small value for the corrupt score. The computed loss is back propagated through the network to update model parameters. \par
+\noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for the same subject and predicate, along with a non-related entity randomly selected and presented as a corrupt object. Relational scores in the range $ (-1, \; 1) $ are produced for the target and corrupt objects respectively. The training task is to compute a large value for the target score, and small value for the corrupt score. The computed loss is backpropagated through the network to update model parameters. \par
 
-\noindent \textbf{Experimental setup.} We use the Wordnet and Freebase link prediction benchmark datasets. Wordnet is a lexical database for English, it is a taxonomy with hypernyms (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs) are presented below:
-
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=\textwidth]{Wordnet}
-	\caption{Wordnet Entities and Relations Graphplot}
-\end{figure}
+\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figures 4.1 to 4.4. Property counts for the respective KGs are presented in Tables 4.1 and 4.2. \par
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=\textwidth]{Freebase}
-	\caption{Freebase Entity and Relations Graphplot}
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Wordnet}
+	\captionsetup{justification=centering}
+	\caption{A subset of WordNet facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple.}
 \end{figure}
-
-\noindent We used the TensorFlow framework to implement our updated NTN training algorithm.  This algorithm makes use of the NTN model introduced by (Socher and Chen, et al. 2013) \unskip ~\citep{socher2013reasoning} and re-implemented in TensorFlow by (Doss, LeNail and Liu 2015) \unskip ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings during model training. The embedding parameters are adjusted during training to generate latent representations specific to the knowledge domain. Property counts for the respective KGs are presented below:
-
-\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{Wordnet_Counts}
-		\caption{Wordnet Property Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{Freebase_Counts}
-		\caption{Freebase Property Barplot}
-		}
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.3\textwidth]{wordnet_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the WordNet KG.}
 \end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Freebase}
+	\captionsetup{justification=centering}
+	\caption{A subset of Freebase facts structured as a KG. Due to the size of Freebase, a subset of facts is presented, where "Michael Jackson" is the subject.}
+\end{figure}
+
+\noindent 
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.9\textwidth, height=0.3\textwidth]{freebase_fact_sample}
+	\captionsetup{justification=centering}
+	\caption{A sample of RDF triples from the Freebase KG.}
+\end{figure}
+
+\noindent We use the TensorFlow framework  \unskip~\citep{abadi2016tensorflow} to implement our improved NTN training algorithm. This algorithm builds upon of the NTN model introduced by Chen, et al. \unskip ~\citep{socher2013reasoning} and reimplemented in TensorFlow by Doss et al. \unskip ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings for model training. The embedding parameters are adjusted during training to generate latent representations specific to the KG. \par
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -62,12 +64,13 @@ This chapter discusses three hypotheses examined in the dissertation including t
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 38,696  \\
-  			Relations & 11  \\
-  			Triples & 136,611  \\
+  			subjects & 38,696  \\
+  			predicates & 11  \\
+  			triples & 136,611  \\
 			&
 		\end{tabular}
-		\caption{Wordnet Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of WordNet KG elements.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -75,33 +78,38 @@ This chapter discusses three hypotheses examined in the dissertation including t
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 75,043   \\
-  			Relations & 13  \\
-  			Triples & 375,499  \\
+  			subjects & 75,043   \\
+  			predicates & 13  \\
+  			triples & 375,499  \\
 			&
 		\end{tabular}
-		\caption{Freebase Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of Freebase KG elements.}
 		}
 \end{table}
 
+
 %********************************** %Predicate  **************************************
 
-\noindent Summary statistics of the respective KG RDF formalism are presented below.
+\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.5, and Tables and 4.4. \par
 
-\medskip
+\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Predicate_Counts}
-		\caption{Wordnet Predicate Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Predicate_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Predicate_Counts}
-		\caption{Freebase Predicate Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Predicate_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG predicate distribution. The number of times each predicate takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -117,7 +125,8 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 7,257.5  \\
 				&
 		\end{tabular}
-		\caption{Wordnet Predicate Statistics}
+		\captionsetup{justification=centering}
+		\caption{WordNet predicate statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -132,24 +141,29 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 34,033  \\
 				&
 		\end{tabular} 
-		\caption{Freebase Predicate Statistics}
+		\captionsetup{justification=centering}
+		\caption{Freebase predicate statistics}
 		}
 \end{table}
+
 
 %********************************** %Subject **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Subject_Counts}
-		\caption{Wordnet Subject Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Subject_Counts}
-		\caption{Freebase Subject Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG subject distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -165,7 +179,7 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{Wordnet Subject Statistics}
+		\caption{WordNet subject statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -180,26 +194,29 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 4 \\
 				&
 		\end{tabular}
-		\caption{Freebase Subject Statistics}
+		\caption{Freebase subject statistics}
 		}
 \end{table}
+
 
 %********************************** %Object  **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Object_Counts}
-		\caption{Wordnet Object Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Object_Counts}
-		\caption{Freebase Object Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG object distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
-
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -214,7 +231,7 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{Wordnet Object Statistics}
+		\caption{WordNet object statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -229,70 +246,79 @@ This chapter discusses three hypotheses examined in the dissertation including t
   			IQR & 6 \\
 				&
 		\end{tabular}
-		\caption{Freebase Object Statistics}
+		\caption{Freebase object Statistics}
 		}
 \end{table}
 
-\noindent For Wordnet, it can be seen that relations are skewed toward "has instance" with 43,312 occurrences, and "type of" with 36,659 occurrences. We would expect poor performance from the model for out of sample data containing relations that are not "has instance" or "type of". Freebase relations are somewhat more uniform, however four relations have occurrences under 10,000. We would expect reasonable performance across all relations for this dataset. \par
+\noindent For WordNet, it can be seen that predicates are skewed toward "has instance" with $ 43, 312 $ occurrences, and "type of" with $ 36, 659 $ occurrences. We would expect poor performance from the model for out-of-sample data containing relations that are not "has instance" or "type of". Freebase predicates are somewhat more uniform, however four predicates have occurrences under $ 10, 000 $. We would expect reasonable performance across all predicates for this dataset. \par
 
-\noindent Wordnet and Freebae subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an IQR of 2 and 4 respectively. These are thus sparse distributions of data points, and the model will need to rely on  similarity of subject features in order to produce sensible inference. Wordnet object occurrences are somewhat uniform whilst Freebase object occurrences are skewed, with a single object, "male" occurring 59,663 times, representing 15,88\% of facts. This is in comparison to a median object occurrence of 3 and an interquartile range of 6. We would expect poor performance from a Freebase link prediction model given this distribution of objects. 
+\noindent WordNet and Freebase subjects are somewhat uniform, although the median number of occurrences is 2 and 5 respectively, with an interquartile range (IQR) of $ 2 $ and $ 4 $ respectively. These are thus sparse distributions, and the model will need to rely on similarity of subject features in order to enable sensible inference. WordNet object occurrences are somewhat uniform while Freebase object occurrences are skewed, with a single object, "male" occurring $ 59, 663 $ times, representing $15, 88\% $ of facts. This is in comparison to a median object occurrence of $ 3 $ and an IQR of $ 6 $. We would expect relatively poor performance from a Freebase link prediction model given this distribution of objects, compared to WordNet. \par
+
+\noindent The WordNet dataset is split into a training, validation and test set of $ 110, 362 \; (80.786 \%) $, $ 5, 215 \; (3.817 \%) $ and $ 21, 034 \; (15.397 \%) $ triples respectively.\ And the Freebase dataset is split into a training, validation and test set of $ 316, 232 \; (84.216 \%) $, $ 11, 815 \; (3.146 \%) $ and $ 47, 452 \; (12.637 \%) $ triples respectively. 
 
 
 %********************************** %Optimised training algorithm **************************************
 
 \subsection{Optimised training algorithm}
 
-\noindent We update the NTN training algorithm to make use of the Adam optimiser \citep{kingma2014adam}, early stopping \citep{prechelt1998early}, and use random grid search for hyperparameter optimisation \citep{bergstra2012random}. The the model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
+\noindent We update the NTN training algorithm to make of use of early stopping \unskip ~\citep{prechelt1998early}, the adaptive moment estimation (Adam) Adam optimiser \citep{kingma2014adam}, and use random search for hyperparameter optimisation \citep{bergstra2012random}. The model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD, and no GPU acceleration. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
 
-\noindent \textbf{Code to reproduce} \newline
-Updated NTN:  \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \newline
-Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks}
+\noindent \textbf{Code to reproduce.} In the interest of reproducibility, all code needed to train and test the models in this section can be found at the following links. \newline
+Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks} \newline
+Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \par
 
-\noindent \textbf{Link training results.} The cost and accuracy results of NTN model training with the original baseline training algorithm, compared to the optimised training algorithm are presented below.
+\noindent \textbf{Link training results.} The cost and accuracy results of NTN model trained using the original baseline training algorithm, compared to the optimised training algorithm are presented in Figures 4.8 and 4.9. as well as Table 4.9. All experiments were only able to complete a maximum of $ 12 $ epochs before overwhelming compute resources. The maximum epoch runs are presented in the aforementioned figures. \par
+
+\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Cost_Results_Early_Stopping}
-		\caption{Wordnet Cost}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Cost_Results_Early_Stopping}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Cost_Results}
-		\caption{Freebase Cost}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Cost_Results}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Cost versus epoch for the respective KG. The training set cost for the baseline algorithm clearly descends as epochs increase. The training cost for the optimised (experiment) algorithm is almost identical to the validation cost after the first epoch, demonstrating the effectiveness of the updates. }
 \end{figure}
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Accuracy_Results_Early_Stopping}
-		\caption{Wordnet Accuracy}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Accuracy_Results_Early_Stopping}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Accuracy_Results}
-		\caption{Freebase Accuracy}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Accuracy_Results}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Accuracy versus epoch for the respective KG. The optimised algorithm (experiment) accuracy is significantly higher than the baseline algorithm. Once again demonstrating the effectiveness of the updates.}
 \end{figure}
 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{lllllllllll}
-  		\textbf{Model} & \textbf{Wordnet} & \textbf{Freebbase} & \textbf{Avg} \\
+  		\textbf{Model} & \textbf{WordNet} & \textbf{Freebase} & \textbf{Avg} \\
   		\hline
-  		Distance Model & .683 & .610 & .647 \\
-  		Hadamard Model & .800 & .688 & .744 \\
-  		Single Layer Model & .760 & .853 & .807 \\
-  		Bilinear Model & \textbf{.841} & \textbf{.877} & \textbf{.859} \\
-  		NTN Baseline & .562 & .535 & .549 \\
+  		Distance Model \unskip ~\citep{bordes2011learning} & .683 & .610 & .647 \\
+  		Original NTN \unskip ~\citep{socher2013reasoning} & \textbf{.862} & \textbf{.90} & \textbf{.881} \\
+  		Reimplimented NTN Baseline  \unskip ~\citep{Doss2015} & .562 & .535 & .549 \\
   		\hline
-  		NTN with Optimised Training & .674 & .548 & .611 \\
+  		Optimised NTN (Ours) & .674 & .548 & .611 \\
 		&
 	\end{tabular}
-	\caption{Test cost and accuracy on Wordnet and Freebase KGs}
+	\captionsetup{justification=centering}
+	\caption{Cost and accuracy on WordNet and Freebase KG test sets. Our reimplimented NTN with optimised training algorithm out performs the baseline NTN across both cost and accuracy measurements. The original NTN algorithm however significantly outperforms all models. This may be due to differences other training algorithm properties such as number of epochs, batch size, and hyperparameter values.}
 \end{table}
 
 
