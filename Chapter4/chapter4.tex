@@ -24,13 +24,13 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 
 \noindent \textbf{Contrastive max-margin loss.} The contrastive max-margin loss is used to train the NTN model. A relational score is computed for the target triple containing a subject, predicate and object. A relational score is then computed for the same subject and predicate, along with a non-related entity randomly selected and presented as a corrupt object. Relational scores in the range $ (-1, \; 1) $ are produced for the target and corrupt objects respectively. The training task is to compute a large value for the target score, and small value for the corrupt score. The computed loss is backpropagated through the network to update model parameters. \par
 
-\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figure 4.1 to Figure 4.4. \par
+\noindent \textbf{Experimental setup.} We use the WordNet \unskip ~\citep{miller1995wordnet} and Freebase \unskip ~\citep{bollacker2008freebase} link prediction benchmark datasets.\ WordNet is a lexical database for English, and a taxonomy with hypernym (is-a) relationships, and synonym sets. Freebase is a large collaborative knowledge base consisting of data about the world composed mainly by its community members. It was an online collection of structured data harvested from many sources, including user-submitted wiki contributions. Visualisations of the respective knowledge graphs (KGs), as well as a sample of resource description framework (RDF) triple encoded facts, is presented in Figures 4.1 to 4.4. Property counts for the respective KGs are presented in Tables 4.1 and 4.2. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Wordnet}
 	\captionsetup{justification=centering}
-	\caption{WordNet facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple, subject (entity) - predicate (relation) - object (entity).}
+	\caption{A subset of WordNet facts structured as a KG. Entities are nodes, and relations are edges, where a fact is encoded as an RDF triple.}
 \end{figure}
 
 \begin{figure}[H]
@@ -44,7 +44,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Freebase}
 	\captionsetup{justification=centering}
-	\caption{Freebase facts structured as a KG. Due to the size of Freebase, a subset of facts is presented, where "Michael Jackson" is the subject.}
+	\caption{A subset of Freebase facts structured as a KG. Due to the size of Freebase, a subset of facts is presented, where "Michael Jackson" is the subject.}
 \end{figure}
 
 \noindent 
@@ -56,23 +56,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 	\caption{A sample of RDF triples from the Freebase KG.}
 \end{figure}
 
-\noindent We used the TensorFlow framework to implement our updated NTN training algorithm.  This algorithm makes use of the NTN model introduced by (Socher and Chen, et al. 2013) \unskip ~\citep{socher2013reasoning} and re-implemented in TensorFlow by (Doss, LeNail and Liu 2015) \unskip ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings during model training. The embedding parameters are adjusted during training to generate latent representations specific to the knowledge domain. Property counts for the respective KGs are presented below:
-
-\bigskip
-
-\begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{Wordnet_Counts}
-		\caption{Wordnet Property Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth]{Freebase_Counts}
-		\caption{Freebase Property Barplot}
-		}
-\end{figure}
+\noindent We use the TensorFlow framework  \unskip~\citep{abadi2016tensorflow} to implement our improved NTN training algorithm. This algorithm builds upon of the NTN model introduced by Chen, et al. \unskip ~\citep{socher2013reasoning} and reimplemented in TensorFlow by Doss et al. \unskip ~\citep{Doss2015}. Pre-trained word vectors are used to initialise entity and relational embeddings for model training. The embedding parameters are adjusted during training to generate latent representations specific to the KG. \par
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -80,12 +64,13 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 38,696  \\
-  			Relations & 11  \\
-  			Triples & 136,611  \\
+  			subjects & 38,696  \\
+  			predicates & 11  \\
+  			triples & 136,611  \\
 			&
 		\end{tabular}
-		\caption{Wordnet Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of WordNet KG elements.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -93,33 +78,38 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 		\begin{tabular}{lllllllllll}
   			\textbf{Property} & \textbf{Count}  \\
   			\hline
-  			Entities & 75,043   \\
-  			Relations & 13  \\
-  			Triples & 375,499  \\
+  			subjects & 75,043   \\
+  			predicates & 13  \\
+  			triples & 375,499  \\
 			&
 		\end{tabular}
-		\caption{Freebase Property Counts}
+		\captionsetup{justification=centering}
+		\caption{Counts of Freebase KG elements.}
 		}
 \end{table}
 
+
 %********************************** %Predicate  **************************************
 
-\noindent Summary statistics of the respective KG RDF formalism are presented below.
+\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.5, and Tables and 4.4. \par
 
-\medskip
+\bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Predicate_Counts}
-		\caption{Wordnet Predicate Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Predicate_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Predicate_Counts}
-		\caption{Freebase Predicate Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Predicate_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG predicate distribution. The number of times each predicate takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -135,7 +125,8 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 7,257.5  \\
 				&
 		\end{tabular}
-		\caption{Wordnet Predicate Statistics}
+		\captionsetup{justification=centering}
+		\caption{WordNet predicate statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -150,24 +141,29 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 34,033  \\
 				&
 		\end{tabular} 
-		\caption{Freebase Predicate Statistics}
+		\captionsetup{justification=centering}
+		\caption{Freebase predicate statistics}
 		}
 \end{table}
+
 
 %********************************** %Subject **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Subject_Counts}
-		\caption{Wordnet Subject Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Subject_Counts}
-		\caption{Freebase Subject Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG subject distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -183,7 +179,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{Wordnet Subject Statistics}
+		\caption{WordNet subject statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -198,26 +194,29 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 4 \\
 				&
 		\end{tabular}
-		\caption{Freebase Subject Statistics}
+		\caption{Freebase subject statistics}
 		}
 \end{table}
+
 
 %********************************** %Object  **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Wordnet_Object_Counts}
-		\caption{Wordnet Object Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Wordnet_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{WordNet}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{Freebase_Object_Counts}
-		\caption{Freebase Object Barplot}
-		}
+		\includegraphics[width=0.9\linewidth, height=0.6\linewidth]{Freebase_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{Freebase}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG object distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
-
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -232,7 +231,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 2 \\
 				&
 		\end{tabular}
-		\caption{Wordnet Object Statistics}
+		\caption{WordNet object statistics}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -247,7 +246,7 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
   			IQR & 6 \\
 				&
 		\end{tabular}
-		\caption{Freebase Object Statistics}
+		\caption{Freebase object Statistics}
 		}
 \end{table}
 
