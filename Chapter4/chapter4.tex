@@ -411,15 +411,7 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 	\caption{WN18 predicate distribution in KG facts.}
 \end{figure}
 
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=1.0\textwidth, height=0.3\textheight]{FB15k_Predicate_Counts}
-	\captionsetup{justification=centering}
-	\caption{FB15k predicate distribution in KG facts.}
-\end{figure}
-
 \begin{table}[H]
-	\parbox{.5\linewidth}{
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -432,9 +424,16 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 			&
 		\end{tabular}
 		\caption{WN18 predicate statistics.}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+\end{table}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=1.0\textwidth, height=0.3\textheight]{FB15k_Predicate_Counts}
+	\captionsetup{justification=centering}
+	\caption{FB15k predicate distribution in KG facts.}
+\end{figure}
+
+\begin{table}[H]
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -447,7 +446,6 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 			&
 		\end{tabular}
 		\caption{FB15k predicate statistics.}
-		}
 \end{table}
 
 %********************************** %Subject **************************************
@@ -552,7 +550,9 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 		}
 \end{table}
 
-\noindent For WN18, it can be seen that relations are skewed toward the relations "hyponym",  "hypernym", and "derivationally related from", with a maximum of $ 37, 221 $ occurrences. FB15k relations are somewhat more uniform. WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurring entities, with the median number of occurrences being $ 3 $ and $ 27 $ respectively, and with an IQR of $ 2 $ and $ 32 $ respectively. WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of $ 3 $ and an IQR of 23.
+\noindent For WN18, it can be seen that predicates are skewed toward the relations "hyponym",  "hypernym", and "derivationally related from", with a maximum of $ 37, 221 $ occurrences. FB15k predicates are somewhat more uniform. \par
+
+\noindent WN18 and FB15k subjects are somewhat uniform aside from a small number of high occurring entities, with the median number of occurrences being $ 3 $ and $ 27 $ respectively, and with an IQR of $ 2 $ and $ 32 $ respectively. WN18 object occurrences are somewhat uniform. FB15k object occurrences are skewed, with the "United States" partaking in the highest number of triples. This is in comparison to a median object occurrence of $ 23 $ and an IQR of 30. \par
 
 \noindent The WN18 dataset is split into a training, validation and test set of $ 141, 442 \; (93.397 \%) $, $ 5, 000 \; (3.302 \%) $ and $ 5, 000 \; (3.302 \%) $ triples respectively.\ And the FB15k dataset is split into a training, validation and test set of $ 483, 142 \; (81.582 \%) $, $ 50, 000 \; (8.443 \%) $ and $ 59, 071 \; (9.975 \%) $ triples respectively. 
 
@@ -831,24 +831,16 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 
 %********************************** %Predicate **************************************
 
-\noindent Summary statistics of the respective KG RDF formalism are presented below.
+\noindent Summary statistics of the respective KG RDF formalism are presented in Figures 4.32 to 4.35, and Tables 4.22 and 4.27.
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Predicate_Counts}
-		\caption{WN18RR Predicate Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Predicate_Counts}
-		\caption{FB15k-237 Predicate Barplot}
-		}
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.2\textheight]{WN18RR_Predicate_Counts}
+	\captionsetup{justification=centering}
+	\caption{WN18RR predicate distribution in KG facts.}
 \end{figure}
 
 \begin{table}[H]
-	\parbox{.5\linewidth}{
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -860,10 +852,17 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 5433.5  \\
 			&
 		\end{tabular}
-		\caption{WN18RR Predicate Statistics}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+		\caption{WN18RR predicate statistics.}
+\end{table}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=1.0\textwidth, height=0.3\textheight]{FB15k-237_Predicate_Counts}
+	\captionsetup{justification=centering}
+	\caption{FB15k-237 predicate distribution in KG facts.}
+\end{figure}
+
+\begin{table}[H]
 		\centering
 		\begin{tabular}{lllllllllll}
   			\textbf{Statistic} & \textbf{Value}  \\
@@ -875,24 +874,26 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 819 \\
 			&
 		\end{tabular}
-		\caption{FB15k-237 Predicate Statistics}
-		}
+		\caption{FB15k-237 predicate statistics.}
 \end{table}
 
 %********************************** %Subject **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Subject_Counts}
-		\caption{WN18RR Subject Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{WN18RR_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{WN18RR}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Subject_Counts}
-		\caption{FB15k-237 Subject Barplot}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{FB15k-237_Subject_Counts}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG subject distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
 
 \begin{table}[H]
@@ -908,7 +909,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 2 \\
 			&
 		\end{tabular}
-		\caption{WN18RR Subject Statistics}
+		\caption{WN18RR subject statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -923,26 +924,28 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 20 \\
 			&
 		\end{tabular}
-		\caption{FB15k-237 Subject Statistics}
+		\caption{FB15k-237 subject statistics.}
 		}
 \end{table}
 
 %********************************** %Object **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Object_Counts}
-		\caption{WN18RR Object Barplot}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{WN18RR_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{WN18RR}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Object_Counts}
-		\caption{FB15k-237 Object Barplot}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.7\linewidth]{FB15k-237_Object_Counts}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{KG object distribution. The number of times each subject takes part in a KG fact.}
 \end{figure}
-
 
 \begin{table}[H]
 	\parbox{.5\linewidth}{
@@ -957,7 +960,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 2 \\
 			&
 		\end{tabular}
-		\caption{WN18RR Object Statistics}
+		\caption{WN18RR object statistics.}
 		}
 	\hfill
 	\parbox{.5\linewidth}{
@@ -972,12 +975,15 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
   			IQR & 16 \\
 			&
 		\end{tabular}
-		\caption{FB15k-237 Object Statistics}
+		\caption{FB15k-237 object statistics.}
 		}
 \end{table}
 
-\noindent For WN18RR, it can be seen that relations are skewed toward the relations "hypernym" and "derivationally related from", with a maximum of 37,221 occurrences, with an IQR of 5433.5 and 819 respectively. FB15k-237 are skewed toward film relations. We would expect reasonable performance across this type of relation for the knowledge graph. WN18R and FB15k-237 subjects are somewhat uniform aside from a small number of high occurrences entities, with the median number of occurrences is 3 and 16 respectively, and with an IQR of 2 and 20 respectively. WN18RR object occurrences are somewhat uniform. FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of facts. This is in comparison to a median object occurrence of 1 and an interquartile range of 10,
-and an IQR of 2 and 16 respectively. Such high variance in FB15k-237 suggests poor potential model performance for FB15k-237 relative to WN18RR. 
+\noindent For WN18RR, it can be seen that predicates are skewed toward the relations "hypernym" and "derivationally related from", with a maximum of $ 37, 221 $ occurring, and an IQR of $ 5433.5 $ and $ 819 $ respectively. FB15k-237 predicates are skewed toward the film relation. \par
+
+\noindent WN18RR and FB15k-237 subjects are somewhat uniform aside from a small number of high occurring entities, with the median number of occurrences being $ 2 $ and $ 16 $ respectively, and with an IQR of $ 2 $ and $ 20 $ respectively. WN18RR object occurrences are also somewhat uniform, while FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of triples. This is in comparison to a median object occurrence of $ 1 $ and $ 10 $, and an IQR of $ 2 $ and $ 16 $ respectively. \par
+
+\noindent The WN18RR dataset is split into a training, validation and test set of $ 86, 835 \; (93.368 \%) $, $ 3, 034 \; (3.262 \%) $ and $ 3, 134\; (3.37 \%) $ triples respectively.\ And the FB15k-237 dataset is split into a training, validation and test set of $ 272, 115 \; (87.746 \%) $, $ 17, 535 \; (5.654 \%) $ and $ 20, 466 \; (6.599 \%) $ triples respectively. 
 
 
 %********************************** %Pre-Trained Word Embeddings **************************************
