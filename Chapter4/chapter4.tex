@@ -682,55 +682,51 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 		\caption{FB15k}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there is no discernible difference in performance on the WN18 KG, however the baseline is once agai outperformed by the hypothesis on FB15k. The training set metrics for both models never seem to reach a plateau for the FB15k KG and keep increasing. However there seems to be sufficient regularisation to prevent overfitting, as indicated by the validation metric plateaus.}
+	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there is no discernible difference in performance on the WN18 KG, however the baseline is once again outperformed by the hypothesis on FB15k. The training set metrics for both models never seem to reach a plateau for the FB15k KG and keep increasing. However there seems to be sufficient regularisation to prevent overfitting, as indicated by the validation metric plateaus.}
 \end{figure}
 
 %********************************** %Test results **************************************
 
 \begin{table}[H]
-	\parbox{.5\linewidth}{
 		\centering
-		\resizebox{0.5\columnwidth}{!}{%
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
-  			TransE (Bordes et al. 2013) & .892 & - & - & \textbf{251} & - \\
-  			DistMult (Yang et al. 2015) & .936 & .914 & .728 & 902 & .822 \\
-  			ComplEx (Trouillon et al. 2016) & .947 & .936 & .936 & - & .941 \\
-  			ANALOGY (Liu, Wu, and Yang 2017) & .947 & .944 & .939 & - & .942 \\
-  			Neural LP (Yang, Yang, and Cohen 2017) & .945 & - & - & - & .940 \\
-			R-GCN (Schlichtkrull et al. 2018) & \textbf{.964} & .929 & .697 & - & .819 \\
-			TorusE (Ebisu and Ichise 2018) & .954 & .950 & .943 & - & .947 \\
-			ConvE (Dettmers et al. 2018) & .956 & .946 & .935 & 374 & .943 \\
-			HypER (Bala\v{z}evi\'c et al. 2019) & .958 & \textbf{.955} & \text{.947} & 431 & \textbf{.951} \\
+  			TransE \unskip~\citep{bordes2013translating} & .892 & - & - & \textbf{251} & - \\
+  			DistMult \unskip~\citep{yang2014embedding} & .936 & .914 & .728 & 902 & .822 \\
+  			ComplEx \unskip~\citep{trouillon2016complex} & .947 & .936 & .936 & - & .941 \\
+  			Neural LP \unskip~\citep{yang2017differentiable} & .945 & - & - & - & .940 \\
+			R-GCN \unskip~\citep{schlichtkrull2018modeling}) & \textbf{.964} & .929 & .697 & - & .819 \\
+			TorusE \unskip~\citep{ebisu2018toruse} & .954 & .950 & .943 & - & .947 \\
+			ConvE \unskip~\citep{dettmers2018convolutional} & .956 & .946 & .935 & 374 & .943 \\
+			HypER \unskip~\citep{balazevic2019hypernetwork} & .958 & \textbf{.955} & \textbf{.947} & 431 & \textbf{.951} \\
   			\hline
   			HypER+ (ours) & .957 & .954 & .946 & 565 & .950 \\
+			&
 		\end{tabular}
-		}
-		\caption{Test results on WN18}
-	}
-	\hfill
-	\parbox{.5\linewidth}{
+		\captionsetup{justification=centering}
+		\caption{Relation prediction test results on WN18. The baseline outperforms the hypothesis across all metrics. It should however be noted that the difference is in the order of a $ 10^{th} $ of a percent, indicating almost identical performance. This is consistent with training and validation results discussed earlier. Interestingly the R-GCN model achieves the highest Hit@10 performance. This model uses the graph modelling SRL paradigm, as opposed to latent feature modelling, it however performs poorly across all other metrics. There may however be opportunity in exploring this paradigm further. }
+\end{table}
+
+\begin{table}[H]
 		\centering
-		\resizebox{0.5\columnwidth}{!}{
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
-  			TransE (Bordes et al. 2013) & .471 & - & - & 125 & - \\
-  			DistMult (Yang et al. 2015) & .824 & .733 & .546 & 97 & .654 \\
-  			ComplEx (Trouillon et al. 2016) & .840 & .759 & .599 & - & .692 \\
-  			ANALOGY (Liu, Wu, and Yang 2017) & .854 & .785 & .646 & - & .725 \\
-  			Neural LP (Yang, Yang, and Cohen 2017) & .837 & - & - & - & .760 \\
-			R-GCN (Schlichtkrull et al. 2018) & .842 & .760 & .601 & - & .696 \\
-			TorusE (Ebisu and Ichise 2018) & .832 & .771 & .674 & - & .733\\
-			ConvE (Dettmers et al. 2018) & .831 & .723 & .558 & 51 & .657 \\
-			HypER (Bala\v{z}evi\'c et al. 2019) & .885 & .829 & .734 & \textbf{44} & .790 \\
+  			TransE \unskip~\citep{bordes2013translating} & .471 & - & - & 125 & - \\
+  			DistMult (\unskip~\citep{yang2014embedding} & .824 & .733 & .546 & 97 & .654 \\
+  			ComplEx \unskip~\citep{trouillon2016complex} & .840 & .759 & .599 & - & .692 \\
+  			Neural LP \unskip~\citep{yang2017differentiable} & .837 & - & - & - & .760 \\
+			R-GCN \unskip~\citep{schlichtkrull2018modeling} & .842 & .760 & .601 & - & .696 \\
+			TorusE \unskip~\citep{ebisu2018toruse}  & .832 & .771 & .674 & - & .733\\
+			ConvE \unskip~\citep{dettmers2018convolutional}  & .831 & .723 & .558 & 51 & .657 \\
+			HypER \unskip~\citep{balazevic2019hypernetwork} & .885 & .829 & .734 & \textbf{44} & .790 \\
   			\hline
   			HypER+ (ours) & \textbf{.894} & \textbf{.856} & \textbf{.790} & 79 & \textbf{.829} \\
+			&
 		\end{tabular}
-		}
-		\caption{Test results on FB15k}
-	}
+		\captionsetup{justification=centering}
+		\caption{Relation prediction test results on FB15k. Test results on FB15k. Here the baseline is outperformed by the hypothesis across all metrics, aside from Mean Rank. Unlike the performance difference on the WN18 KG, the difference here is by a number percentage points, indicating a significant improvement over the baseline. The hypernetwork approach also significantly outperforms the R-GCN model.}
 \end{table}
 
 %********************************** %T-SNE **************************************
