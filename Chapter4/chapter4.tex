@@ -983,22 +983,22 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 
 \noindent WN18RR and FB15k-237 subjects are somewhat uniform aside from a small number of high occurring entities, with the median number of occurrences being $ 2 $ and $ 16 $ respectively, and with an IQR of $ 2 $ and $ 20 $ respectively. WN18RR object occurrences are also somewhat uniform, while FB15k-237 object occurrences are skewed, with the "United States" partaking in the highest number of triples. This is in comparison to a median object occurrence of $ 1 $ and $ 10 $, and an IQR of $ 2 $ and $ 16 $ respectively. \par
 
-\noindent The WN18RR dataset is split into a training, validation and test set of $ 86, 835 \; (93.368 \%) $, $ 3, 034 \; (3.262 \%) $ and $ 3, 134\; (3.37 \%) $ triples respectively.\ And the FB15k-237 dataset is split into a training, validation and test set of $ 272, 115 \; (87.746 \%) $, $ 17, 535 \; (5.654 \%) $ and $ 20, 466 \; (6.599 \%) $ triples respectively. 
+\noindent The WN18RR dataset is split into a training, validation and test set of $ 86, 835 \; (93.368 \%) $, $ 3, 034 \; (3.262 \%) $ and $ 3, 134\; (3.37 \%) $ triples respectively.\ And the FB15k-237 dataset is split into a training, validation and test set of $ 272, 115 \; (87.746 \%) $, $ 17, 535 \; (5.654 \%) $ and $ 20, 466 \; (6.599 \%) $ triples respectively. \par
 
 
 %********************************** %Pre-Trained Word Embeddings **************************************
 
-\subsection{HypER+ with glove word embeddings}
+\noindent The model was trained on Google Cloud Platform, on an N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and an Nvidia Tesla P100 GPU. We evaluate the model using the standard link prediction benchmarks discussed above. \par 
 
-HypER+ here is implemented using Glove pre-trained word embeddings. The the model was trained on Google Cloud Platform, on a N1 series instance with  8 CPU cores, 30GB RAM, 512GB SSD and a Nvidia Tesla P100 GPU. We evaluate the model using standard link prediction benchmarks. \par 
+\noindent \textbf{Code to reproduce.} In the interest of reproducibility, all code needed to train and test the models in this section can be found at the following links. \newline
+Baseline: \url{https://github.com/xhosaBoy/HypER-baseline} \newline
+HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vectors} \par
 
-\noindent \textbf{Code to reproduce} \newline
-HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vectors} \newline
-Baseline: \url{https://github.com/xhosaBoy/HypER-baseline} 
-
-\noindent {Link prediction results.} The link prediction benchmark results of the HypER+ with pre-trained embeddings model, compared against other link prediction models, are presented below.
+\noindent \textbf{Link prediction results.} The cost and suite of current standard link prediction benchmark metrics, including Hit@10, Hit@3, Hit@1, Mean Rank and Mean Reciprocal Rank, are used to compare the HypER+ model without pre-trained embeddings, against the HypER baseline model, as well as against the HypER+ model without pre-trained embeddings, against the HypER+ model with pre-trained embeddings. The results are presented in Figures 4.18 and 4.23. as well as Tables 4.18 and 4.19. \par
 
 %********************************** %Cost **************************************
+
+\bigskip
 
 \begin{figure}[H]
 	\parbox{.5\linewidth}{
