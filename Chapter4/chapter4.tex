@@ -732,38 +732,32 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 %********************************** %T-SNE **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.4\textwidth, height=0.2\textheight]{t_sne_train_profession}
-		\captionsetup{justification=centering}
-		\caption{FB15k T-SNE: Michael Jackson Profession Facts, Pre-Training}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-		\includegraphics[width=0.5\textwidth, height=0.2\textheight]{t_sne_train_award}
-		\captionsetup{justification=centering}
-		\caption{FB15k T-SNE: Michael Jackson Award Facts, Pre-Training}
-		}
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textheight]{t_sne_train_profession}
+	\captionsetup{justification=centering}
+	\caption{FB15k T-SNE: Triples about "Michael Jackson's" (subject) "profession" (predicate), pre HypER+ training. The legend lists all professions (objects) known to have have been performed by Michael Jackson. We can see most objects in the KG, regardless of type, clustered in the same embedding region. This includes the transformed subject-predicate vector,  "/people/person/profession(Michael Jackson)", used to take an inner product with an object. We expect this given Xavier \unskip~\citep{glorot2010understanding} intitialised entity and relation embeddings. }
 \end{figure}
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
-   		\centering
-    		\includegraphics[width=0.4\textwidth, height=0.2\textheight]{t_sne_test_profession}
-		\captionsetup{justification=centering}
-		\caption{FB15k T-SNE: Michael Jackson Profession Facts, Post-Training}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
-   		\centering
-		\includegraphics[width=0.5\textwidth, height=0.2\textheight]{t_sne_test_award}
-		\captionsetup{justification=centering}
-		\caption{FB15k T-SNE: Michael Jackson Award Facts, Post-Training}
-		}
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textheight]{t_sne_test_profession}
+	\captionsetup{justification=centering}
+	\caption{FB15k T-SNE: Triples about Michael Jackson's (subject) profession (predicate), post HypER+ training. Professions Michael Jackson is known to have performed are now all clustered within the same embedding region. This indicates the model has built some conceptual understanding around the objects.}
 \end{figure}
 
-\newpage
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textheight]{t_sne_train_award}
+	\captionsetup{justification=centering}
+	\caption{FB15k T-SNE: Triples about "Michael Jackson's" (subject) "awards" (predicate), pre HypER+ training. The legend lists all awards (objects) known to have have been won by Michael Jackson. Once again we can see most objects in the KG, regardless of type, clustered in the same embedding region.}
+\end{figure}
+
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.7\textwidth, height=0.3\textheight]{t_sne_test_award}
+	\captionsetup{justification=centering}
+	\caption{FB15k T-SNE: Triples about "Michael Jackson's" (subject) "awards" (predicate), post HypER+ training. Awards Michael Jackson is known to have won are now somewhat clustered within the same embedding region. This indicates the model has built some conceptual understanding around the objects, and attempts to account for sub-domain differences, as well conceptual differences between the awards. For example, the "MTV Movie Award for Best Song from a Movie" is located in a region relatively far from all the "Music"-related awards. }
+\end{figure}
 
 
 %********************************** %HypER+ with Pre-Trained Word Embeddings  **************************************
