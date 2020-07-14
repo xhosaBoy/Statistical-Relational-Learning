@@ -1001,143 +1001,263 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 \bigskip
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_Cost_Results}
-		\caption{WN18RR Cost}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_Cost_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_Cost_Results}
-		\caption{FB15k-237 Cost}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_Cost_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Cost versus epoch for the respective KG. There is a large difference between the HypER (baseline) and HypER+ (hypothesis) costs, where the hypothesis outperforms the baseline on both KGs by quite some margin. The FB15k costs exhibits strange behaviour, dropping sharply in the first 10 epochs, before rising and plateauing. This could be attributed to small probabilities first computed by the models, before becoming more confident with larger probabilities. The FB15k cost is also higher than the WN18 cost, this may be due their respective KG size and complexity.}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_Cost_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_Cost_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Cost versus epoch for the respective KG. There is a large difference between the HypER (baseline) and HypER+ (hypothesis) costs, where the hypothesis outperforms the baseline on both KGs by quite some margin. The FB15k costs exhibits strange behaviour, dropping sharply in the first 10 epochs, before rising and plateauing. This could be attributed to small probabilities first computed by the models, before becoming more confident with larger probabilities. The FB15k cost is also higher than the WN18 cost, this may be due their respective KG size and complexity.}
+\end{figure}
+
 
 %********************************** %Hits@10 **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_10_Results}
-		\caption{WN18RR Hits@10}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_10_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_10_Results}
-		\caption{FB15k-237 Hits@10}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_10_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@10 versus epoch for the respective KG. There is hardly any difference between the baseline and hypothesis models for the WN18 KG. The hypothesis model once again outperforms the baseline on the FB15k KG, although the validation difference is not as pronounced as the training difference. Once again the WN18 KG has higher performance, and both metrics reach a plateau.}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_10_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_10_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@10 versus epoch for the respective KG. There is hardly any difference between the baseline and hypothesis models for the WN18 KG. The hypothesis model once again outperforms the baseline on the FB15k KG, although the validation difference is not as pronounced as the training difference. Once again the WN18 KG has higher performance, and both metrics reach a plateau.}
+\end{figure}
+
 
 %********************************** %Hits@3 **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_3_Results}
-		\caption{WN18RR Hits@3}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_3_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_3_Results}
-		\caption{FB15k-237 Hits@3}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_3_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@3 versus epoch for the respective KG. Here the models have similar behaviour to the Hit@10 metric, and both have lower accuracy. There is however a larger performance difference between the baseline and hypothesis. This may be due to the more robust generalisation requirements with a smaller subset of acceptable answers, Hit@3 vs Hit@10, resulting in a more pronounced impact from covariate shift of predicate latent parameters.}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_3_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_3_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@3 versus epoch for the respective KG. Here the models have similar behaviour to the Hit@10 metric, and both have lower accuracy. There is however a larger performance difference between the baseline and hypothesis. This may be due to the more robust generalisation requirements with a smaller subset of acceptable answers, Hit@3 vs Hit@10, resulting in a more pronounced impact from covariate shift of predicate latent parameters.}
+\end{figure}
+
 
 %********************************** %Hits@1 **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_hits_at_1_Results}
-		\caption{WN18RR Hits@1}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_1_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_hits_at_1_Results}
-		\caption{FB15k-237 Hits@1}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_1_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@1 versus epoch for the respective KG. Once more the models have similar behaviour to the Hit@10 and Hit@3 metrics, and both have even lower accuracy. There is no discernible difference between the models on the WN18 KG, however there is once again a larger difference between them on the FB15k KG. }
+\end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_hits_at_1_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_hits_at_1_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Hits@1 versus epoch for the respective KG. Once more the models have similar behaviour to the Hit@10 and Hit@3 metrics, and both have even lower accuracy. There is no discernible difference between the models on the WN18 KG, however there is once again a larger difference between them on the FB15k KG. }
 \end{figure}
 
 %********************************** %Mean rank **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_rank_Results}
-		\caption{WN18RR Mean Rank}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_mean_rank_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_rank_Results}
-		\caption{FB15k-237 Mean Rank}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_mean_rank_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Mean Rank versus epoch for the respective KG. Not surprisingly, the training set outperforms the validation set on mean rank. There is also now a discernible difference in performance on the WN18 KG. For the first time, the baseline outperforms the hypothesis on both KGs. One potential reason for the this is that $ 50^{th} $ percentile accuracy of the baseline is higher, where as the hypothesis is more accurate at higher percentiles, e.g. $ 90^{th} $.}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_mean_rank_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_mean_rank_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Mean Rank versus epoch for the respective KG. Not surprisingly, the training set outperforms the validation set on mean rank. There is also now a discernible difference in performance on the WN18 KG. For the first time, the baseline outperforms the hypothesis on both KGs. One potential reason for the this is that $ 50^{th} $ percentile accuracy of the baseline is higher, where as the hypothesis is more accurate at higher percentiles, e.g. $ 90^{th} $.}
+\end{figure}
+
+
 
 %********************************** %Mean reciprocal rank **************************************
 
 \begin{figure}[H]
-	\parbox{.5\linewidth}{
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-    		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{WN18RR_mean_reciprocal_rank_Results}
-		\caption{WN18RR Mean Reciprocal Rank}
-		}
-	\hfill
-	\parbox{.5\linewidth}{
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_mean_reciprocal_rank_Results}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER versus HypER+}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
    		\centering
-		\includegraphics[width=0.45\textwidth, height=0.2\textheight]{FB15k-237_mean_reciprocal_rank_Results}
-		\caption{FB15k-237 Mean Reciprocal Rank}
-		}
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_mean_reciprocal_rank_Results}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER versus HypER+}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there is no discernible difference in performance on the WN18 KG, however the baseline is once again outperformed by the hypothesis on FB15k.}
 \end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{WN18RR_mean_reciprocal_rank_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{WN18RR: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\linewidth}
+   		\centering
+		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{FB15k-237_mean_reciprocal_rank_Results_ptwv}
+		\captionsetup{justification=centering}
+		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
+	\end{subfigure}
+	\captionsetup{justification=centering}
+	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there is no discernible difference in performance on the WN18 KG, however the baseline is once again outperformed by the hypothesis on FB15k.}
+\end{figure}
+
 
 %********************************** %Test results **************************************
 
 \begin{table}[H]
-	\parbox{.5\linewidth}{
 		\centering
-		\resizebox{0.5\columnwidth}{!}{
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
-  			DistMult (Yang et al. 2015) & .490 & .440 & .390 & 5110 & .430 \\
-  			ComplEx (Trouillon et al. 2016) & .510 & .460 & .410 & 5261 & .440 \\
-  			Neural LP (Yang, Yang, and Cohen 2017) & - & - & - & - & - \\
-			MINERVA (Das et al. 2018) & - & - & - & - & - \\
-			ConvE (Dettmers et al. 2018) & .520 & .440 & .400 & 4187 & .430 \\
-			HypER (Bala\v{z}evi\'c et al. 2019) & .522 & .477 & \textbf{.436} & 5798 & .465 \\
+  			DistMult \unskip~\citep{yang2014embedding} & .490 & .440 & .390 & 5110 & .430 \\
+  			ComplEx \unskip~\citep{trouillon2016complex} & .510 & .460 & .410 & 5261 & .440 \\
+  			Neural LP \unskip~\citep{yang2017differentiable} & - & - & - & - & - \\
+			ConvE \unskip~\citep{dettmers2018convolutional} & .520 & .440 & .400 & 4187 & .430 \\
+			HypER \unskip~\citep{balazevic2019hypernetwork} & .522 & .477 & .436 & 5798 & .465 \\
+			HypER+ (ours) & .519 & .479 & \textbf{.438} & 7061 & .466 \\
   			\hline
-  			HypER+ (ours) & \textbf{.552} & \textbf{.481} & .432 & \textbf{1586} & \textbf{.471} \\
+  			HypER+ with pre-trained embeddings (ours) & \textbf{.578} & \textbf{.493} & .435 & \textbf{1063} & \textbf{.480} \\
 			&
 		\end{tabular}
-		}
 		\captionsetup{justification=centering}
-		\caption{Test results on WN18RR}
-	}
-	\hfill
-	\parbox{.5\linewidth}{
+		\caption{Relation prediction test results on WN18RR. The baseline outperforms the hypothesis across all metrics. It should however be noted that the difference is in the order of a $ 10^{th} $ of a percent, indicating almost identical performance. This is consistent with training and validation results discussed earlier. Interestingly the R-GCN model achieves the highest Hit@10 performance. This model uses the graph modelling SRL paradigm, as opposed to latent feature modelling, it however performs poorly across all other metrics. There may however be opportunity in exploring this paradigm further. }
+\end{table}
+
+\begin{table}[H]
 		\centering
-		\resizebox{0.5\columnwidth}{!}{
 		\begin{tabular}{lllllllllll}
   			\textbf{Model} & \textbf{H@10} & \textbf{H@3} & \textbf{H@1} & \textbf{MR} & \textbf{MRR} \\
   			\hline
-  			DistMult (Yang et al. 2015) & .419 & .263 & .155 & 254 & .241 \\
-  			ComplEx (Trouillon et al. 2016) & .428 & .275 & .158 & 339 & .247 \\
-  			Neural LP (Yang, Yang, and Cohen 2017) & .408 & - & - & - & .250 \\
-			MINERVA (Das et al. 2018) & .456 & - & - & - & - \\
-			ConvE (Dettmers et al. 2018) & .501 & .356 & .237 & 244 & .325 \\
-			HypER (Bala\v{z}evi\'c et al. 2019) & .520 & \textbf{.376} & \textbf{.252} & 250 & \textbf{.341} \\
+  			DistMult \unskip~\citep{yang2014embedding} & .419 & .263 & .155 & 254 & .241 \\
+  			ComplEx \unskip~\citep{trouillon2016complex} & .428 & .275 & .158 & 339 & .247 \\
+  			Neural LP  \unskip~\citep{yang2017differentiable} & .408 & - & - & - & .250 \\
+			ConvE \unskip~\citep{dettmers2018convolutional} & .501 & .356 & .237 & 244 & .325 \\
+			HypER \unskip~\citep{balazevic2019hypernetwork} & .520 & .376 & .252 & 250 & .341 \\
+			HypER+ (ours) & .516 & .368 & .245 & 268 & .335 \\
   			\hline
-  			HypER+ (ours) & \textbf{.522} & \textbf{.376} & \textbf{.252} & \textbf{215} & \textbf{.341} \\
+  			HypER+ with pre-trained embeddings (ours) & \textbf{.525} & \textbf{.379} & \textbf{.255} & \textbf{196} & \textbf{.345} \\
 			&
 		\end{tabular}
-		}
 		\captionsetup{justification=centering}
-		\caption{Test results on FB15k-237}
-	}
+		\caption{Relation prediction test results on FB15k-237. Test results on FB15k. Here the baseline is outperformed by the hypothesis across all metrics, aside from Mean Rank. Unlike the performance difference on the WN18 KG, the difference here is by a number percentage points, indicating a significant improvement over the baseline. The hypernetwork approach also significantly outperforms the R-GCN model.}
 \end{table}
 
 %********************************** %Test Result Decomposition **************************************
