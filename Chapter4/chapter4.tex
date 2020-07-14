@@ -606,7 +606,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 		\caption{FB15k}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Hits@10 versus epoch for the respective KG. There is hardly any difference between the baseline and hypothesis models for the WN18 KG. The hypothesis model once again outperforms the baseline on the FB15k KG, although the validation difference is not as pronounced as the training difference. Once again the WN18 KG has higher performance, and both metrics reach a plateau.}
+	\caption{Hits@10 versus epoch for the respective KG. There is hardly any difference between the hypothesis and baseline models for the WN18 KG. The hypothesis model once again outperforms the baseline on the FB15k KG, although the validation difference is not as pronounced as the training difference. Once again the WN18 KG has higher performance, and both metrics reach a plateau.}
 \end{figure}
 
 %********************************** %Hits@3  **************************************
@@ -625,7 +625,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 		\caption{FB15k}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Hits@3 versus epoch for the respective KG. Here the models have similar behaviour to the Hit@10 metric, and both have lower accuracy. There is however a larger performance difference between the baseline and hypothesis. This may be due to the more robust generalisation requirements with a smaller subset of acceptable answers, Hit@3 vs Hit@10, resulting in a more pronounced impact from covariate shift of predicate latent parameters.}
+	\caption{Hits@3 versus epoch for the respective KG. The models have similar behaviour to the Hit@10 metric, and both have lower accuracy. There is however a larger performance difference between the hypothesis and baseline. This may be due to the more robust generalisation requirements with a smaller subset of acceptable answers, Hit@3 vs Hit@10, resulting in a more pronounced impact from covariate shift of predicate latent parameters.}
 \end{figure}
 
 %********************************** %Hits@1  **************************************
@@ -663,7 +663,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 		\caption{FB15k}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Mean Rank versus epoch for the respective KG. Not surprisingly, the training set outperforms the validation set on mean rank. There is also now a discernible difference in performance on the WN18 KG. For the first time, the baseline outperforms the hypothesis on both KGs. One potential reason for the this is that $ 50^{th} $ percentile accuracy of the baseline is higher, where as the hypothesis is more accurate at higher percentiles, e.g. $ 90^{th} $.}
+	\caption{Mean Rank versus epoch for the respective KG. Not surprisingly, the training set outperforms the validation set on mean rank. There is also now a discernible difference in performance on the WN18 KG. For the first time, the hypothesis outperformed by the baseline on both KGs. One potential reason for the this is that $ 50^{th} $ percentile accuracy of the baseline is higher, where as the hypothesis is more accurate at higher percentiles, e.g. $ 90^{th} $.}
 \end{figure}
 
 %********************************** %Mean reciprocal rank **************************************
@@ -682,7 +682,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 		\caption{FB15k}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there is no discernible difference in performance on the WN18 KG, however the baseline is once again outperformed by the hypothesis on FB15k.}
+	\caption{Mean Reciprocal Rank versus epoch for the respective KG. There is no discernible difference in performance on the WN18 KG, however the hypothesis is once again outperforms the baseline on the FB15k KG.}
 \end{figure}
 
 %********************************** %Test results **************************************
@@ -705,7 +705,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 			&
 		\end{tabular}
 		\captionsetup{justification=centering}
-		\caption{Relation prediction test results on WN18. The baseline outperforms the hypothesis across all metrics. It should however be noted that the difference is in the order of a $ 0.1\% $, indicating almost identical performance. This is consistent with training and validation results discussed earlier. Interestingly the R-GCN model achieves the highest Hit@10 performance. This model uses the graph modelling SRL paradigm, as opposed to latent feature modelling, it however performs poorly across all other metrics. There may however be opportunity in exploring this paradigm further. }
+		\caption{Relation prediction test results on WN18. The hypothesis is outperformed by the baseline across all metrics. It should however be noted that the difference is in the order of a $ 0.1\% $, indicating almost identical performance. This is consistent with training and validation results discussed earlier. Interestingly the R-GCN model achieves the highest Hit@10 performance. This model uses the graph modelling SRL paradigm, as opposed to latent feature modelling, it however performs poorly across all other metrics. There may however be opportunity in exploring this paradigm further. }
 \end{table}
 
 \begin{table}[H]
@@ -726,7 +726,7 @@ HypER+: \url{https://github.com/xhosaBoy/HypER-Regularised-Relations} \par
 			&
 		\end{tabular}
 		\captionsetup{justification=centering}
-		\caption{Relation prediction test results on FB15k. Test results on FB15k. Here the baseline is outperformed by the hypothesis across all metrics, aside from Mean Rank. Unlike the performance difference on the WN18 KG, the difference here is by a number percentage points, indicating a significant improvement over the baseline. The hypernetwork approach also significantly outperforms the R-GCN model.}
+		\caption{Relation prediction test results on FB15k. Test results on FB15k. The hypothesis is outperforms the baseline across all metrics, aside from Mean Rank. Unlike the performance difference on the WN18 KG, the difference here is by a number percentage points, indicating a significant improvement over the baseline. The hypernetwork approach also significantly outperforms the R-GCN model.}
 \end{table}
 
 %********************************** %T-SNE **************************************
@@ -1051,7 +1051,7 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 		\caption{FB15k-237: HypER versus HypER+}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Hits@10 versus epoch for the respective KG. There is once again hardly any difference between the baseline and hypothesis models for the WN18RR KG. The hypothesis model marginally outperforms the baseline on the FB15k-237 KG. There is also a pronounced difference between training set performance and validation set performance on both KGs. The bears the impact inverse relations have on WN18 and FB15k respectively, as discussed earlier.}
+	\caption{Hits@10 versus epoch for the respective KG. There is once again hardly any difference between the hypothesis and baseline models for the WN18RR KG. The hypothesis model marginally outperforms the baseline on the FB15k-237 KG. There is also a pronounced difference between training set performance and validation set performance on both KGs. The bears the impact inverse relations have on WN18 and FB15k respectively, as discussed earlier.}
 \end{figure}
 
 \begin{figure}[H]
@@ -1068,7 +1068,7 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Hits@10 versus epoch for the respective KG. Here the hypothesis significantly outperforms the baseline on the WN18RR KG. The hypothesis only marginally outperforms the baseline on the FB15k-237 KGb. This suggests pre-trained embeddings have more of an impact on smaller KGs, where relations are likely to be more sparse, making it harder to build entity and relation conceptual understanding.}
+	\caption{Hits@10 versus epoch for the respective KG. The hypothesis significantly outperforms the baseline on the WN18RR KG. The hypothesis only marginally outperforms the baseline on the FB15k-237 KGb. This suggests pre-trained embeddings have more of an impact on smaller KGs, where relations are likely to be more sparse, making it harder to build entity and relation conceptual understanding.}
 \end{figure}
 
 
@@ -1161,7 +1161,7 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 		\caption{FB15k-237: HypER versus HypER+}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Mean Rank versus epoch for the respective KG. The baseline outperforms the hypothesis on the WN18RR KG, however the hypothesis outperforms the baseline on the FB15k-237 KG. The impact of KG size and complexity on covariate shift seems to drive this behaviour, where relational batch normalisation is very effective at inducing good latent representations for relations, resulting in a consistently higher rank for the correct prediction.}
+	\caption{Mean Rank versus epoch for the respective KG. The hypothesis is outperformed by the baseline on the WN18RR KG, however the hypothesis outperforms the baseline on the FB15k-237 KG. The impact of KG size and complexity on covariate shift seems to drive this behaviour, where relational batch normalisation is very effective at inducing good latent representations for relations, resulting in a consistently higher rank for the correct prediction.}
 \end{figure}
 
 \begin{figure}[H]
@@ -1216,7 +1216,7 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 		\caption{FB15k-237: HypER+ versus \\ HypER+ with Pre-Trained Embeddings}
 	\end{subfigure}
 	\captionsetup{justification=centering}
-	\caption{Mean Reciprocal Rank versus epoch for the respective KG. Here there hypothesis marginally outperforms the baseline on the WN18RR KG, and there is no discernible difference in performance on the FB15k-237 KG. This again suggests pre-trained embeddings having more of an impact on the WN18RR KG.}
+	\caption{Mean Reciprocal Rank versus epoch for the respective KG. The hypothesis marginally outperforms the baseline on the WN18RR KG, and there is no discernible difference in performance on the FB15k-237 KG. This again suggests pre-trained embeddings having more of an impact on the WN18RR KG.}
 \end{figure}
 
 
@@ -1257,7 +1257,7 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 			&
 		\end{tabular}
 		\captionsetup{justification=centering}
-		\caption{Relation prediction test results on FB15k-237. Here the HypER+ model with pre-trained embeddings achieves state-of-the-art (SOTA) performance across all metrics. Covariate shift seems to not be playing as meaningful a role, and pre-trained embeddings are providing a more meaningful contribution. This suggested by the HypER+ model's inferior performance to the HypER model. Strangely, this is inconsistent with training and validation set results, where HypER+ consistently outperforms HypER on FB15k-237. Using the quoted HypER test results, as opposed to reimplemented and verified test results may explain this inconsistency. There may be an implementation detail not used by the thesis author to achieve the quoted level of performance. This inconsistency aside, pre-trained embeddings remain effective at improving relation prediction performance on the FB15k-237 KG.}
+		\caption{Relation prediction test results on FB15k-237. The HypER+ model with pre-trained embeddings achieves state-of-the-art (SOTA) performance across all metrics. Covariate shift seems to not be playing as meaningful a role, and pre-trained embeddings are providing a more meaningful contribution. This suggested by the HypER+ model's inferior performance to the HypER model. Strangely, this is inconsistent with training and validation set results, where HypER+ consistently outperforms HypER on FB15k-237. Using the quoted HypER test results, as opposed to reimplemented and verified test results may explain this inconsistency. There may be an implementation detail not used by the thesis author to achieve the quoted level of performance. This inconsistency aside, pre-trained embeddings remain effective at improving relation prediction performance on the FB15k-237 KG.}
 \end{table}
 
 
@@ -1298,8 +1298,8 @@ HypER+ with GloVe: \url{https://github.com/xhosaBoy/HypER-Pretrained-Word-Vector
 
 \section{Summary}
 
-\textbf{NTN with optimised training algorithm.} We attempt a simple improvement in the NTN model by appplying training alogirthm optimisation techniques including early stopping, the Adam optimiser and hyperparameter random search. The results indicate that there are potential performance gains through simple training algorithm component substitutions. In this instance, we see an accuracy gain of 6.2\%, for the WordNet and Freebase datasets. \par
+\textbf{NTN with optimised training algorithm.} We attempt to improve the NTN model by applying training algorithm optimisations including early stopping, the Adam optimiser and hyperparameter random search. The results indicate that there are potential performance gains to be realised simply through using training algorithm techniques known to improve performance. In this instance we see an accuracy gain of 6.2\%, across the WordNet and Freebase datasets. \par
 
-\noindent \textbf{HypER+.} We compensate for possible covariate shifts introduced by hypernetworks.\ The distributional drift is pronounced enough that we are able to improve the Hit@1 accuracy on of the original HypER model on average by 2.7\%, for the WN18 and FB15k KGs. We not graph modelling may be a worthwhile paradigm to explore for link prediction, given it's SOTA performance for Hit@10 on the WN18 KG. We also note the greater improvement in relation prediction for larger, more complex KGs when compensating for covariate shift. \par
+\noindent \textbf{HypER+.} We compensate for possible covariate shift introduced by hypernetworks.\ The latent representation distribution drift of relations is pronounced enough that we are able to improve the Hit@1 accuracy of the original HypER model on average by 2.7\%, across the WN18 and FB15k KGs.\ We note graph modelling may be a worthwhile paradigm to explore for link prediction, given R-GCN's SOTA performance for Hit@10 accuracy on the WN18 KG. We also note the greater influence of relational normalisation on prediction performance for larger and more complex KGs. \par
 
-\noindent \textbf{HypER+ with pre-trained word vectors.} Finally we extend HypER+ to make use of pre-trained GloVe word vectors.\ The semantic information inherent in these embeddings significantly improves relation prediction performance on sparse relational data. Their influence is somewhat reduced at higher levels of accuracy requirements, where KG domain alignment becomes more important. Pre-trained word vectors also offer less utility for large and complex KGs, however still contribute an improvement to prediction. The combination of covariate shift compensation, and entity and relation embedding initialisation using pre-trained word vectors, addresses both the problems of data sparsity, as well as producing higher quality latent representations for large and complex datasets. As a result, HypER+ with pre-trained word vectors achieves SOTA performance across almost all standard link prediction benchmark metrics, on both the WN18RR and FB15k-237 KGs. 
+\noindent \textbf{HypER+ with pre-trained word vectors.} Finally we extend HypER+ to make use of pre-trained GloVe word vectors.\ The semantic information inherent in these embeddings significantly improves relation prediction performance on sparse relational data. Their influence is somewhat reduced at higher levels of accuracy, where KG domain alignment becomes more important. Pre-trained word vectors also offer less utility for large and complex KGs, however still contribute an improvement to prediction. The combination of relation normalisation, and entity and relation embedding initialisation using pre-trained word vectors, addresses both the problems of data sparsity, as well as producing higher quality relational latent representations for large and complex datasets. As a result, HypER+ with pre-trained word vectors achieves SOTA performance on almost all standard link prediction benchmark metrics, across both the WN18RR and FB15k-237 KGs. 
