@@ -16,20 +16,20 @@ There are many tasks which are hard to write algorithms for. For example, writin
  
 \noindent Machine learning (ML) can be used to solve such tasks, as well as others like weather prediction, stock price forecasting and risk modelling.\ ML is the process of using data to build prediction models, where these models typically output discrete (classification) or continuous (regression) values. There are various learning paradigms, including supervised learning, unsupervised learning and reinforcement learning, used to train models from data in order to perform a specific task. The models can be divided into three classes, namely shallow, deep and probabilistic ~\citep{hastie2009elements}. \par
 
-\noindent This chapter presents a brief introduction to the supervised learning paradigm, a description of deep convolutional \unskip ~\citep{lecun1998gradient} and recurrent \unskip ~\citep{werbos1988generalization} network models, and a discussion on regularisation techniques for deep models, including early stopping \unskip~\citep{prechelt1998early}, dropout \unskip ~\citep{srivastava2014dropout} and batch normalisation \unskip ~\citep{ioffe2015batch}. 
+\noindent This chapter presents a brief introduction to the supervised learning paradigm, a description of deep convolutional \unskip ~\citep{lecun1998gradient} and recurrent \unskip ~\citep{werbos1988generalization} network models, a brief discussion on language models, and a discussion on regularisation techniques for deep models, including early stopping \unskip~\citep{prechelt1998early}, dropout \unskip ~\citep{srivastava2014dropout} and batch normalisation \unskip ~\citep{ioffe2015batch}. 
 
 
 %********************************** %First Section  **************************************
 
 \section{Supervised learning}
 
-An ML prediction model takes as input a set of features. These features are attributes of a data sample. For example in the fruit prediction task mentioned above, input features might be attributes such as shape, colour, texture and size.\ These inputs are provided to a model that maps them to outputs, where outputs would be types of fruit, represented as values corresponding to orange, apple, strawberry, pineapple, etc., see Figure 2.1.\ The model is then trained to identify the correct fruit (output) based on the features (input) it receives from a collection of input-output examples; a type of training called supervised learning \citep{bishop2006pattern}.
+An ML prediction model takes as input a set of features. These features are attributes of a data sample. For example in the fruit prediction task mentioned above, input features might be attributes such as shape, colour, texture and size.\ These inputs are provided to a model that maps them to outputs, where outputs might be types of fruit represented as values corresponding to orange, apple, strawberry, pineapple, etc.; see Figure 2.1.\ The model is then trained to identify the correct fruit (output) based on the features (input) it receives from a collection of input-output examples. This type of training is called supervised learning \citep{bishop2006pattern}.
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=1.0\textwidth, height=0.4\textwidth]{supervised_learning}
-	\captionsetup{justification=centering}
-	\caption{A machine learning model trained using supervised learning. The task of this model is to map input features to output categories, predict a type of fruit given an image.}
+	\captionsetup{justification=centering, name={Figure}}
+	\caption{A machine learning model trained using supervised learning. The task of this model is to map input features to output categories, in this case predicting the type of fruit given an image.}
 \end{figure}
 
 \noindent Features can be continuous valued or discrete, where discrete values are referred to as categorical variables. Outputs can also be continuous or discrete, where discrete outputs are known as classes. Example input-output pairs comprise a training dataset which is represented as \begin{math} D = \{(x_i, \; y_i)\}_{i=1}^N \end{math}, where \begin{math} x_i \end{math} is the input feature and \begin{math} y_i \end{math} is its expected output label. The model has to learn a general mapping from input features to output labels. \par
@@ -39,38 +39,39 @@ An ML prediction model takes as input a set of features. These features are attr
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{oranges_and_apples_decision_boundary}
-	\captionsetup{justification=centering}
-	\caption{A decision boundary between two classes, apples and oranges. The model constructs this curve by learning the feature characteristics corresponding to each class.}
+	\captionsetup{justification=centering, name={Figure}}
+	\caption{A decision boundary between two classes, apples and oranges. The model constructs this curve by learning discriminative feature characteristics corresponding to each class.}
 \end{figure}
 
-\noindent Data is assumed to be generated by the same underlying process, and would be either: independent and identically distributed (IID), or dependent. In the context of IID data, samples are independent and therefore order invariant; while in the context of dependent data, samples are dependent and order matters.\ The class of data can determine the best choice of model for prediction. \par
+\noindent Data is assumed to be generated by the same underlying process, and would be either independent and identically distributed (IID), or not. In the context of IID data, samples are independent and therefore order-invariant; while in the context of dependent data samples, order might matter.\ The class of data can determine the best choice of model for prediction. \par
 
-\noindent Available labelled data is typically subdivided into three sets: training, validation and test. The training set provides in-sample data -- input-output pairs which are exposed to the model during training and used to update its parameters. The validation set approximates out-of-sample data used to adjust model architecture, as well as hyperparameters (meta model parameters which configure its operation). The test set is used to assess the model's prediction performance after training and hyperparameter tuning are complete. These results establish an objective measure of the model's utility.  \par
+\noindent Available labelled data is typically subdivided into three sets: training, validation and test data. The training set provides in-sample data -- input-output pairs which are exposed to the model during training and used to update its parameters.\ The validation set approximates out-of-sample data used to adjust model architecture, as well as hyperparameters (model parameters which configure its architecture and operation).\ The test set is used to assess the model's prediction performance after training and hyperparameter tuning are complete, and establish an unbiased measure of the model's utility.  \par
 
-\noindent An objective function is used to measure the prediction performance of a model during training, and can compute an error or reward signal.\ When the objective computes an error it is called a loss function, and measures the difference between the model's predicted output and the target output (the labels in the training set). As the model parameters are updated during training, the loss value changes and produces a multidimensional loss surface. The training algorithm tries to minimise this loss using a method of optimisation, such as Bayesian, evolutionary or first order. When the objective computes a reward it is called a reward function, and is often used when a sequence of steps is required to complete a task \unskip ~\citep{murphy2012machine}. The training algorithm tries to maximise the reward, which is typically applied in reinforcement learning settings. The reader is referred to \unskip~\citep {sutton2018reinforcement} for a complete introduction. \par
+\noindent An objective function is used to measure the prediction performance of a model during training, and can compute an error or reward signal.\ When the objective computes an error it is called a loss function, and measures the difference between the model's predicted output and the target output (the labels in the training set). As the model parameters are updated during training, the loss value changes and produces a multidimensional loss surface. The training algorithm tries to minimise this loss using a method of optimisation, such as Bayesian, evolutionary or first-order. When the objective computes a reward it is called a reward function, and is often used when a sequence of steps is required to complete a task \unskip ~\citep{murphy2012machine}. The training algorithm tries to maximise the reward, which is typically applied in reinforcement learning settings. The reader is referred to \unskip~\citep {sutton2018reinforcement} for a complete introduction. \par
 
-\noindent A popular method of optimisation is gradient descent, which tries to descend to the lowest region of the loss surface: the global minimum. Model parameter updates are computed based on partial derivatives of the loss, with respect to the individual parameters.\ The size of the update is dependent on the magnitude of the gradient of the loss i.e. the steeper the gradient, the larger the update. A training algorithm uses gradient descent to guide the loss toward the global minimum, but in practice a local minimum is usually the best that can be achieved. In doing so the algorithm attempts to optimise the model, such that it can estimate the underlying distribution of the data, enabling it to perform inference. \par
+\noindent A popular method of optimisation is gradient descent, which tries to descend to the lowest region of the loss surface: the global minimum. Model parameter updates are computed based on partial derivatives of the loss, with respect to the individual parameters.\ The size of the update is dependent on the magnitude of the gradient of the loss, i.e. the steeper the gradient, the larger the update. A training algorithm uses gradient descent to guide the loss toward its global minimum, but in practice a local minimum is usually the best that can be achieved. In doing so the training algorithm attempts to optimise the model, such that it can estimate the underlying distribution of the data and perform inference on samples not seen during training. \par
 
-\noindent During training, mini-batch optimisation is often used along with gradient descent to update model parameters. In mini-batch optimisation the training set is divided into batches, where model parameters are updated after a mini-batch has been processed.\ This is in contrast to stochastic gradient descent where parameters are updated per sample, and batch gradient descent where parameters are updated after a run through the entire training set. Mini-batch optimisation is both robust to convergence (not as susceptible to local optima), and compute efficient. \par
+\noindent During training, mini-batch optimisation is often used along with gradient descent to update model parameters. In mini-batch optimisation the training set is divided into batches, where model parameters are updated after a mini-batch has been processed.\ This is in contrast to stochastic gradient descent where parameters are updated per sample, and batch gradient descent where parameters are updated after a run through the entire training set. Mini-batch optimisation is both robust in terms of convergence (not as susceptible to local optima), and compute efficient. \par
 
-\noindent The supervised learning training algorithm is expressed as follows: \par 
+\noindent The supervised learning training algorithm is expressed as in Algorithm 1. \par 
 
 \bigskip
 
 \begin{algorithm}[H]
 	\SetAlgoLined
 	\textbf{Input} 
-	Training set \begin{math} D = \{(x_i, \; y_i)\}_{i=1}^N \end{math} of input features and output labels\;
-	Intialise parameters $w \in \mathbb{R}^d$, for model \begin{math} M(w) \end{math} // e.g. random normal initialisation \\
-	\For{Epoch \begin{math} k =  1 \dots \; K  \end{math}}{
-  		\begin{math} B \gets sample(D, s) \end{math} // sample mini-batch of size \begin{math} s \end{math} \\
-	 	\For{(x, y) \begin{math} \in B \end{math}}{
-     			\begin{math} y' \gets predict(x, \; y') \end{math} // predict label for sample \\
-			\begin{math} e \gets y' - y \end{math} // compute loss
+	Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $ of input features and output labels \\
+	Initialise parameters $ w \in \mathbb{R}^d $, for model $ M(w) $ // e.g. random normal initialisation \\
+	\For{Epoch $ k =  1 \dots \; K $}{
+  		$ B \gets sample(D, s) $ // sample mini-batch of size $ s $ \\
+	 	\For{(x, y) $ \in B $}{
+     			$ y' \gets predict(x, \; w) $ // predict label for sample $ x $ using parameters $ w $ \\
+			$ l \gets -(ylog(y') + (1 - y)log(1- y')) $ // compute cross-entropy loss \\
+			$ e \gets e + l $ // add loss to zero-initialised batch B loss $ e $ 
      			}
-		$ w \gets w - \lambda \cdot \nabla_{w} J_{e}(w) $ // gradient descent update of model with respect to loss $ e $, \\  // where $ \lambda$  is the learning rate, and $ J_{e}(w) $ is the partial derivative of parameter $ w $ 
+		$ w \gets w - \lambda \cdot J_{e}(w) $ // gradient descent update of model where $ \lambda $  is the learning rate, and $ J_{e}(w) $ are the partial derivatives of the loss with respect to the parameters $ w $ 
 	}
-	\caption{Supervised Learning}
+	\caption{Supervised learning with mini-batch gradient descent}
 \end{algorithm}
 
 
@@ -142,7 +143,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution1}\hfill
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution2}\hfill
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution3}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step computes a summary of that location as a single value.}
 \end{figure}
 
@@ -151,7 +152,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{translation_invariance}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Two images of the same object, in different locations. Filter parameter sharing enables input translation invariance. The CN should predict "car" on both occasions.}
 \end{figure}
 
@@ -160,7 +161,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{A basic CN consisting of an input, convolutional layer, fully connected layer and output layer.}
 \end{figure}
 
@@ -187,7 +188,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution2}
 		}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Convolution operation with a stride of 1.}
 	
 	\parbox{.5\linewidth}{
@@ -199,14 +200,14 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{stride_of_2}
 		}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Convolution operation with a stride of 2.}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{padding_and_dilation}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{An input image with a padding of $ 1 $, convolved with a filter with a dilation of $ 2 $.}
 \end{figure}
 
@@ -257,7 +258,7 @@ An IID dataset is order invariant, because the probability of seeing one data po
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recurrent_network}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{A basic RN consisting of an input, hidden and output layer. An internal state is added to hidden layer nodes which tracks previous output. This state is summed with the node output.}
 \end{figure}
 
