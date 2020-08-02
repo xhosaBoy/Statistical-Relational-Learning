@@ -16,7 +16,7 @@ There are many tasks which are hard to write algorithms for. For example, writin
  
 \noindent Machine learning (ML) can be used to solve such tasks, as well as others like weather prediction, stock price forecasting and risk modelling.\ ML is the process of using data to build prediction models, where these models typically output discrete (classification) or continuous (regression) values. There are various learning paradigms, including supervised learning, unsupervised learning and reinforcement learning, used to train models from data in order to perform a specific task. The models can be divided into three classes, namely shallow, deep and probabilistic ~\citep{hastie2009elements}. \par
 
-\noindent This chapter presents a brief introduction to the supervised learning paradigm, a description of deep convolutional \unskip ~\citep{lecun1998gradient} and recurrent \unskip ~\citep{werbos1988generalization} network models, a brief discussion on language models, and a discussion on regularisation techniques for deep models, including early stopping \unskip~\citep{prechelt1998early}, dropout \unskip ~\citep{srivastava2014dropout} and batch normalisation \unskip ~\citep{ioffe2015batch}. 
+\noindent This chapter presents a brief introduction to the supervised learning paradigm, a description of deep convolutional \unskip ~\citep{lecun1998gradient} and recurrent \unskip ~\citep{werbos1988generalization} network models, a discussion on regularisation techniques for deep models, including early stopping \unskip~\citep{prechelt1998early}, dropout \unskip ~\citep{srivastava2014dropout} and batch normalisation \unskip ~\citep{ioffe2015batch}; as well as a brief discussion on language models. 
 
 
 %********************************** %First Section  **************************************
@@ -229,23 +229,15 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
 
 \subsection{Recurrent networks}
 
-An IID dataset is order invariant, because the probability of seeing one data point in no way influences the event of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance.\ Some data is however dependent, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is influenced by the steps before it. \par
+An IID dataset is order invariant, because the probability of seeing one data point in no way influences the event of seeing another. Practically, this means shuffling the data when training a model has no influence on prediction performance.\ However some data may contain dependencies, and when training a model the order of the data points matters. Such data is presented as a sequence which is broken into steps, where each step is influenced by the steps before it. \par
 
-\noindent An example of dependent data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is influenced by the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. If we try to predict the temperature one day into the future, it is reasonable to believe that if the daily high on day $ t - 2 $ was mild, and the daily high on day $ t - 1 $ was warm, the daily high on day $ t $ may be hot. \par
+\noindent An example of dependent data is the daily temperature of Cape Town over a year. This sequence can be broken into steps, where each step is the daily high in degrees Celsius. The temperature on day $ t $ is influenced by the temperature on the preceding days, $ t - 1, \; t - 2, \; \dots \; t - n $. \par
  
-\noindent Text expressed in natural language is another example of sequential data. This data is arranged in sentences which are comprised of sequences of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the words at $t -1$ and $t - 2$. For example in the sentence, "I think, therefore I ...", we would want to predict "am" as the next word. \par
+\noindent Text expressed in natural language is another example of sequential data. This data is arranged in sentences which are comprised of sequences of words. Each word represents a step in the sequence, and if we try to predict the word at step $ t $, it may be useful to have context of the words at $t -1$ and $t - 2$. For example, in the sentence "I think, therefore I ...", we would want to predict "am" as the next word. \par
 
-\noindent In the task of one step ahead prediction, we build models that attempt to estimate a probability distribution over a sequence. This distribution estimates the likelihood of seeing a data point given a preceding sequence. Formally we estimate a conditional distribution given a sequence. \par 
+\noindent In the task of one step ahead prediction, we build models that attempt to estimate a probability distribution over a sequence. This distribution estimates the likelihood of seeing a data point given a preceding sequence. \par 
 
-\noindent The conditional distribution is defined as follows:
-\begin{equation}
-	\begin{split}
-		\Pr( x_t | x_{t - 1},  x_{t - 2}, \dots,  x_{t - n} ) & = \Pr(x_t | x_{t - 1}) \Pr(x_{t - 1}| x_{t - 2}) \; \dots \; \Pr(x_{t - n - 1}| x_{t - n}) \Pr(x_{t-n}) \\
-		& = \prod_{t=1}^N \Pr(x_t | x_{t - 1})
-	\end{split}
-\end{equation}
-
-\noindent Recurrent networks (RNs) estimate the conditional distribution of dependent data points from sequential input by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps combined with a recurrent parameter matrix using an matrix-vector product operator.\ RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, see Figure 2.10. \par
+\noindent Recurrent networks (RNs) model the conditional distribution of sequential input data by computing a summary of previous data points. This summary is defined as an internal state of the model, and contains outputs from previous sequence steps combined with a recurrent parameter matrix using a matrix-vector product operator.\ RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, as illustrated in Figure 2.10. \par
 
 \begin{figure}[H]
    	\centering
@@ -256,31 +248,31 @@ An IID dataset is order invariant, because the probability of seeing one data po
 
 \noindent Additional context applied to RN prediction is made at the expense of a higher number of model parameters. The increase in parameters is linear in the number of sequence steps considered in the context summary. Practically this means a truncated sequence is used to provide context during training, to keep computation tractable. \par
 
-\noindent In the following we discuss the RN forward pass. \par
+\noindent In the following paragraph we discuss the RN forward pass. \par
 
 \noindent \textbf{Recurrent layers.} RNs build context by generating a representation of a window of data samples. This representation is defined as a state vector, which is added to a hidden vector and bias of a layer within the network. The layer output is then passed through a nonlinear activation before being passed to the next layer. RN layers are comprised of cells, which contain an internal state, hidden output and a bias \unskip ~\citep{DLIndaba2018}. An RN cell can thus be defined as follows: 
 \begin{equation}
-	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b)
+	h_t = \sigma(W_{hh}h_{t-1} + W_{xh}x_t + b) \; ,
 \end{equation}
 
-\noindent where $h_t$ is the cell output, and added to the state vector as context for the following sequence step. $\sigma$ is a nonlinear activation function, $W_{hh}$ contains the recurrent parameters, $W_{xh}$ contains the non-recurrent parameters, $x_t$ is the input and $b$ is the bias. $h_t$ is then used as input to a fully connected layer for prediction at every step, which is given by:
+\noindent where $ h_t $ is the cell output, and added to the state vector as context for the following sequence step. $ \sigma $ is a nonlinear activation function, $ W_{hh} $ contains the recurrent parameters, $ W_{xh }$ contains the non-recurrent parameters, $ x_t $ is the input and $ b $ is the bias.\ $ h_t $ is then used as input to a fully-connected layer for prediction at every step, which is given by:
 \begin{equation}
-	y_t = \sigma(W_{hy}h_{t} + b)
+	y_t = \sigma(W_{hy}h_{t} + b) \; .
 \end{equation}
 
-\noindent \textbf{Backpropagation through time.} RNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps.\ Parameter gradients are computed at each step with respect to the error generated at that prediction step. The error signal generated is backpropagated through the RN layer to adjust the cell state, hidden and bias parameters, by computing their first order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
+\noindent \textbf{Backpropagation through time.} RNs are trained using a method called backpropagation through time (BPTT),  a gradient-based process that updates recurrent parameters by unrolling cell outputs over a window of sequence steps.\ Parameter gradients are computed at each step with respect to the error generated at that prediction step. The error signal generated is backpropagated through the RN layer to adjust the cell state, hidden and bias parameters, by computing the appropriate first-order partial derivatives. In practice, a fixed sequence length is decided upfront for updating cell parameters, leading to a process called truncated BPTT, which has compute resource advantages. Standard backpropagation is used for non-recurrent parameter updates. \par
 
 \noindent The gradient of the loss function $ E_t $ at time $ t $ with respect to $ W_{hh} $ is a function of the current hidden state and model predictions $\hat{y_t}$ at time $ t $:  
 \begin{equation}
-	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}}
+	\frac{\partial E_t} {\partial W_{hh}} = \sum_{k=0}^{t}\frac{\partial E_t} {\partial \hat{y_t}}\frac{\partial \hat{y_t}} {\partial h_t}\frac{\partial h_t} {\partial h_k}\frac{\partial h_k} {\partial W_{hh}} \; .
 \end{equation}
 
 \noindent One problem experienced by RNs is the multiplicative effect of state vector derivates throughout sequence-time. This problem can be seen in the following expression:
 \begin{equation}
-	\frac{\partial h_t} {\partial h_k} = \prod_{j=k+1}^t\frac{\partial h_j} {\partial h_{j-1}}
+	\frac{\partial h_t} {\partial h_k} = \prod_{j=k+1}^t\frac{\partial h_j} {\partial h_{j-1}} \; .
 \end{equation}
 
-\noindent This multiplicative operation causes small gradients to become progressively smaller as the sequence window becomes larger, or large gradients to become much larger. This is called the vanishing or exploding gradient problem and has lead to the development of RN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
+\noindent This multiplicative operation causes small gradients to become progressively smaller as the sequence window becomes larger, or large gradients to become much larger. It is called the vanishing or exploding gradient problem and has lead to the development of RN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
 
 %********************************** %Third Section  **************************************
