@@ -12,24 +12,24 @@
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
 
-Knowledge graphs (KGs) are a framework used to represent logical structure in data \unskip ~\citep{koller2007introduction}. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in encoding the relational data representation by KGs, dyadic relationships between entities expressed nodes and edges.\ Recently approaches to combine statistical learning focused on feature representation of data, with relational data representation have been attempted in a KG link prediction setting \unskip~\citep{kazemi2018simple, chang2014typed, kang2012gigatensor}, statistical relational learning (SRL). Tensor factorisation has been explored as an approach to link prediction \unskip ~\citep{nickel2011three, bordes2013translating, trouillon2016complex}.\ This approach has shown promise as a machine learning approach in domains that are high-dimensional and sparse. It is also compute efficient, and lends itself to GPU computation common in modern machine learning workloads. \par
+Knowledge graphs (KGs) are a framework used to represent logical structure in data \unskip ~\citep{koller2007introduction}. The resource description framework (RDF) formalism, subject-predicate-object, is especially useful in encoding the relational data representation in KGs: dyadic relationships between entities expressed as nodes and edges.\ Recent approaches to include statistical learning focused on feature representation of data, with relational data representation having been attempted in a KG link prediction setting \unskip~\citep{kazemi2018simple, chang2014typed, kang2012gigatensor} for statistical relational learning (SRL). Tensor factorisation has been explored as an approach to link prediction \unskip ~\citep{nickel2011three, bordes2013translating, trouillon2016complex}.\ This has shown promise as a machine learning approach in domains that are high-dimensional and sparse. It is also compute efficient, and lends itself to GPU computation as is common in modern machine learning workloads. \par
 
-\noindent KG tensor factorisation decomposes relational score tensors into an entity matrix, a relational tensor and transposed entity matrix.\ The entity matrix is composed of entity vectors, latent entity representations consisting of trainable parameters that need to be learned. The relational tensor is composed of relational matrix slices, latent relational representations also consisting of trainable parameters that need to be learned, corresponding to the set of relation types in the KG. The product between the entity matrix, the relational tensor and the transposed entity matrix is the bilinear tensor product. In practise this is performed by expressing KG facts (entity-relation-entity) as RDF triples (subject-predicate-object). Taking the vector-matrix product between the subject and predicate, generating a subject-predicate vector, and taking the inner product of this vector with the object vector, illustrated in Figure 3.1. This operation computes a relational score tensor with unnormalised scores of potential relationships between entities, indexed by relation. \par
+\noindent KG tensor factorisation decomposes relational score tensors into an entity matrix, a relational tensor and a transposed entity matrix.\ The entity matrix is composed of entity vectors, which are latent entity representations consisting of trainable parameters that need to be learned. The relational tensor is composed of relational matrix slices, which are latent relational representations also consisting of trainable parameters that need to be learned, corresponding to the set of relation types in the KG. The product between the entity matrix, the relational tensor and the transposed entity matrix is the bilinear tensor product. In practice this is performed by expressing KG facts (entity-relation-entity) as RDF triples (subject-predicate-object). A vector-matrix product is taken between the subject and predicate, generating a subject-predicate vector, and an inner product of this vector and the object vector is taken. Figure 3.1 illustrates. This operation computes a relational score tensor with unnormalised scores of potential relationships between entities, indexed by relation. \par
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{inference}
-	\captionsetup{justification=centering}
+    	\includegraphics[width=0.8\textwidth, height=0.3\textwidth]{inference}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Relation prediction between two entities. Subject $ i $ and object $ j $ are two distinct entities, and predicate $ k $ is a relation from the set of relations in the KG. A product is taken between subject-predicate vector $ h $ and an object $ j $ to compute a relational score $ s $.}
 \end{figure}
 
 \noindent Previous tensor factorisation approaches focused on limiting the total number of model parameters in order to scale to large KGs. This approach was often at the expense of complex entity-relational interaction modelling.\ The neural tensor network (NTN) \unskip~\citep{socher2013reasoning}, a nonlinear extension of tensor factorisation, was the first successful attempt to take advantage of the expressiveness of neural compositional models. It relies on using a recursive network (RCN) \unskip ~\citep{pollack1990recursive} to output a compositional score between two entities, adding that score to the bilinear tensor product, and passing the result through a hyperbolic tangent function. The product between the result and an output layer of relation parameters is then taken, which generates a measure of confidence in potential relations between the two entities.\par
 
-\noindent Convolutional entity-relational modelling (ConvE) \unskip~\citep{dettmers2018convolutional} was similarly effective at extending tensor factorisation.\ ConvE lengthwise concatenates reshaped subject and predicate vectors into an subject-predicate matrix, then applies a 2-dimensional ($ 2D $) convolution operation on this matrix, convolutional tensor factorisation. This generates feature maps which are reshaped and flattened into a hidden vector which is passed through a nonlinearity. A product is then taken between the vector and an object vector, to compute a relational score.\ Here a sigmoid function is applied to generate a probability of a potential relationship between the two entities. \par 
+\noindent Convolutional entity-relational modelling (ConvE) \unskip~\citep{dettmers2018convolutional} was similarly effective at extending tensor factorisation.\ ConvE lengthwise concatenates reshaped subject and predicate vectors into an subject-predicate matrix, then applies a 2-dimensional ($ 2D $) convolution operation on this matrix, which leads to convolutional tensor factorisation. This generates feature maps which are reshaped and flattened into a hidden vector and then passed through a nonlinearity. A product is then taken between the vector and an object vector, to compute a relational score.\ Here a sigmoid function is applied to generate a probability of a potential relationship between the two entities. \par 
 
-\noindent HypER \unskip~\citep{balazevic2019hypernetwork} extends convolutional tensor factorisation. It models entity-relational interactions by using a hypernetwork \unskip~\citep{ha2016hypernetworks} to generate $ 2D $ relation-specific convolutional filters as predicate matrices. A $ 2D $ convolution is then taken between a subject vector and predicate matrix, which generates a feature map that is reshaped and passed through a fully connected layer with a nonlinearity. An inner product is taken between the generated hidden vector and an object vector, which computes a relational score. And once again a sigmoid function is applied to generate a probability of a potential relationship. \par
+\noindent HypER \unskip~\citep{balazevic2019hypernetwork} extends convolutional tensor factorisation. It models entity-relational interactions by using a hypernetwork \unskip~\citep{ha2016hypernetworks} to generate $ 2D $ relation-specific convolutional filters as predicate matrices. A $ 2D $ convolution is then taken between a subject vector and predicate matrix, which generates a feature map that is reshaped and passed through a fully-connected layer with a nonlinearity. An inner product is taken between the generated hidden vector and an object vector, which computes a relational score. Once again a sigmoid function is applied to generate a probability of a potential relationship. \par
 
-\noindent In the rest of this chapter we assess the NTN model and attempt a simple improvement by applying early stopping \unskip ~\citep{prechelt1998early}, adaptive moment estimation (Adam) optimisation \unskip ~\citep{kingma2014adam}, and hyperparameter random search \unskip ~\citep{bergstra2012random} to the training algorithm. We then propose HypER+, an extension of the HypER model which compensates for covariate shift introduced by the hypernetwork when generating relation-specific convolutional filters. Finally we extend HypER+ by intialising entity and relation model embeddings using pre-trained word vectors from the GloVe language model \unskip ~\citep{pennington2014glove}. In doing so we take advantage of semantic information contained in these vectors. 
+\noindent In the rest of this chapter we assess the NTN model and attempt a simple improvement by applying early stopping \unskip ~\citep{prechelt1998early}, adaptive moment estimation (Adam) optimisation \unskip ~\citep{kingma2014adam}, and hyperparameter random search \unskip ~\citep{bergstra2012random} to the training algorithm. We then propose HypER+, an extension of the HypER model which compensates for covariate shift introduced by the hypernetwork when generating relation-specific convolutional filters. Finally we extend HypER+ by initialising entity and relation model embeddings using pre-trained word vectors from the GloVe language model \unskip ~\citep{pennington2014glove}. In doing so we take advantage of semantic information contained in these vectors. 
 
 
 % **************************** First Section **************************
@@ -64,7 +64,7 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Recursive network which constructs a composition tree between inputs. It begins with a full tree and is pruned during training to obtain the optimal structure.}
 \end{figure}
 
@@ -78,7 +78,7 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.8\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias. The result is squashed using a hyperbolic tangent function, and then multiplied by an output vector of relation parameters.}
 \end{figure}
 
@@ -150,7 +150,7 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{convolutional_entity_representations_final}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{ConvE forward pass which computes a relational score $ s_{i,k,j} $ between subject $ i $, predicate $ k $ and object $ j $.}
 \end{figure}
 
@@ -185,7 +185,7 @@ A hypernetwork is a meta network that generates parameters for a main network \u
 \begin{figure} [H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input, and the main network takes an image as input.}
 \end{figure}
 
@@ -219,6 +219,7 @@ A hypernetwork is a meta network that generates parameters for a main network \u
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.5\textwidth]{hyper_neural_tensor_network_final}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{Hypernetwork convolutional entity representations.}
 \end{figure}
 
