@@ -875,6 +875,9 @@ wish to left align your text}
 % Submission Text
 \newcommand{\submissiontext}{This dissertation is submitted for the degree of }
 
+% Supervisor Text
+\newcommand{\supervisortext}{This dissertation supervisor }
+
 % keywords (These keywords will appear in the PDF meta-information
 % called `pdfkeywords`.)
 \newcommand{\@keywords}{}
@@ -999,8 +1002,8 @@ wish to left align your text}
 \thispagestyle{empty}
 }{
 \flushright
-\@author{}\\
-\@degreedate{}
+% \@author{}\\
+\@supervisor{December 2020}
 \vfill
 }
 
@@ -1165,24 +1168,6 @@ wish to left align your text}
   \end{minipage}
 \end{lrbox}
 
-% Supervisor Box
-\newsavebox{\PHD@supervisor}
-\begin{lrbox}{\PHD@supervisor}
-  \begin{minipage}[c]{\textwidth}
-    \ifthenelse{\equal{\@supervisor}{}}{
-      % supervisor is not defined
-    }{
-      \begin{center}
-        \makebox[\widthof{supervisorrole} + \@supervisorlinewidth][c]{
-          \Large
-          \@supervisorrole \parbox[t]{\@supervisorlinewidth}{\@supervisor}
-        }
-      \end{center}
-      \vspace{0.5em}
-    } % supervisor is defined
-  \end{minipage}
-\end{lrbox}
-
 % Advisor Box
 \newsavebox{\PHD@advisor}
 \begin{lrbox}{\PHD@advisor}
@@ -1218,6 +1203,35 @@ wish to left align your text}
       \large \submissiontext \par
       \large \textit {\@degreetitle} \par
     \end{center}
+  \end{minipage}
+\end{lrbox}
+
+% Supervisor Box
+%\newsavebox{\PHD@supervisor}
+%\begin{lrbox}{\PHD@supervisor}
+%  \begin{minipage}[c]{\textwidth}
+%    \ifthenelse{\equal{\@supervisor}{}}{
+%      % supervisor is not defined
+%    }{
+%      \begin{center}
+%        \makebox[\widthof{supervisorrole} + \@supervisorlinewidth][c]{
+%          \Large
+%          \@supervisorrole \parbox[t]{\@supervisorlinewidth}{\@supervisor}
+%        }
+%      \end{center}
+%      \vspace{0.5em}
+%    } % supervisor is defined
+%  \end{minipage}
+%\end{lrbox}
+
+% Supervisor Box
+\newsavebox{\PHD@supervisor}
+\begin{lrbox}{\PHD@supervisor}
+  \begin{minipage}[c]{\textwidth}
+      \begin{center}
+	 \large \supervisor \par
+	 \large \textit {\@degreetitle} \par
+      \end{center}
   \end{minipage}
 \end{lrbox}
 
