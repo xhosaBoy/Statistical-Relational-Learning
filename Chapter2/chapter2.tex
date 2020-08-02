@@ -81,37 +81,36 @@ An ML prediction model takes as input a set of features. These features are attr
 
 Deep learning models have become popular for classification and regression tasks, and machine learning tasks in general.\ The reason for this is that deep models solve a major problem with shallow models, which is to select the best features with which to represent raw input samples \unskip ~\citep{Goodfellow-et-al-2016}.\ The problem of feature selection has resulted in a methodology used during shallow model development, called feature engineering.\ It includes techniques such as bucketing, crossing, hashing and embedding.\ These techniques are designed to build feature representations that will result in high classification and regression accuracy.\ Deep models attempt to discover optimal representations automatically during training, hence their superior performance on a number of machine learning tasks. \par
 
-\noindent Multilayer perceptrons (MLPs) are deep learning models implemented as feed-forward neural networks, consisting of $N$ layers applied to an input vector $ x $.\ These models compute unnormalised scores, known as logits, for each of the possible outputs.\ They construct a composition of nonlinear functions which describe an analytical definition of the generative process of the data used to train them. The utility of composition is what gives them the capability needed to model complex datasets. MLPs achieve nonlinear expressiveness with the use of nonlinear activation functions, such as the ReLU, Sigmoid and Tanh functions.  \par
+\noindent Multilayer perceptrons (MLPs) are deep models implemented as feed-forward neural networks, consisting of $N$ layers applied to an input vector $ x $.\ These models compute unnormalised scores, known as logits, for each of the possible outputs.\ They construct a composition of nonlinear functions which describe an analytical definition of the generative process of the data used to train them. The utility of composition is what gives them the capability needed to model complex datasets. MLPs achieve nonlinear expressiveness with the use of nonlinear activation functions, such as the ReLU, sigmoid and tanh functions.  \par
 
-\noindent MLPs generate an output by executing a number of steps in what is called the forward pass, where each step is represented as a layer. A basic MLP may consist of three layers: an input, hidden and output layer. It uses a hidden layer comprised of neurons (nodes) to generate an activation (output) per node.\ Each node computes a linear combination of inputs from the previous layer, and then transforms the result using a nonlinear activation function.\ The set of node outputs is a hidden vector representation, which is passed to the following layer as input. The output layer generates a logit, using a linear combination of inputs from the hidden layer, see Figure 2.2. The more hidden layers the model has, the deeper it is.
+\noindent MLPs generate an output by executing a number of steps in what is called the forward pass, where each step is represented as a layer. A basic MLP may consist of three layers (as shown in Figure 2.2): an input, hidden and output layer. A hidden layer is comprised of neurons (nodes) that generate an activation (output) per node.\ Each node computes a linear combination of inputs from the previous layer, and then transforms the result using a nonlinear activation function.\ The set of node outputs is a hidden vector representation, which is passed to the following layer as input. The output layer generates a logit, using a linear combination of inputs from the hidden layer. The more hidden layers the model has, the deeper it is said to be.
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{multilayer_perceptron}
-	\captionsetup{justification=centering}
+	\captionsetup{justification=centering, name={Figure}}
 	\caption{A basic MLP consisting of an input, hidden and output layer. The model can comprise an arbitrary number of hidden layers, containing an arbitrary number of nodes.}
 \end{figure}
 
 \noindent The forward pass can be expressed as follows:
 \begin{subequations}
 	\begin{gather}
-		f_0 = x \\
-		f_i=\sigma_i(W_{hi}f_{i - 1} + b_{hi}) \quad i \in [1, \; N] \\
-		f_o = W_{o}f_N + b_o
+		f_0 = x \; , \\
+		f_i=\sigma_i(W_{i}f_{i - 1} + b_{i}) \quad i \in [1, \; N] \; .
 	\end{gather}
 \end{subequations}
 
-\noindent Where $ f_0 $ is the input layer, the features of input vector $ x \in \mathbb{R}^{m_0} $. $ f_i $ is a hidden layer output vector of size $ m_i $, $ f_{i - 1} $ is the input vector from the previous layer of size $ m_{i-1} $. $ W_{hi} \in \mathbb{R}^{m_i \times m_{i - 1}} $ is a matrix of hidden layer parameters, $ b_{hi} \in \mathbb{R}^{m_i} $ is a vector of hidden bias parameters. $ \sigma_i \in \mathbb{R}^{m_i} $ a vector nonlinear activation functions. $ f_o $ is the output layer, a vector of logits $ y \in \mathbb{R}^o $, $ f_N $ is the final input vector of size $ m_{N} $. $ W_{o} \in \mathbb{R}^{m_N \times m_o} $ is a matrix of output layer parameters, $ b_{o} \in \mathbb{R}^{m_o} $ is a vector of output bias parameters.
+\noindent where $ f_0 $ is the input layer, containing the features of input vector $ x \in \mathbb{R}^{m_0} $. $ f_i $ is a hidden layer output vector of size $ m_i $, $ f_{i - 1} $ is the input vector from the previous layer of size $ m_{i-1} $. $ W_{i} \in \mathbb{R}^{m_i \times m_{i - 1}} $ is a matrix of layer parameters, $ b_{i} \in \mathbb{R}^{m_i} $ is a vector of bias parameters. $ \sigma_i $ is the activation function at layer $ i $.
 
-\noindent Loss functions are used to train deep models under a supervised learning paradigm.\ The loss function is minimised with gradient descent, which in the case of MLPs makes use of a process called backpropagation.\ This process involves the computation of first order partial derivatives, and the adjustment of the parameters in a direction and magnitude relating to their respective derivative. In a network with $ N $ layers, the gradient for the respective parameter in layer $ i $ is given by:
+\noindent Loss functions are used to train deep models under a supervised learning paradigm.\ The loss function is minimised with gradient descent, which in the case of MLPs makes use of a process called backpropagation.\ This process involves the computation of first-order partial derivatives, and the adjustment of the parameters in a direction and magnitude relating to those derivatives. In a network with $ N $ layers, the gradient for the respective parameter in layer $ i $ is given by:
 \begin{subequations}
 	\begin{gather}
-		\frac{\partial E} {\partial W_i} = \frac{\partial E} {\partial z_N}\frac{\partial z_N} {\partial z_{N - 1}}  \dots \frac{\partial z_{i + 2}} {\partial z_{i + 1}}\frac{\partial z_{i + 1}} {\partial W_{i}} \\
-		\frac{\partial E} {\partial b_i} = \frac{\partial E} {\partial z_N}\frac{\partial z_N} {\partial z_{N - 1}}  \dots \frac{\partial z_{i + 2}} {\partial z_{i + 1}}\frac{\partial z_{i + 1}} {\partial b_{i}}
+		\frac{\partial E} {\partial W_i} = \frac{\partial E} {\partial z_N}\frac{\partial z_N} {\partial z_{N - 1}}  \dots \frac{\partial z_{i + 2}} {\partial z_{i + 1}}\frac{\partial z_{i + 1}} {\partial W_{i}} \; , \\
+		\frac{\partial E} {\partial b_i} = \frac{\partial E} {\partial z_N}\frac{\partial z_N} {\partial z_{N - 1}}  \dots \frac{\partial z_{i + 2}} {\partial z_{i + 1}}\frac{\partial z_{i + 1}} {\partial b_{i}} \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ E $ is the loss function, $ W_i $ is parameter matrix for layer $ i $, $ z $ is the layer output, and $ b_i $ is the bias vector at layer $ i $. The matrix $ \frac{\partial z_{i + 1}} {\partial W_i} $ is called a Jacobian matrix.\ The Jacobian matrix contains the partial derivatives of the layer-specific parameters, with respect to the loss contributed by each parameter to the overall output error. It summarizes all the ways in which changing the matrix $ W_i $ by a small amount will influence the output $ z_{i + 1} $. The matrix is expressed as follows: \par
+\noindent where $ E $ is the loss function, $ W_i $ is parameter matrix for layer $ i $, $ z $ is the layer output, and $ b_i $ is the bias vector at layer $ i $. The matrix $ \frac{\partial z_{i + 1}} {\partial W_i} $ is called a Jacobian matrix.\ It summarises all the ways in which changing the matrix $ W_i $ by a small amount will influence the output $ z_{i + 1} $. The matrix is expressed as follows: \par
 \begin{equation}
 	\renewcommand\arraystretch{2}
 	J = \begin{bmatrix}
@@ -119,11 +118,11 @@ Deep learning models have become popular for classification and regression tasks
            	\frac{\partial z^1}{\partial W^2} &\frac{\partial z^2}{\partial W^2} & \cdots & \frac{\partial z^m}{\partial W^2} \\
            	\vdots & \vdots & \ddots & \vdots \\
            	\frac{\partial z^1}{\partial W^n} & \frac{\partial z^2}{\partial W^n} & \cdots & \frac{\partial z^m}{\partial W^n} \\
-        \end{bmatrix}
+        \end{bmatrix} \; .
 \end{equation}
 
 \medskip
-\noindent Different schemes are used to initialise layer parameters $ W_i $ and $ b_i $. These schemes are sensitive to the choice of activation function, $ \sigma_i $, used.\ Sigmoid and Tanh functions can saturate if parameters are intialised with values that are too large, or can die if intialised with values which are too small, which in turn can lead to exploding and vanishing parameter gradients. In order to overcome this problem Xavier intialisation \unskip ~\citep{glorot2010understanding} is used, which tries to scale the parameters by the number of layer inputs and outputs.\ This limits the variance of layer outputs and helps stabilise gradient updates.\ When the ReLU activation is used He intialisation \unskip ~\citep{he2015delving}, a modification of Xavier initialisation, is commonly applied. \par
+\noindent Different schemes are used to initialise layer parameters $ W_i $ and $ b_i $. The appropriateness of these schemes depends on the choice of activation function, $ \sigma_i $, used.\ Sigmoid and tanh functions can lead to saturation if parameters are initialised with values that are too large, or to vanishment if initialised with values which are too small, which in turn can lead to exploding and vanishing parameter gradients. In order to overcome this problem Xavier intialisation \unskip ~\citep{glorot2010understanding} is used, which scales the initial parameter values by the number of layer inputs and outputs.\ This limits the variance of layer outputs and helps stabilise gradient updates.\ When the ReLU activation is used He initialisation \unskip ~\citep{he2015delving}, a modification of Xavier initialisation, is commonly applied. \par
 
 \noindent Together the forward pass algorithm and backpropagation implicitly allow the automatic discovery of the most meaningful representations used to generate model output.\ We refer the reader to \unskip ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and backpropagation. 
 
@@ -132,11 +131,11 @@ Deep learning models have become popular for classification and regression tasks
 
 \subsection{Convolutional networks}
 
-MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagenet}. In an MLP layer, all features of an input vector are fully connected to all other features when computing the layer output. The outputs of a layer are then all fully connected to each other in the following layer. This interconnectedness causes the number of model parameters to grow exponentially in the number of input features. For example, a feed-forward network with two hidden layers consisting of $ 512 $ and $ 256 $ neurons respectively, an output size of $10$, and an input vector of shape $ \left [ \begin{matrix} 200 \times 1 \end{matrix} \right] $, ends up with a total of $ 236,810 $ parameters. This can cause a problem with high-dimensional input vectors such as images, where inputs may consist of a $ 3D $ input volume. MLPs may also need to be composed of a number of layers in order to produce satisfactory prediction performance when presented with high-dimensional inputs.\ In such a scenario, parameters can number in the millions, resulting in a model that is computationally inefficient to train. \par
+Deep MLPs may suffer from an explosion in the number of model parameters \unskip ~\citep{krizhevsky2012imagenet}. In an MLP layer, all features of an input vector are connected to all other features when computing the layer output. This interconnectedness causes the number of model parameters to grow rapidly in the number of neurons per layer. For example, a feed-forward network with two hidden layers consisting of $ 512 $ and $ 256 $ neurons respectively, an output size of $10$, and an input vector of shape $ 200 \times 1 $, ends up with a total of $ 236,810 $ parameters. This can cause a problem with high-dimensional input vectors such as images, where inputs may consist of a $ 3D $ input volume. MLPs may also need to be composed of a number of layers in order to produce satisfactory prediction performance when presented with high-dimensional inputs.\ In such a scenario, parameters can number in the millions, resulting in a model that can be impractically slow to train. \par
 
-\noindent MLPs are also not able to take direct advantage of structure in data.\ When images are represented as a matrix, common shapes (features) may appear in a regular composition. For example, different cars may appear regularly as a compositions of rectangles and circles. The inner product operator applied between the input (which is typically flattened into a vector) and layer parameters of an MLP, destroys the spatial information of the data, making the task of learning distributions of features harder. As a result, in order to possess sufficient learning capacity that adequately models variance in structural representations, MLPs need to be larger and despite this may still produce poor prediction performance. \par
+\noindent MLPs are also not able to take direct advantage of structure in data samples.\ When images are represented as a matrix, common shapes (features) may appear in a regular composition. For example, different cars may appear regularly as a compositions of rectangles and circles. The inner product operator applied between the input (which is typically flattened into a vector) and layer parameters of an MLP, disregards the spatial information of the data, making the task of learning class-discriminative features harder. As a result, in order to possess sufficient learning capacity that adequately models variance in structural representations, MLPs need to be impractically large. \par
 
-\noindent Convolutional networks (CNs) have been developed to overcome both the above mentioned problems experienced by MLPs. CNs make use of the convolutional operator instead of the inner product operator by using a filter, a matrix with trainable parameters. This process generates a latent feature map which is used in subsequent layers in the network, see Figure 2.4. Latent feature maps may capture structural patterns in data, building simple intermediate representations. CNs compose these representations into more sophisticated representations in subsequent layers. \par 
+\noindent Convolutional networks (CNs) have been developed to overcome both the above-mentioned problems experienced by MLPs. CNs make use of the convolutional operator instead of the inner product operator, with a small filter consisting of trainable parameters, as demonstrated in Figure 2.4.\ This process generates a latent feature map which is used in subsequent layers in the network. Latent feature maps may capture structural patterns in data, building simple intermediate representations. CNs compose these representations into more sophisticated representations in subsequent layers. \par 
 
 \begin{figure}[H]
 	\centering
@@ -144,38 +143,31 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution2}\hfill
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution3}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step computes a summary of that location as a single value.}
+	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step computes a summary of that location is computed as a single value.}
 \end{figure}
 
-\noindent The convolutional operator allows CNs to capture translation invariance in inputs, due to filter parameter sharing \unskip ~\citep{simonyan2014very}.\ Translation invariance is achieved when a CN layer generates an intermediate representation that is consistent under transformation. For example, if a different image of  car is used as input, and the car is located in a different position, that would lead to a consistent feature map representation being generated, see Figure 2.5. This property allows CNs to model the distribution of features using fewer parameters and smaller datasets. \par 
+\noindent The convolutional operator allows CNs to capture translation invariance in inputs, due to filter parameter sharing \unskip ~\citep{simonyan2014very}.\ Translation invariance is achieved when a CN layer generates an intermediate representation that is consistent under translational transformations. For example, if a different image of  car is used as input, and the car is located in a different position, that would lead to a consistent feature map representation being generated. This property allows CNs to model the distribution of features using far fewer parameters and smaller datasets. \par 
 
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{translation_invariance}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Two images of the same object, in different locations. Filter parameter sharing enables input translation invariance. The CN should predict "car" on both occasions.}
-\end{figure}
-
-\noindent The trade off one makes when using CNs is reduced flexibility in modelling complex decision boundaries.\ To mitigate this trade off, CNs are often implemented with a final set of fully connected layers, which enable the expressiveness required for accurate prediction, see Figure 2.6. \par
+\noindent The trade-off one makes when using CNs is reduced flexibility in modelling complex decision boundaries.\ To mitigate this trade-off, CNs are often implemented with a final set of fully-connected layers, which enable the expressiveness required for accurate prediction, as illustrated in Figure 2.5. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{A basic CN consisting of an input, convolutional layer, fully connected layer and output layer.}
+	\caption{A basic CN consisting of an input, convolutional layer, fully-connected layer and output layer.}
 \end{figure}
 
-\noindent In the following we discuss the CN forward pass. \par
+\noindent In the following paragraphs we discuss the CN forward pass. \par
 
-\noindent \textbf{Convolutional layers.} Convolutional layers rely on filters that are small spatially (along width and height), and extend through the full depth of an input volume. During the forward pass, each filter is convolved across the width and height of the input volume, where the element-wise dot product is computed between the entries of the filter and the input at a particular position. A $ 2D $ feature map is generated, that gives the responses of that filter at every spatial position of the input. Every convolutional layer has a set of filters, and each of them produces separate $ 2D $ feature maps, which are then stacked along the depth dimension to produce an output volume \unskip ~\citep{DLIndaba2017}. \par
+\noindent \textbf{Convolutional layers.} Convolutional layers rely on filters that are small spatially (along width and height), and extend through the full depth of an input volume. During the forward pass, each filter is convolved across the width and height of the input volume, where the elementwise dot product is computed between the entries of the filter and the input at a particular position. A $ 2D $ feature map is generated, that gives the responses of that filter at every spatial position of the input. Every convolutional layer has a set of filters, and each of them produces separate $ 2D $ feature maps, which are then stacked along the depth dimension to produce an output volume \unskip ~\citep{DLIndaba2017}. \par
 
-\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size (kernel), number of filters (channels), stride, padding, and dilation. The kernel size defines the width and height of the kernel, which is often square, and the filter is the set of kernels that is the same size as the depth of the input volume, see Figure 2.7. The number of channels controls the output volume depth. The stride defines the number of entries by which the filter will move when convolving it along the input volume, see Figure 2.8 and Figure 2.9. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field, see Figure 2.10. \par
+\noindent  The size of the output volume is controlled by the hyperparameters of the convolutional layer, namely the filter size, number of filters (channels), stride, padding, and dilation. The filter size defines the width and height of the filters, which are often square. The number of channels controls the output volume depth, as illustrated in Figure 2.6. The stride defines the number of entries by which the filter will move when convolving it along the input volume, as demonstrated in Figure 2.7 and Figure 2.8. Padding refers to the number of $ 0 $ entries added to the input volume along the width and height dimensions. It can be used to ensure that the output volume has the same width and height as the input volume. Dilation introduces spaces between the filter parameters, and is used to increase its receptive field, as shown in Figure 2.9. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{channels}
 	\captionsetup{justification=centering}
-	\caption{A $ 3D $ input image with 3 input channels. A kernel size of $ 2 $ is used, where the filter depth is the same as the number of input channels $ 3 $. Using $ 2 $ filters produces $ 2 $ output channels.}
+	\caption{A $ 3D $ input image with three input channels. A kernel size of $ 2 $ is used, where the filter depth is the same as the number of input channels. Using two filters produces two output channels.}
 \end{figure}
 
 \begin{figure}[H]
@@ -189,7 +181,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution2}
 		}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{Convolution operation with a stride of 1.}
+	\caption{Consecutive steps in a convolutional operation with a stride of 1.}
 	
 	\parbox{.5\linewidth}{
    		\centering
@@ -201,7 +193,7 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{stride_of_2}
 		}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{Convolution operation with a stride of 2.}
+	\caption{Consecutive steps in a convolutional operation with a stride of 2.}
 \end{figure}
 
 \begin{figure}[H]
@@ -213,23 +205,23 @@ MLPs suffer from an explosion of parameters \unskip ~\citep{krizhevsky2012imagen
 
 \noindent Convolution of an input volume $ X $ with a single filter $ W $ is given by: 
 \begin{equation}
-	O_{ij}^{d} = \sum_{a=0}^{f_w - 1}\sum_{b=0}^{f_h - 1}\sum_{c=0}^{d_i - 1}W_{a,b,c,d_o}X_{i+a,j+b,c}^{pad}  + b_{d_o} 
+	O_{ij}^{d} = \sum_{a=0}^{f_w - 1}\sum_{b=0}^{f_h - 1}\sum_{c=0}^{d_i - 1}W_{a,b,c,d_o}X_{i+a,j+b,c}^{pad}  + b_{d_o} \; , 
 \end{equation}
 
-\noindent where $ O_{ij}^d $ is the value of the output volume at position $ i, \; j $ of feature map $ d $. $ W_{a,b,c,d} \in \mathbb{R}^{f_wf_hd_id_o} $ is set of filters with kernel size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. $ X^{pad} $ is the padded input volume and $ a, \; b, \; c $ are indices into the volume dimensions. $ b \in \mathbb{R}^{d} $ is a bias vector. \par
+\noindent where $ O_{ij}^d $ is the value of the output volume at position $ (i, \; j) $ of feature map $ d $. $ W_{a,b,c,d} \in \mathbb{R}^{f_wf_hd_id_o} $ is a set of filters with size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. $ X^{pad} $ is the padded input volume, and $ a, \; b, \; c $ are indices into the volume dimensions. $ b \in \mathbb{R}^{d} $ is a bias vector. \par
 
-\noindent \textbf{Pooling layers.} A pooling layer is used to reduce the spatial size of the representation, in order to reduce the number of parameters in the network.\ Pooling layers provide latent features deeper in the network with a larger receptive field. In particular, pooling gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some $ 2D $ aggregation operation (usually a max, but others like average may also be used) to local regions of the input volume. A pooling layer has no trainable parameters itself. \par
+\noindent \textbf{Pooling layers.} A pooling layer is used to reduce the spatial size of the representation, in order to reduce the number of parameters in the network.\ Pooling layers provide latent features deeper in the network with a larger receptive field. In particular, pooling gives deeper latent features much larger receptive fields so that they can effectively combine smaller features together. Pooling layers apply some $ 2D $ aggregation operation (usually a maximum, but others like average may also be used) to local regions of the input volume. A pooling layer has no trainable parameters itself. \par
 
-\noindent \textbf{Fully connected layers.} In order to compute the output of a CN, one or more fully connected layers are required to flatten the output volume of the last convolutional layer. These layers perform the same functions as an MLP to compute an output vector. \par
+\noindent \textbf{Fully-connected layers.} In order to compute the output of a CN, one or more fully-connected layers are required to flatten the output volume of the last convolutional layer. These layers perform the same functions as an MLP to compute an output vector. \par
 
-\noindent \textbf{Convolutional backpropagation.} Computing parameter updates for convolutional filters follows the same first order differential procedure used in backpropagation for MLPs. Assuming a loss function $ E $, and having computed the derivative of this loss up to the output of the convolutional layer, $ \frac{\partial E} {\partial O} $, in order to update the parameters the convolutional layer, we require the derivative of $ E $ with respect to the weights and biases of the convolutional layer. We also require the derivative with respect to the input to the current layer $\frac{\partial E} {\partial X}$, and use this when computing the error to pass back to the previous layer. \par
+\noindent \textbf{Convolutional backpropagation.} Computing parameter updates for convolutional filters follows the same first-order differential procedure used in backpropagation for MLPs. Assuming a loss function $ E $, and having computed the partial derivatives of this loss up to the output of the convolutional layer, $ \frac{\partial E} {\partial O} $, in order to update the parameters the convolutional layer, we require the derivative of $ E $ with respect to the weights and biases of the convolutional layer. We also require the derivative with respect to the input to the current layer $\frac{\partial E} {\partial X}$, and use this when computing the error to pass back to the previous layer. \par
 
 \noindent The required derivatives are:
 \begin{subequations}
 	\begin{gather}
-		\frac{\partial E} {\partial b} = \frac{\partial E} {\partial O}\frac{\partial O} {\partial b} \\
-		\frac{\partial E} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial E} {\partial O_{ij}^{d}}\frac{\partial O_{ij}^d} {\partial W_{a,b,c,d}} \\
-		\frac{\partial E} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial E} {\partial O_{ij}^{d}}
+		\frac{\partial E} {\partial b} = \frac{\partial E} {\partial O}\frac{\partial O} {\partial b} \; , \\
+		\frac{\partial E} {\partial W_{a,b,c,d}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\frac{\partial E} {\partial O_{ij}^{d}}\frac{\partial O_{ij}^d} {\partial W_{a,b,c,d}} \; , \\
+		\frac{\partial E} {\partial X_{m,n,c}^{pad}} = \sum_{i=0}^{O_w - 1}\sum_{j=0}^{O_h - 1}\sum_{d=0}^{D - 1}W_{m-i,n-j,c,d}\frac{\partial E} {\partial O_{ij}^{d}} \; .
 	\end{gather}
 \end{subequations}
 
@@ -253,7 +245,7 @@ An IID dataset is order invariant, because the probability of seeing one data po
 	\end{split}
 \end{equation}
 
-\noindent Recurrent networks (RNs) estimate the conditional distribution of dependent data points from sequential input by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps combined with a recurrent parameter matrix using an matrix-vector product operator.\ RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, see Figure 2.11. \par
+\noindent Recurrent networks (RNs) estimate the conditional distribution of dependent data points from sequential input by modelling a summary of previous data points. This summary is defined as an internal state of the model, which contains outputs from previous sequence steps combined with a recurrent parameter matrix using an matrix-vector product operator.\ RNs thus extend feed-forward networks like MLPs and CNs by directly incorporating sequential dependencies between data in the model, see Figure 2.10. \par
 
 \begin{figure}[H]
    	\centering

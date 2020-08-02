@@ -132,7 +132,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \noindent The bilinear tensor product is the tensor product between entity matrix $ E $ and relational tensor $ R_k $, which generates an entity-relational tensor. The tensor product is then taken between it and the transposed entity matrix $ E^T $, 
 \begin{equation}
-	S_k \approx ER_kE^T.
+	S_k \approx ER_kE^T \; .
 \end{equation}
 
 \noindent Entity matrix $ E $ is composed of entity vectors $ e_i \in \mathbb{R}^{1 \times r} $, and relational tensor $ R_k $ is composed of full rank matrix slices $ W_k \in \mathbb{R}^{r \times r} $ \unskip~\citep{nickel2012factorizing}, where $ k \in \{1, \; \dots, \; m \} $ is the set of KG relations.\ The vector-matrix product between entity $ e_i $ and relational matrix $ W_k $ generates an entity-relational vector $ h_{i,k} \in \mathbb{R}^{1 \times r} $. The inner product between $ h_{i,k} $ and entity vector $ e_j \in \mathbb{R}^{r \times 1} $ generates a relational score $ s_{i,k,j} $, as shown in Figure 1.5. 
@@ -161,9 +161,9 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \noindent HolE, by Nickel et al. \unskip~\citep{nickel2016holographic}, uses a circular correlation as an operator during relation prediction. The multiplication between subject features $ e_i $ and object features $ e_j $ is taken by sliding the object over the subject, as demonstrated in the following:
 \begin{subequations}
 	\begin{gather}
-		c_0 =  e_{i0}e_{j0} + e_{i1}e_{j1} + e_{i2}e_{j2}, \\
-		c_1 =  e_{i0}e_{j2} + e_{i1}e_{j0} + e_{i2}e_{j1}, \\
-		c_2 =  e_{i0}e_{j1} + e_{i1}e_{j2} + e_{i2}e_{j0}, 
+		c_0 =  e_{i0}e_{j0} + e_{i1}e_{j1} + e_{i2}e_{j2} \; , \\
+		c_1 =  e_{i0}e_{j2} + e_{i1}e_{j0} + e_{i2}e_{j1} \; , \\
+		c_2 =  e_{i0}e_{j1} + e_{i1}e_{j2} + e_{i2}e_{j0} \; , 
 	\end{gather}
 \end{subequations}
 
@@ -182,7 +182,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
            	                                                  e_i & e_i & e_i \\
            							w_k & w_k & w_k \\
            	                                                  w_k & w_k & w_k 
-        			     				\end{bmatrix}.
+        			     				\end{bmatrix} \; .
 \end{equation}
 
 \noindent A convolution is then performed on $ m $ using a set of convolutional filters. The same set of filters is used for convolutions across all subject-predicate combinations, allowing for parameter sharing across entity-relation feature interactions. The convolution generates a feature map that is reshaped into a vector and passed to a fully-connected layer, which generates a hidden vector that is passed through a nonlinearity. Finally the inner product of the vector is taken with all object vectors, to produce a relational score for each object. The convolutional operator increases expressiveness by modelling entity-relation feature interactions around the entire concatenation line, enabling high levels of relation prediction performance. \par
