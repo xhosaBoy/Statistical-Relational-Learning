@@ -39,41 +39,41 @@ Knowledge graphs (KGs) are a framework used to represent logical structure in da
 \subsection{Nonlinear latent feature modelling}
 Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor product for relational scoring, in a model called RESCAL. This model makes use of entity vectors and a relational tensor, where each relation type is modelled as a matrix slice of the tensor. RESCAL is defined as follows:
 \begin{equation}
-	f_{i, k, j} = e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}W_{a,b,k}e_{ia}e_{jb}
+	f_{i, k, j} = e_i^TW_ke_j = \sum_{a=1}^{H_e}\sum_{b=1}^{H_e}W_{a,b,k}e_{ia}e_{jb} \; ,
 \end{equation}
 
-\noindent where $ f_{i,k,j} $ is the relational score, $ e_i $ is the subject vector and $ e_j $ is the object vector, entity representations implemented as model embeddings. $ W_k $ is the predicate matrix for relation $ k $, a relation representation implemented as a model embedding. Entity-relational interactions are modelled using the vector-matrix product between the subject vector and predicate matrix, generating a subject-predicate vector. A relational score is then computed by taking the inner product between the subject-predicate vector and the object vector. RESCAL is thus a linear tensor factorisation composition. \par
+\noindent where $ f_{i,k,j} $ is the relational score, $ e_i $ is the subject vector and $ e_j $ is the object vector. The latter two are entity representations implemented as model embeddings. $ W_k $ is the predicate matrix for relation $ k $, which is a relation representation implemented as a model embedding. Entity-relational interactions are modelled using the vector-matrix product between the subject vector and predicate matrix, generating a subject-predicate vector. A relational score is then computed by taking the inner product between the subject-predicate vector and the object vector. RESCAL is thus a linear tensor factorisation composition. \par
 
 \noindent A natural extension to this model is to include a nonlinearity for relational scoring.\ This extension was introduced by Jenatton et al. \unskip ~\citep{jenatton2012latent}. Their model uses a sigmoid nonlinearity to generate a probability of a possible relationship from the relational score computed using the bilinear tensor product. The model is defined as follows:
 \begin{subequations}
 	\begin{gather}
-		n_{i,j,k} = e_i^TW_ke_j \\
-		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{i,j,k})
+		n_{i,j,k} = e_i^TW_ke_j \; , \\
+		\mathbb{P}\left [ R_j(S_i, O_k) = 1 \right ] = \sigma(n_{i,j,k}) \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ n_{i,j,k} $ is the relational score, $ \sigma(t) = 1/(1 + e^{-t}) $ is the sigmoid function, a value in the range $\in \left ( 0, 1 \right ]$, and $\mathbb{P}$ is the probability of a potential relationship between subject $ S_i $ and object $ O_k $, indexed by relation $ R_j $. This model introduces nonlinear relational scoring to latent feature modelling based link prediction. 
+\noindent where $ n_{i,j,k} $ is the relational score, $ \sigma(t) = 1/(1 + e^{-t}) $ is the sigmoid function which maps to the range $ (0,1) $, and $\mathbb{P}$ is the probability of a potential relationship between subject $ S_i $ and object $ O_k $, indexed by relation $ R_j $. This model introduces nonlinear relational scoring to latent feature modelling based link prediction. 
 
 
 %********************************************* Recursive neural tensor factorisation **************************************************
 
 \subsection{Recursive neural tensor factorisation}
 
-Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between words, in a sequence of words \unskip ~\citep{socher2012semantic}, illustrated in figure 3.2. \par
+Chen et al. \unskip ~\citep{socher2013reasoning} introduced nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between words, in a sequence of words \unskip ~\citep{socher2012semantic}, as illustrated in Figure 3.2. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{Recursive network which constructs a composition tree between inputs. It begins with a full tree and is pruned during training to obtain the optimal structure.}
+	\caption{Recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
 \end{figure}
 
 \noindent The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product, illustrated in Figure 3.3, and is defined as follows:
 \begin{equation}
-	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k)
+	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k) \; ,
 \end{equation}
 
-\noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T \in \mathbb{R}^{1 \times m} $ is an output layer of trainable prameters, and $ f $ is the hyperbolic tangent function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. The output of a subject $ i $ and object $ j $ input, $ \{ e_i, \; e_j \} $, is a vector of relational scores $ \{ s_{i,1,j}, \; \dots, \; s_{i,m,j} \} $, indicating which possible relationships may exist between $ i $ and $ j $. 
+\noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T \in \mathbb{R}^{1 \times m} $ is an output layer of trainable parameters, and $ f $ is the tanh activation function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. The output of a subject $ i $ and object $ j $ input, $ \{ e_i, \; e_j \} $, is a vector of relational scores $ \{ s_{i,1,j}, \; \dots, \; s_{i,m,j} \} $, indicating the plausibility of relationships that may exist between $ i $ and $ j $. 
 
 \begin{figure}[H]
    	\centering
@@ -82,12 +82,12 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 	\caption{Recursive neural tensor network. This model computes the bilinear tensor product, and adds it to a recursive composition of entities and a bias. The result is squashed using a hyperbolic tangent function, and then multiplied by an output vector of relation parameters.}
 \end{figure}
 
-\noindent The contrastive max-margin loss is minimised during training. This loss computes a confidence magnitude on a correct sample (a fact present in the KG), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KG). The correct and corrupt samples are used by the loss function as follows:
+\noindent The contrastive max-margin loss is minimised during training. This loss computes a confidence magnitude on a correct sample (a fact present in the KG), and a confidence magnitude on a corrupt sample (a randomly generated fact not present in the KG). The correct and corrupt samples are used in the loss function as follows:
 \begin{equation}
-	J(\si{\ohm}) =  \sum_{i=1}^N \sum_{c=1}^C \max(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda \left \lVert \si{\ohm} \right \rVert_2^2
+	J(\si{\ohm}) =  \sum_{i=1}^N \sum_{c=1}^C \max(0,1 - g(T^{(i)}) + g(T_c^{(i)})) + \lambda \left \lVert \si{\ohm} \right \rVert_2^2 \; ,
 \end{equation}
 
-\noindent where $J$ is the loss value, $\si{\ohm}$ contains the trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training sample triplets, and $ C $ is the number of randomly corrupted facts.\ $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regression regulariser. \par
+\noindent where $J$ is the loss value, $\si{\ohm}$ contains the trainable parameters $u, W, V, b $, and $ E $. $N$ is the number of training sample triplets, and $ C $ is the number of randomly corrupted facts.\ $ g(T^{(i)}) $ is the confidence in the true fact computed by the model, and $ g(T_c^{(i)}) $ is the confidence in the corrupt fact computed by the model. Finally $\lambda\left\lVert \si{\ohm} \right\rVert_2^2$ is the ridge ($L_2$) regulariser. \par
 
 \noindent The NTN model training algorithm also makes use of pre-trained word vectors, from a language model by Turian et al. \unskip ~\citep{turian2010word}, to initialise entity embeddings. These are 100-dimensional vectors, which are aggregated from the set of words that represent an entity. For example for the entity \textit{homo sapiens}, the resulting entity embedding is $V_{homo \; sapiens} = 0.5(V_{homo} + V_{sapiens})$.\ These entity embeddings are trainable, and updated using backpropagation to generate a distributed representation of words that aligns with the KG of the particular application. \par
 
@@ -95,36 +95,41 @@ Chen et al.  \unskip ~\citep{socher2013reasoning} introduce nonlinear tensor fac
 
 Overfitting can be a concern for models with large numbers of parameters. This problem results in poor generalisation to testing data by the model. It can occur when training has progressed beyond the optimal point, and the model parameters begin to bias toward the training data. High model bias is revealed by good model performance on training data, and poor performance on validation data. Early stopping \unskip~\citep{prechelt1998early} is often used to prevent this and encourage generalisation. \par
 
-\noindent Neural model training can suffer from slow convergence when using stochastic gradient descent, mini-batch optimisation, and regularisation techniques such as dropout. Neural models can also suffer from insufficient signal to update parameters, a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first order gradient-based stochastic optimisation algorithm that compensates for these problems \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first and second order moments of the gradient, combining the advantages of AdaGrad ~\citep{duchi2011adaptive} and RMSprop ~\citep{tieleman2012lecture}. Adam efficiently regulates the size of parameter updates, accelerating toward local optima, and remaining small in sparse regions and where the gradient signal is small. \par
+\noindent Neural model training can suffer from slow convergence when using stochastic gradient descent, mini-batch optimisation, and regularisation techniques such as dropout. Neural models can also suffer from insufficient signal to update parameters, which is a problem known as sparse gradients. Adaptive moment estimation (Adam) is a first-order gradient-based stochastic optimisation algorithm that compensates for these problems \unskip ~\citep{kingma2014adam}. It computes the adaptive learning rates for parameters using the first- and second-order moments of the gradient, combining the advantages of AdaGrad \unskip ~\citep{duchi2011adaptive} and RMSprop \unskip ~\citep{tieleman2012lecture}.\ Adam efficiently regulates the size of parameter updates, accelerating toward local optima, and remaining small in sparse regions where the gradient signal is small. \par
 
-\noindent Setting model hyperparameters remains a challenge in neural model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}, the process of defining intervals for model hyperparameters, and randomly sampling from those intervals for a finite number of training runs (experiments). This approach improves on grid search, a brute force process that iterates through combinations of hyperparameter intervals, as models often match or exceed performance in a fraction of the training time. It takes advantage of the fact that for most datasets, only a subset of the hyperparameters contribute meaningful variance in model performance, eliminating the need for an exhaustive search over a large combinatorial space. \par
+\noindent Setting model hyperparameters remains a challenge in neural model training. A simple method proposed to address this problem is hyperparameter random search \unskip ~\citep{bergstra2012random}, which is the process of defining intervals for model hyperparameters, and randomly sampling from those intervals for a finite number of training runs (experiments). This approach improves on grid search, which is a brute force process that iterates through combinations of hyperparameter intervals, as models often match or exceed performance in a fraction of the training time. It takes advantage of the fact that for most datasets, only a subset of the hyperparameters contribute meaningful variance in model performance, thus eliminating the need for an exhaustive search over a large combinatorial space. \par
 
 \subsection{Training algorithm}
 
-Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model underperforms compared to the original model, relying on AdaGrad optimisation and the same hyperparameters. We apply early stopping, Adam optimisation as well as hyperparameter random search, in an attempt to improve performance. The new training algorithm is as follows: 
+Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model underperforms compared to the original model, relying on AdaGrad optimisation and the same hyperparameters. We apply early stopping, Adam optimisation as well as hyperparameter random search, in an attempt to improve performance. The new training algorithm is given in Algorithm 2. 
 
 \medskip
 
 \begin{algorithm}[H]
 	Repeat for $ Z $ experiments using random uniform hyperparameter configuration \\
-	\For{Epoch}{ 
+	\For{Epoch k = 1 \dots K }{ 
 		\SetAlgoLined
 		\textbf{Input} 
-		Training set \begin{math} D = \{(x_i, \; y_i)\}_{i=1}^N \end{math}, of samples and labels\;
-  		\begin{math} S \gets sample(D, \; b) \end{math} // sample a mini-batch of size $ b $ from training set $ D $\\
-		\For{S}{
-	 		\For{(x, y) $ \in S $}{
-     				$ y^{'}_{correct} \gets predict(x) $ \\ // for $ \{ e_i, e_{jt} \} $ predict relational score $ g(T^{(i)}) $ for sample \\
-				$ y^{'}_{corrupt} \gets predict(x) $ \\ // for $ \{ e_i, e_{jc} \} $ predict relational score $ g(T_c^{(i)}) $ for sample \\
+		Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $, of samples and labels \;
+		\For{b $ \in D $}{ 
+  			$ B \gets sample(D, \; b) $ // sample mini-batch of size $ b $ \\
+	 		\For{(x, y) $ \in B $}{
+     				$ y^{'}_{correct} \gets predict(x) $ // for $ \{ e_i, e_{jt} \} $ predict relational score $ g(T^{(i)}) $ \\
+				$ y^{'}_{corrupt} \gets predict(x) $ // for $ \{ e_i, e_{jc} \} $ predict relational score $ g(T_c^{(i)}) $ \\
 				$ e \gets contrast(y^{'}_{correct}, \;  y^{'}_{corrupt}) $ // compute error
      			}
-			Update model w.r.t. \begin{math}  e \end{math} // using Adam optimiser \\
-			\For{Validation}{
-				Check validation score at previous iteration, $ vScore_{t - 1} $ \\
-				If  $ vScore_{t} < vScore_{t - 1} $ \\
-					\quad Stop training. // early stopping
-			}
+			Update model w.r.t. $ e $ // using Adam optimiser \\
 		}
+		$ V \gets sample(D, \; v) $ // sample validation data of size $ v $ \\
+		\For{(x, y) $ \in V $}{
+			$ y^{'} \gets predict(x) $ // predict relational score \\
+			$ Y^{'} \gets y^{'} $ // append relational score to predictions $ Y^{'} $ 
+		}
+		$ vScore_{t} \gets accuracy(Y^{'}, \; Y) $ // Compute current epoch validation score \\
+		If $ vScore_{t} < vScore_{t - 1} $ // Check validation score against previous epoch score \\
+			\quad Stop training // early stopping \\
+		Else \\
+			\quad $ vScore_{t - 1} := vScore_{t} $ // Assign current validation score to previous score
 	}
 	\caption{Optimised NTN training algorithm}
 \end{algorithm} 
