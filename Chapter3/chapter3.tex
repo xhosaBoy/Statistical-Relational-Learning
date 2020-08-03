@@ -102,19 +102,20 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 		\SetAlgoLined
 		\textbf{Input} 
 		Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $, of samples and labels \;
-		\For{b $ \in D $}{ 
-  			$ B \gets sample(D, \; b) $ // sample mini-batch of size $ b $ \\
-	 		\For{(x, y) $ \in B $}{
+		\For{Mini-batch b = 1 \dots B}{ 
+  			$ S \gets sample(D, \; b) $ // sample mini-batch $ b $ \\
+	 		\For{(x, y) $ \in S $}{
      				$ y^{'}_{correct} \gets predict(x) $ // for $ \{ e_i, e_{jt} \} $ predict relational score $ g(T^{(i)}) $ \\
 				$ y^{'}_{corrupt} \gets predict(x) $ // for $ \{ e_i, e_{jc} \} $ predict relational score $ g(T_c^{(i)}) $ \\
-				$ e \gets contrast(y^{'}_{correct}, \;  y^{'}_{corrupt}) $ // compute error
+				$ l \gets contrast(y^{'}_{correct}, \;  y^{'}_{corrupt}) $ // compute error \\
+				$ e \gets e + l $ // add loss to zero-initialised mini-batch loss $ e $
      			}
 			Update model w.r.t. $ e $ // using Adam optimiser \\
 		}
 		$ V \gets sample(D, \; v) $ // sample validation data of size $ v $ \\
 		\For{(x, y) $ \in V $}{
 			$ y^{'} \gets predict(x) $ // predict relational score \\
-			$ Y^{'} \gets append(y^{'}) $  
+			$ Y^{'} \gets append(Y^{'}, \; y^{'}) $  // append prediction $ y^{'} $ to predictions vector $ Y^{'} $
 		}
 		$ vScore_{t} \gets accuracy(Y^{'}, \; Y) $ // Compute current epoch validation score \\
 		If $ vScore_{t} < vScore_{t - 1} $ // Check validation score against previous epoch score \\
@@ -221,46 +222,50 @@ A hypernetwork is a meta-network that generates parameters for a main network \u
 
 \subsection{Covariate shift in hypernetworks}
 
-We make the observation that hypernetworks may also suffer from covariate shift. The hypernetwork generates relational filters for the main network from relational embedding inputs. During training, the distribution of the latent parameters of the relational embeddings change, altering the inputs used to generate the filters. We consider whether this change in distribution makes it hard for the hpernetwork fully connected layer, to learn the most useful parameters for creating relational filters. We further consider that given the relational filters are used early (upstream) in the main network, the effect of their suboptimal representations might be amplified. \par
+We make the observation that hypernetworks may also suffer from covariate shift. The hypernetwork generates relational filters for the main network from relational embedding inputs. During training, the distribution of the latent parameters of the relational embeddings change, altering the inputs used to generate the filters. We consider whether this change in distribution makes it hard for the hypernetwork's fully-connected layer to learn the most useful parameters for creating relational filters. We further consider that given the relational filters are used early (upstream) in the main network, the effect of their suboptimal representations might be amplified. \par
 
-\noindent To address this issue, we introduce relational input batch normalisation. This operation performs normalisation on relational input mini-batches during training, such that each batch has zero mean and unit variance, regulating hypernetwork input. Batch normalisation components are presented in equations 3.12a to 3.12d. 
+\noindent To address this issue, we introduce relational input batch normalisation. This operation performs normalisation on relational input mini-batches during training, such that each batch has zero mean and unit variance, to regulate hypernetwork input. The components of batch normalisation are as follows: 
 \begin{subequations}
 	\begin{gather}
-		\mu_B \gets \frac{1}{m} \sum_{i=1}^m x_i \\
-		\sigma_B^2 \gets \frac{1}{m} \sum_{i=1}^m (x_i - \mu_B)^2 \\
-		\hat{x_i} \gets \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} \\
-		y_i \gets \gamma \hat{x_i} + \beta \equiv BN_{\gamma, \beta}(x_i)
+		\mu_B \gets \frac{1}{m} \sum_{i=1}^m x_i \; , \\
+		\sigma_B^2 \gets \frac{1}{m} \sum_{i=1}^m (x_i - \mu_B)^2 \; , \\
+		\hat{x_i} \gets \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} \; , \\
+		y_i \gets \gamma \hat{x_i} + \beta \equiv BN_{\gamma, \beta}(x_i) \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ \mu_B $ is the mini-batch mean, $ \sigma_B^2 $ is the variance, $ \hat{x_i} $ is the normalised output, and $ y_i $ scaled and shifted normalisation. Parameters $ \gamma $ and $ \beta $ are learned during training. Population mean and variance, along transformations of $ \gamma $ and $ \beta $ are used to regulate input during inference. Population components are presented in equations 3.13a to 3.13c. 
+\noindent where $ \mu_B $ is the mini-batch mean, $ \sigma_B^2 $ is the variance, $ \hat{x_i} $ is the normalised input, and $ y_i $ is the result of scaled and shifted normalisation. Parameters $ \gamma $ and $ \beta $ are learned during training. Population mean and variance, and the parameters $ \gamma $ and $ \beta $, are used to regulate layer inputs during inference. The components are as follows: 
 \begin{subequations}
 	\begin{gather}
-		E[x] \gets E_B[\mu_B] \\
-		Var[x] \gets \frac{m}{m - 1} E_B[\sigma_B^2] \\
-		y = \frac{\gamma}{\sqrt{Var[x] + \epsilon}} \cdot x + (\beta - \frac{\gamma E[x]}{\sqrt{Var[x] + \epsilon}}) \equiv BN_{\gamma, \beta}(x)
+		E[x] \gets E_B[\mu_B] \; , \\
+		Var[x] \gets \frac{m}{m - 1} E_B[\sigma_B^2] \; , \\
+		y = \frac{\gamma}{\sqrt{Var[x] + \epsilon}} \cdot x + \left(\beta - \frac{\gamma E[x]}{\sqrt{Var[x] + \epsilon}}\right) \equiv BN_{\gamma, \beta}(x) \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ E[x] $ is the population mean, $ Var[x] $ is the population variance, and $ y $ relies on  $ \gamma $ and $ \beta $ parameters transformed using population statistics. We adjust the HypER model accordingly, and call the adjusted model HypER+. Algorithm 3 presents the optimised training algorithm. \par
+\noindent where $ E[x] $ is the population mean, $ Var[x] $ is the population variance, and $ y $ relies on the $ \gamma $ and $ \beta $ parameters transformed using population statistics. We adjust the HypER model accordingly, and call the adjusted model HypER+. Algorithm 3 presents the updated training algorithm. \par
 
 \begin{algorithm}
 	\SetAlgoLined
 	\textbf{Input} 
-	Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $, of input features and output labels\;
-	Intialise parameters $ w $, for model $ M(w) $ // e.g. random normal initialisation \\
+	Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $, of input features and output labels \\
+	Initialise parameters $ w $, for model $ M(w) $ // e.g. random normal initialisation \\
 	\For{Epoch $ k = 1 \dots \; K $}{
-  		$ B \gets sample(D, \; b) $ // sample minibatch of size $ b $ \\
-	 	\For{(x, y) $ \in B $}{
-			$ y'_j = BN_{\gamma_j,\beta_j, \mu_{Bj}, s_{Bj}}(x_j) $ // Transformation of inputs to layer $ j $ for batch $ B $ \\
-     			$ y' \gets predict(x, \; y') $ // predict label for sample \\
-			$ e \gets y' - y $ // compute loss
-     			}
-		$ w \gets w - \lambda \cdot \hat{\nabla}_{w} J_{e} (w) $ // partial derivative update of model with respect to cost $ e $ \\
-		$ \theta \gets \theta \; \cup \;  \{\gamma_j, \; \beta_j\}  $ // Optimize batch normalisation parameters for layer $ j $
+		\For{Mini-batch b = 1 \dots B}{ 
+  			$ S \gets sample(D, \; b) $ // sample mini-batch $ b $ \\
+			$ j \gets j \in \{ {hypernetwork \; input \; layer, \; main \; network \; input \; layer} $ \\ $ { \; main \; network \; convolution \; layer} \} $ \\
+	 		\For{(x, y) $ \in S $}{
+				$ y'_j = BN_{\gamma_j,\beta_j, \mu_{Sj}, s_{Sj}}(x_j) $ // normalisation of outputs from layers $ j $ \\
+     				$ y' \gets predict(x, \; w) $ // predict label for sample $ x $ using parameters $ w $ \\
+				$ l \gets loss(y - y') $ // compute binary cross-entropy loss \\
+				$ e \gets e + l $ // add loss to zero-initialised mini-batch loss $ e $ 
+     				}
+			$ w \gets w - \lambda \cdot J_{e}(w) $ // gradient descent update of model where $ \lambda $  is the learning rate, and $ J_{e}(w) $ are the partial derivatives of the loss with respect to the parameters $ w $ \\
+			$ \gamma_j \gets \gamma_j + \Delta \gamma_j, \; \beta_j \gets \beta_j +  \Delta \beta_j $ // optimise batch normalisation parameters
+		}
 	}
-	$ E[x] \gets E[\mu_B] $, $ \; Var[x] \gets E[\sigma_B^2] $ // Average $ \mu_B $ and $ \sigma_B^2 $ over mini-batches $ B $ \\
-	$ \frac{\gamma}{\sqrt{Var[x] + \epsilon}} \gets \gamma $, $ \; (\beta - \frac{\gamma E[x]}{\sqrt{Var[x] + \epsilon}}) \gets \beta $ // update $ \gamma $ and $ \beta $ with population statistics
+	$ E[x] \gets E[\mu_B] $, $ \; Var[x] \gets E[\sigma_B^2] $ // average $ \mu_B $ and $ \sigma_B^2 $ over mini-batches $ B $ \\
+	$ \gamma \gets \frac{\gamma}{\sqrt{Var[x] + \epsilon}} $, $ \; \beta \gets \left(\beta - \frac{\gamma E[x]}{\sqrt{Var[x] + \epsilon}} \right) $ // update $ \gamma $ and $ \beta $ with population statistics
 	\caption{Training HypER+ with batch normalisation}
 \end{algorithm} 
  

@@ -63,13 +63,15 @@ An ML prediction model takes as input a set of features. These features are attr
 	Training set $ D = \{(x_i, \; y_i)\}_{i=1}^N $ of input features and output labels \\
 	Initialise parameters $ w \in \mathbb{R}^d $, for model $ M(w) $ // e.g. random normal initialisation \\
 	\For{Epoch $ k =  1 \dots \; K $}{
-  		$ B \gets sample(D, \; b) $ // sample mini-batch of size $ b $ \\
-	 	\For{(x, y) $ \in B $}{
-     			$ y' \gets predict(x, \; w) $ // predict label for sample $ x $ using parameters $ w $ \\
-			$ l \gets -(y - y') $ // compute loss e.g. cross-entropy or squared difference \\
-			$ e \gets e + l $ // add loss to zero-initialised mini-batch loss $ e $ 
-     			}
-		$ w \gets w - \lambda \cdot J_{e}(w) $ // gradient descent update of model where $ \lambda $  is the learning rate, and $ J_{e}(w) $ are the partial derivatives of the loss with respect to the parameters $ w $ 
+		\For{Mini-batch b = 1 \dots B} {
+  			$ S \gets sample(D, \; b) $ // sample mini-batch $ b $ \\
+	 		\For{(x, y) $ \in S $}{
+     				$ y^{'} \gets predict(x, \; w) $ // predict label for sample $ x $ using parameters $ w $ \\
+				$ l \gets loss(y - y^{'}) $ // compute loss e.g. cross-entropy or squared difference \\
+				$ e \gets e + l $ // add loss to zero-initialised mini-batch loss $ e $ 
+     				}
+			$ w \gets w - \lambda \cdot J_{e}(w) $ // gradient descent update of model where $ \lambda $  is the learning rate, and $ J_{e}(w) $ are the partial derivatives of the loss with respect to the parameters $ w $ 
+		}
 	}
 	\caption{Supervised learning with mini-batch gradient descent}
 \end{algorithm}
