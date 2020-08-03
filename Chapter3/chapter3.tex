@@ -59,16 +59,7 @@ Nickel et al. \unskip ~\citep{nickel2011three} introduced the bilinear tensor pr
 
 \subsection{Recursive neural tensor factorisation}
 
-Chen et al. \unskip ~\citep{socher2013reasoning} introduced nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between words, in a sequence of words \unskip ~\citep{socher2012semantic}, as illustrated in Figure 3.2. \par
-
-\begin{figure}[H]
-   	\centering
-    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
-\end{figure}
-
-\noindent The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product, illustrated in Figure 3.3, and is defined as follows:
+Chen et al. \unskip ~\citep{socher2013reasoning} introduced nonlinear tensor factorisation by adding recursive entity representations in the composition of the relational score. Recursive networks (RCNs) try to capture the rules for word combinations by constructing a composition tree between words, in a sequence of words \unskip ~\citep{socher2012semantic}. The NTN model tries to take advantage of these compositional rules by adding them to the bilinear tensor product, illustrated in Figure 3.2, and is defined as follows:
 \begin{equation}
 	g_{i,k,j} =  u_k^Tf(e_i^TW_k^{\left [1:m \right ]} e_j + V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] + b_k) \; ,
 \end{equation}
@@ -123,7 +114,7 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 		$ V \gets sample(D, \; v) $ // sample validation data of size $ v $ \\
 		\For{(x, y) $ \in V $}{
 			$ y^{'} \gets predict(x) $ // predict relational score \\
-			$ Y^{'} \gets y^{'} $ // append relational score to predictions $ Y^{'} $ 
+			$ Y^{'} \gets append(y^{'}) $  
 		}
 		$ vScore_{t} \gets accuracy(Y^{'}, \; Y) $ // Compute current epoch validation score \\
 		If $ vScore_{t} < vScore_{t - 1} $ // Check validation score against previous epoch score \\
@@ -141,16 +132,16 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 
 \subsection{Convolutional factorisation}
 
-ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using $ 2D $ convolutions, which are particularly effective at modelling the interactions of entities involved in a large number of relations. This may be due to filter parameter sharing between entity-relational combination features, however perhaps more pertinently, the convolutional operator performs nonlinear modelling of entity-relational feature interaction when summarising regions of interactions between the respective representations, as opposed to the bilinear tensor product, which performs simple linear interaction modelling. \par
+ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using $ 2D $ convolutions, which have been found to be particularly effective at modelling the interactions of entities involved in a large number of relations. This may be due to filter parameter sharing between entity-relational combination features, but perhaps more pertinently, the convolutional operator captures a larger variety of entity-relational feature interactions when summarising interaction regions between the respective representations. Where as the bilinear tensor product performs interaction modelling using a simple inner product. \par
 
-\noindent ConvE concatenates subject and predicate matrices along the row axis, creating an subject-predicate matrix.\ The convolution is then taken between the matrix and filters, producing feature maps which are reshaped into a vector, flattened by a fully connected layer and pass through a nonlinearity, generating a hidden vector.\ The inner product of the hidden vector is then taken with the object vector to compute an unnormalised relational score between the subject and object. A sigmoid function is applied to generate a probability of relational plausibility. 
+\noindent ConvE concatenates subject and predicate matrices along the row axis, creating a subject-predicate matrix.\ Convolutions are then taken between the matrix and filters, producing feature maps which are reshaped into a vector, flattened by a fully-connected layer and passed through a nonlinearity, to generate a hidden vector.\ The inner product of the hidden vector is then taken with the object vector to compute an unnormalised relational score between the subject and object. A sigmoid function is applied to generate a probability of relational plausibility. 
 
 \noindent The ConvE model is defined as follows:
 \begin{equation}
-	\psi_k(e_i, \; e_j) = g(vec(f(\left [ \overline{e_i}; \; \overline{w_k} \right ]) * c)W )e_j
+	\psi_k(e_i, \; e_j) = g(vec(f(\left [ \overline{e_i}; \; \overline{w_k} \right ]) * c)W )e_j \; ,
 \end{equation}
 
-\noindent where $ \psi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{n \times 1} $. $ \overline{e_i} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ e_i $, and similarly $ \overline{w_k} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ w_k $, where $ n = n_w \times n_h $, and $ f $ is the lengthwise concatenation operation between $ \overline{e_i} $ and $ \overline{w_k} $. $ c $ contains $ 2D $ convolutional filters operated on by $ * $, the convolutional operator. This generates the set of feature maps $ C \in \mathbb{R}^{l \times b \times m} $, where $ l $ and $ b $ are the $ 2D $ feature map dimensions, and $ m $ is the number of maps. $ vec $ reshapes $ C $ into a vector $ v \in \mathbb{R}^{1 \times lbm} $ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{lbm \times n} $, and generates a vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ g $ a ReLU nonlinearity. Finally the inner product is taken with this vector and $ e_j $ to compute a relational score. ConvE is thus a convolutional tensor factorisation. Figure 3.4 illustrates the ConvE forward pass.
+\noindent where $ \psi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{n \times 1} $. $ \overline{e_i} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ e_i $, and similarly $ \overline{w_k} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ w_k $, where $ n = n_w \times n_h $, and $ f $ is the lengthwise concatenation operation between $ \overline{e_i} $ and $ \overline{w_k} $. $ c $ contains $ 2D $ convolutional filters operated on by $ * $, the convolutional operator. This generates the set of feature maps $ C \in \mathbb{R}^{l \times b \times m} $, where $ l $ and $ b $ are the $ 2D $ feature map dimensions, and $ m $ is the number of maps. $ vec $ reshapes $ C $ into a vector $ v \in \mathbb{R}^{1 \times lbm} $ which is passed through a fully-connected layer parameterised by $ W \in \mathbb{R}^{lbm \times n} $, and generates a vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through a ReLU nonlinearity $ g $. Finally the inner product is taken with this vector and $ e_j $ to compute a relational score. ConvE is thus a convolutional tensor factorisation. Figure 3.3 illustrates the ConvE forward pass.
 
 \begin{figure}[H]
    	\centering
@@ -163,14 +154,14 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \noindent The generated relational probability is defined as follows: 
 \begin{equation}
-	\mathbb{P} = \sigma(\psi_k(e_i, \; e_j)) 
+	\mathbb{P} = \sigma(\psi_k(e_i, \; e_j)) \; .
 \end{equation}
 
 \noindent The binary cross-entropy loss is minimised during training. This loss function is particularly appropriate as we expect only a single object to belong to the fact (subject-predicate-object) and generate a probability close to $ 1 $, and every other object to not belong to the fact, generating a probability close to $ 0 $. \par
 
 \noindent The loss function is defined as follows:
 \begin{equation}
-	L(p, \; t) =  -\frac{1}{N}\sum_i(t_i \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i))
+	L(p, \; t) =  -\frac{1}{N}\sum_i(t_i \cdot log(p_i) + (1 - t_i) \cdot log(1 - p_i)) \; ,
 \end{equation}
 
 \noindent where $ L $ is the loss value, $ p_i $ is the relational probability computed by the model, and $ t_i $ is the target. $ N $ is the batch size, and $ i $ is the sample index.
@@ -183,57 +174,50 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \subsubsection{Hypernetworks}
 
-A hypernetwork is a meta network that generates parameters for a main network \unskip ~\citep{ha2016hypernetworks}.\ It compresses layer weights of a main network into an input embedding vector, which is analogous to a encoding a main network configuration. Hypernetworks are used to discover an efficient subset of main network parameters, reducing the total number of parameters without sacrificing performance. They are also used to enable parameter sharing across layers of a main network similar to recurrent networks, however without incurring the problem of vanishing and exploding gradients. \par
+A hypernetwork is a meta-network that generates parameters for a main network \unskip ~\citep{ha2016hypernetworks}.\ It compresses layer weights of a main network into an input embedding vector, which is analogous to encoding a main network configuration. Hypernetworks are used to discover an efficient subset of main network parameters, reducing the total number of parameters without sacrificing performance. They are also used to enable parameter sharing across layers of a main network, similar to recurrent networks, however without incurring the problem of vanishing and exploding gradients. \par
 
-\noindent A standard tensor serves as input to a main network, for example an image or sequence of words, while an embedding vector serves as input to a hypernetwork, see Figure 3.5.\ The embedding vector size and hypernetwork layer weights are used to determine the respective layer weight sizes of the main network. Static or dynamic embedding vectors  can be used as hypernetwork input. For the dynamic case, different embedding vectors are used at each time step, and can be useful for adapting the main network to its input sequence. Embedding vector parameters are learned during end-to-end training of the main network using backpropagation. \par
+\noindent A standard tensor serves as input to a main network, for example an image or sequence of words, while an embedding vector serves as input to a hypernetwork. \ The embedding vector size and hypernetwork layer weights are used to determine the respective layer weight sizes of the main network. Static or dynamic embedding vectors  can be used as hypernetwork input. For the dynamic case, different embedding vectors are used at each time step, and can be useful for adapting the main network to its input sequence. Embedding vector parameters are learned during end-to-end training of the main network, using backpropagation. \par
 
-\begin{figure} [H]
-   	\centering
-    	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input, and the main network takes an image as input.}
-\end{figure}
-
-\noindent For a feedfoward convolutional network with $ D $ layers, the hypernetwork can be used to generate main network weight tensors $ K^j \in \mathbb{R}^{f_wf_hd_id_o} $ for each layer $ j = 1, \; \dots \; D $, where $ K^j $ is a set of filters with filter size $ f_w \times f_h $, number of input channels $ d_i $, and number of output channels $ d_o $. The hypernetwork model can then be defined as follows: 
+\noindent For a feed-foward convolutional network with $ D $ layers, the hypernetwork can be used to generate main network weight tensors $ K^j \in \mathbb{R}^{f_wf_hd_id_o} $ for each layer $ j = 1, \; \dots \; D $, where $ K^j $ is a set of filters with filter size $ f_w \times f_h $, $ d_i $ is the number of input channels, and $ d_o $ is the number of output channels. The hypernetwork model can then be defined as follows: 
 \begin{equation}
-	K^j = g(z^j), \quad \forall j = 1, \dots, D
+	K^j = g(z^j), \quad \forall j = 1, \dots, D \; ,
 \end{equation}
 
-\noindent where $ K_j $ contains the parameters of layer $ j $, $ g $ is the hypernetwork composition, and $ z_j \in \mathbb{R}^n $ is the embedding vector input. If the hypernetwork is a $ 2 $ layer multilayer perceptron (MLP), $ g(z^j) $ can be defined as follows:  
+\noindent where $ K_j $ contains the parameters of layer $ j $, $ g $ is the hypernetwork composition, and $ z_j \in \mathbb{R}^n $ is the embedding vector input. If the hypernetwork is a two-layer multilayer perceptron (MLP), $ g(z^j) $ can be defined as follows:  
 \begin{subequations}
 	\begin{gather}
-		a_i^j = W_iz^j + B_i, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \\
-		K_i^j = W_{out}a_i^j + B_{out}, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \\
-		K^j = (K_1^j, \; K_2^j, \; \dots \;, \; K_{d_o}^j), \quad \forall j = 1, \; \dots, \; D
+		a_i^j = W_iz^j + B_i, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \; , \\
+		K_i^j = W_{out}a_i^j + B_{out}, \quad \forall i = 1, \; \dots, \; d_o, \; \forall j = 1, \; \dots, \; D \; , \\
+		K^j = (K_1^j, \; K_2^j, \; \dots \;, \; K_{d_o}^j), \quad \forall j = 1, \; \dots, \; D \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer of the hypernetwork, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ are the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is filter $ i $ for main network layer $ j $. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ are second layer parameters of the hypernetwork, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. Finally $ K^j $ is the set of filters for layer $ j $ of the main network. \par
+\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer of the hypernetwork, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ contain the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is filter $ i $ for layer $ j $ in the main network. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ contain the second layer parameters of the hypernetwork, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. Finally $ K^j $ is the set of filters for layer $ j $ of the main network. \par
 
 \subsubsection{HypER}
 
-\noindent HypER is inspired by ConvE, and implements a convolutional operator that models entity-relation feature interactions \unskip ~\citep{balazevic2019hypernetwork}. It makes use of a hypernetwork to generate relation-specific convolutional filters, where the subject and predicate filter are used in a convolution operation to generate a subject-predicate feature map. This is reshaped into vector and passed through a fully connected layer which outputs a hidden vector that is passed through a nonlinearity. An inner product is then taken between the vector and the object vector, computing a relational score.\ Finally a sigmoid function is applied to the score, which generates a probability for a potential relationship between the two entities. \par
+\noindent HypER is inspired by ConvE, and implements a convolutional operator that models entity-relation feature interactions \unskip ~\citep{balazevic2019hypernetwork}. It makes use of a hypernetwork to generate relation-specific convolutional filters, where the subject and predicate filter are used in a convolution operation to generate a subject-predicate feature map. This is reshaped into a vector and passed through a fully-connected layer which outputs a hidden vector that is passed through a nonlinearity. An inner product is then taken with the object vector, to produce a relational score, Figure 3.4 illustrates.\ Finally a sigmoid function is applied to the score, which generates a probability for a potential relationship between the two entities. \par
 
 \noindent The HypER model is defined as follows: 
 \begin{equation}
 	\phi_k(e_i, \; e_j) = f(vec(e_i * (vec^{-1}(w_kH)))W)e_j
 \end{equation}
 
-\noindent where $ \phi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{1 \times n} $. $ H \in \mathbb{R}^{n \times h} $ are the fully connected layer parameters of the hypernetwork. $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters $ c_{ik} $. $ * $ is the convolutional operator that takes the convolution between $ e_i $ and $ c_{ik} $, generating a set of feature maps $ C_{ik} \in \mathbb{R}^{l \times b} $, where $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes the feature maps into a vector $ v \in \mathbb{R}^{1 \times lb} $ which is passed through a fully connected layer parameterised by $ W \in \mathbb{R}^{lb \times n} $, generating a hidden vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ f $, a ReLU nonlinearity. HypER is thus a hyper-convolutional tensor factorisation. 
+\noindent where $ \phi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{1 \times n} $. $ H \in \mathbb{R}^{n \times h} $ are the fully-connected layer parameters of the hypernetwork. $ vec^{-1} $ is the transformation that reshapes the output of the hypernetwork into a set of relation-specific convolutional filters $ c_{ik} $. $ * $ is the convolutional operator that takes the convolution between $ e_i $ and $ c_{ik} $, generating a set of feature maps $ C_{ik} \in \mathbb{R}^{l \times b} $, where $ l $ and $ b $ are the feature map dimensions. $ vec $ reshapes the feature maps into a vector $ v \in \mathbb{R}^{1 \times lb} $ which is passed through a fully-connected layer parameterised by $ W \in \mathbb{R}^{lb \times n} $, generating a hidden vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through $ f $, a ReLU nonlinearity. HypER is thus a hyper-convolutional tensor factorisation. 
 
-\begin{figure}[H]
+\begin{figure}
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.5\textwidth]{hyper_neural_tensor_network_final}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{Hypernetwork convolutional entity representations.}
+	\caption{Hyper-convolutional entity representations. The hypernetwork takes the predicate embedding $ k $ as input, which generates predicate-specific convolutional filter. A convolutional is taken between this filter and a subject embedding $ i $, which generates a feature map which is reshaped into vector $ v $. A fully-connected layer transforms the feature map vector to a hidden vector $ h $, and the inner product is taken between this vector and the object embedding $ j $ to produce relational score $ s_{ikj} $.}
 \end{figure}
 
 \noindent The relational probability is computed as follows: 
 \begin{equation}
-	\mathbb{P} = \sigma(\phi_k(e_i, \; e_j)) 
+	\mathbb{P} = \sigma(\phi_k(e_i, \; e_j)) \; .
 \end{equation}
 
-\noindent The HypER training algorithm minimises the binary cross-entropy loss. Entity and relation embeddings are intialised using Xavier initialisation \unskip ~\citep{glorot2010understanding}, from a uniform distribution with zero mean and varience of $ \frac{2}{n} $, where $ n $ is the embedding length. \par
+\noindent The HypER training algorithm minimises a binary cross-entropy loss. Entity and relation embeddings are initialised using Xavier initialisation \unskip ~\citep{glorot2010understanding}, from a uniform distribution with zero mean and variance of $ \frac{2}{n} $, where $ n $ is the embedding length. \par
 
 \subsection{Covariate shift in hypernetworks}
 

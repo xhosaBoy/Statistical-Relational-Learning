@@ -274,9 +274,23 @@ An IID dataset is order invariant, because the probability of seeing one data po
 
 \noindent This multiplicative operation causes small gradients to become progressively smaller as the sequence window becomes larger, or large gradients to become much larger. It is called the vanishing or exploding gradient problem and has lead to the development of RN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
-\subsection{Recursive and hypernetworks} A number of non-mainstream architectures have also been explored in deep model design. Recursive networks (RCNs) are one such architecture, which construct a composition tree using sequential input, producing composition scores. For example for an input sequence of three samples, RCNs may compute a composition score between input 1 and input 2, and a composition score between input 2 and input 3.\ A composition between the two generated scores is then taken to produced an output score.\ This approach differs from RNs, which construct a composition chain using sequential input. Composition trees may be able to model more complex structure in input sequences, however require pre-training to first prune them, and may not be as computationally efficient during inference. \par
+\subsection{Recursive and hypernetworks} A number of non-mainstream architectures have also been explored in deep model design. Recursive networks (RCNs) are one such architecture, which construct a composition tree using sequential input, producing composition scores. Figure 2.11 illustrates.\ This approach differs from RNs, which construct a composition chain using sequential input. Composition trees may be able to model more complex structure in input sequences, however require pre-training to first prune them, and may not be as computationally efficient during inference. \par
 
-\noindent Hypernetworks are meta-networks that generate parameters for a main network.\ An embedding is supplied as input to a hypernetwork, which encodes information about main network layer parameters.\ For example, an embedding may be used as input to an MLP hypernetwork which generates the layer parameters for a CN main network, consisting of a convolutional layer, and a fully-connected output layer.\ Hypernetworks enable the design of more parameter efficient main networks, by compressing main network parameter information into the embedding input of the hypernetwork.\ They are also useful for a form of relaxed parameter sharing across layers, without suffering from the vanishing and exploding gradients experienced by RNs. 
+\begin{figure}[H]
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
+	\captionsetup{justification=centering, name={Figure}}
+	\caption{Recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
+\end{figure}
+
+\noindent Hypernetworks are meta-networks that generate parameters for a main network.\ An embedding is supplied as input to a hypernetwork, which encodes information about main network layer parameters.\ For example, an embedding may be used as input to an MLP hypernetwork which generates the layer parameters for a CN main network, consisting of a convolutional layer, and a fully-connected output layer, Figure 2.12 illustrates.\ Hypernetworks enable the design of more parameter efficient main networks, by compressing main network parameter information into the embedding input of the hypernetwork.\ They are also useful for a form of relaxed parameter sharing across layers, without suffering from the vanishing and exploding gradients experienced by RNs. 
+
+\begin{figure}
+   	\centering
+    	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
+	\captionsetup{justification=centering, name={Figure}}
+	\caption{Hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input, and the main network takes a tensor as input.}
+\end{figure}
 
 
 %********************************** %Third Section  **************************************
