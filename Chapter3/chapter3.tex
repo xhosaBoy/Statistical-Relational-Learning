@@ -18,7 +18,7 @@ Knowledge graphs (KGs) are a framework used to represent logical structure in da
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.8\textwidth, height=0.3\textwidth]{inference}
+    	\includegraphics[width=0.7\textwidth, height=0.2\textwidth]{inference}
 	\captionsetup{justification=centering, name={Figure}}
 	\caption{Relation prediction between two entities. Subject $ i $ and object $ j $ are two distinct entities, and predicate $ k $ is a relation from the set of relations in the KG. A product is taken between subject-predicate vector $ h $ and an object $ j $ to compute a relational score $ s $.}
 \end{figure}
@@ -66,7 +66,7 @@ Chen et al. \unskip ~\citep{socher2013reasoning} introduced nonlinear tensor fac
 
 \noindent where $ g_{i,k,j} $ is the relational score tensor, $ u_k^T \in \mathbb{R}^{1 \times m} $ is an output layer of trainable parameters, and $ f $ is the tanh activation function. $ e_i^TW_k^{\left [1:m \right ]} e_j $ is the bilinear tensor product between subject vector $ e_i^T \in \mathbb{R}^{1 \times n} $ and object vector $ e_j \in \mathbb{R}^{n \times 1} $, computed for relations $ W_k \in \mathbb{R}^{n \times n} $, where $ k \in \{1 \dots \; m \} $, and $ b_k $ is the bias. $ \; V_k \left [ \begin{matrix} e_i \\ e_j \end{matrix} \right ] $ is the recursive entity composition, where $ V_k \in \mathbb{R}^{k \times 2n} $ is a matrix of trainable parameters, and the matrix-vector product is taken between $ V_k $ and the concatenation of the subject and object vectors. A row of matrix $ V_k $ corresponds to relation $ k $. The output of a subject $ i $ and object $ j $ input, $ \{ e_i, \; e_j \} $, is a vector of relational scores $ \{ s_{i,1,j}, \; \dots, \; s_{i,m,j} \} $, indicating the plausibility of relationships that may exist between $ i $ and $ j $. 
 
-\begin{figure}[H]
+\begin{figure}
    	\centering
     	\includegraphics[width=0.8\textwidth, height=0.4\textwidth]{recursive_neural_tensor_network.png}
 	\captionsetup{justification=centering, name={Figure}}
@@ -94,9 +94,7 @@ Overfitting can be a concern for models with large numbers of parameters. This p
 
 Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \unskip ~\citep{abadi2016tensorflow}. This model underperforms compared to the original model, relying on AdaGrad optimisation and the same hyperparameters. We apply early stopping, Adam optimisation as well as hyperparameter random search, in an attempt to improve performance. The new training algorithm is given in Algorithm 2. 
 
-\medskip
-
-\begin{algorithm}[H]
+\begin{algorithm}
 	Repeat for $ Z $ experiments using random uniform hyperparameter configuration \\
 	\For{Epoch k = 1 \dots K }{ 
 		\SetAlgoLined
@@ -135,7 +133,7 @@ Doss et al. \unskip~\citep{Doss2015} reimplemented the NTN model in TensorFlow \
 
 ConvE introduced the convolutional operator to neural tensor factorisation \unskip ~\citep{dettmers2018convolutional}. Specifically, this operator increases expressiveness in entity-relation interaction modelling by using $ 2D $ convolutions, which have been found to be particularly effective at modelling the interactions of entities involved in a large number of relations. This may be due to filter parameter sharing between entity-relational combination features, but perhaps more pertinently, the convolutional operator captures a larger variety of entity-relational feature interactions when summarising interaction regions between the respective representations. Where as the bilinear tensor product performs interaction modelling using a simple inner product. \par
 
-\noindent ConvE concatenates subject and predicate matrices along the row axis, creating a subject-predicate matrix.\ Convolutions are then taken between the matrix and filters, producing feature maps which are reshaped into a vector, flattened by a fully-connected layer and passed through a nonlinearity, to generate a hidden vector.\ The inner product of the hidden vector is then taken with the object vector to compute an unnormalised relational score between the subject and object. A sigmoid function is applied to generate a probability of relational plausibility. 
+\noindent ConvE concatenates subject and predicate matrices along the row axis, creating a subject-predicate matrix.\ Convolutions are then taken between the matrix and filters, producing feature maps which are reshaped into a vector, flattened by a fully-connected layer and passed through a nonlinearity, to generate a hidden vector.\ The inner product of the hidden vector is then taken with the object vector to compute an unnormalised relational score between the subject and object. A sigmoid function is applied to generate a probability of relational plausibility. \par
 
 \noindent The ConvE model is defined as follows:
 \begin{equation}
@@ -144,14 +142,12 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 
 \noindent where $ \psi_k $ is the relational score between subject $ e_i \in \mathbb{R}^{n \times 1} $ and object $ e_j \in \mathbb{R}^{n \times 1} $ for predicate $ w_k \in \mathbb{R}^{n \times 1} $. $ \overline{e_i} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ e_i $, and similarly $ \overline{w_k} \in \mathbb{R}^{n_w \times n_h} $ is a $ 2D $ reshaping of $ w_k $, where $ n = n_w \times n_h $, and $ f $ is the lengthwise concatenation operation between $ \overline{e_i} $ and $ \overline{w_k} $. $ c $ contains $ 2D $ convolutional filters operated on by $ * $, the convolutional operator. This generates the set of feature maps $ C \in \mathbb{R}^{l \times b \times m} $, where $ l $ and $ b $ are the $ 2D $ feature map dimensions, and $ m $ is the number of maps. $ vec $ reshapes $ C $ into a vector $ v \in \mathbb{R}^{1 \times lbm} $ which is passed through a fully-connected layer parameterised by $ W \in \mathbb{R}^{lbm \times n} $, and generates a vector $ h \in \mathbb{R}^{1 \times n} $ which is passed through a ReLU nonlinearity $ g $. Finally the inner product is taken with this vector and $ e_j $ to compute a relational score. ConvE is thus a convolutional tensor factorisation. Figure 3.3 illustrates the ConvE forward pass.
 
-\begin{figure}[H]
+\begin{figure}
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{convolutional_entity_representations_final}
 	\captionsetup{justification=centering, name={Figure}}
 	\caption{ConvE forward pass which computes a relational score $ s_{i,k,j} $ between subject $ i $, predicate $ k $ and object $ j $.}
 \end{figure}
-
-\newpage
 
 \noindent The generated relational probability is defined as follows: 
 \begin{equation}
@@ -166,7 +162,6 @@ ConvE introduced the convolutional operator to neural tensor factorisation \unsk
 \end{equation}
 
 \noindent where $ L $ is the loss value, $ p_i $ is the relational probability computed by the model, and $ t_i $ is the target. $ N $ is the batch size, and $ i $ is the sample index.
-
 
 
 %********************************************* HypER ****************************************************************
@@ -193,7 +188,7 @@ A hypernetwork is a meta-network that generates parameters for a main network \u
 	\end{gather}
 \end{subequations}
 
-\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer of the hypernetwork, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ contain the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is filter $ i $ for layer $ j $ in the main network. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ contain the second layer parameters of the hypernetwork, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. Finally $ K^j $ is the set of filters for layer $ j $ of the main network. \par
+\noindent where $ a_i^j \in \mathbb{R}^{m} $ is the output of the first layer of the hypernetwork, and $ i $ corresponds to feature map $ i $. $ W_i \in \mathbb{R}^{m \times n} $ contain the first layer parameters and $ B_i \in \mathbb{R}^m $ is the bias. $ K_i^j $ is filter $ i $ for layer $ j $ in the main network. $ W_{out} \in \mathbb{R}^{f_w f_hd_i \times m} $ contain the second layer parameters of the hypernetwork, and $ B_{out} \in \mathbb{R}^{f_wf_hd_i} $ is the bias. Finally $ K^j $ is the set of filters for layer $ j $ of the main network. 
 
 \subsubsection{HypER}
 
@@ -243,7 +238,7 @@ We make the observation that hypernetworks may also suffer from covariate shift.
 	\end{gather}
 \end{subequations}
 
-\noindent where $ E[x] $ is the population mean, $ Var[x] $ is the population variance, and $ y $ relies on the $ \gamma $ and $ \beta $ parameters transformed using population statistics. We adjust the HypER model accordingly, and call the adjusted model HypER+. Algorithm 3 presents the updated training algorithm. \par
+\noindent where $ E[x] $ is the population mean, $ Var[x] $ is the population variance, and $ y $ relies on the $ \gamma $ and $ \beta $ parameters transformed using population statistics. We adjust the HypER model accordingly, and call the adjusted model HypER+. Algorithm 3 presents the updated training algorithm. 
 
 \begin{algorithm}
 	\SetAlgoLined
@@ -273,7 +268,7 @@ We make the observation that hypernetworks may also suffer from covariate shift.
 
 We also incorporate pre-trained word vectors from the GloVe \unskip ~\citep{pennington2014glove} language model into the HypER+ training algorithm.\ KGs are comprised of respective vocabularies of entities and relations.\ These vocabularies contain a KG word to ID map, which is used during model training to identify the respective entity or relation.\ The language model itself is a map of words to vectors, and is used to look up the corresponding vectors for entities or relations in the KG. Where a pre-trained vector does not exist for the word, a randomly initialised vector is generated in its place. This makes the size of language model important, as it determines the total pre-trained vector coverage of KG words.\par
 
-\noindent We use GloVe word vectors to initialise $ 200D $ entity and relation embeddings. The respective embeddings are generated by aggregating the set of vectors corresponding to the sequence of words that describe them; the same method of aggregation used to construct embeddings for NTN model training.\ This process generates two KG pre-trained vector to ID maps, one for entities and one for relations, and these maps are used to initialise the model entity and relation embeddings respectively. The embeddings are trainable, and updated using backpropagation.  \par
+\noindent We use GloVe word vectors to initialise $ 200D $ entity and relation embeddings. The respective embeddings are generated by aggregating the set of vectors corresponding to the sequence of words that describe them; the same method of aggregation used to construct embeddings for NTN model training.\ This process generates two KG pre-trained vector to ID maps, one for entities and one for relations, and these maps are used to initialise the model entity and relation embeddings respectively. The embeddings are trainable, and updated using backpropagation. 
 
 
 %********************************** %Third Section  **************************************
