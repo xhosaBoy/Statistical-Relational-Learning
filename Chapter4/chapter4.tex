@@ -152,32 +152,15 @@ This chapter discusses three hypotheses examined in the thesis, including the ap
 
 \subsection{Optimised training algorithm}
 
-\noindent We update the NTN training algorithm to make of use of early stopping \unskip ~\citep{prechelt1998early}, the adaptive moment estimation (Adam) Adam optimiser \citep{kingma2014adam}, and use random search for hyperparameter optimisation \citep{bergstra2012random}. The model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD, and no GPU acceleration. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective datasets. \par
+\noindent We update the NTN training algorithm to make use of early stopping \unskip ~\citep{prechelt1998early}, the adaptive moment estimation (Adam) optimiser \citep{kingma2014adam}, and random search for hyperparameter optimisation \citep{bergstra2012random}. The model was trained on a MacBook Pro 2015 with 8 cores, 16GB RAM, and 512GB SSD, and no GPU acceleration. We evaluate the model by ranking the accuracy scores of the predicted triples for the respective test sets of WordNet and Freebase. \par
 
 \noindent \textbf{Code to reproduce.} In the interest of reproducibility, all code needed to train and test the models in this section can be found at the following links. \newline
-Baseline: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks} \newline
-Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledge-modelling} \par
+Baseline NTN: \url{https://github.com/xhosaBoy/recursive-neural-tensor-networks} \newline
+Optimised NTN: \url{https://github.com/xhosaBoy/optimised-neural-tensor-network} 
 
-\noindent \textbf{Link training results.} The cost and accuracy results of NTN model trained using the original baseline training algorithm, compared to the optimised training algorithm are presented in Figures 4.8 and 4.9. as well as Table 4.9.\ All experiments were only able to complete a maximum of $ 12 $ epochs before overwhelming compute resources. The maximum epoch runs are presented in the aforementioned figures. \par
+\subsubsection{Results} 
 
-\bigskip
-
-\begin{figure}[H]
-	\begin{subfigure}[b]{.5\linewidth}
-   		\centering
-    		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{Wordnet_Cost_Results_Early_Stopping}
-		\captionsetup{justification=centering}
-		\caption{WordNet}
-	\end{subfigure}
-	\begin{subfigure}[b]{.5\linewidth}
-   		\centering
-		\includegraphics[width=1.0\linewidth, height=0.6\linewidth]{Freebase_Cost_Results}
-		\captionsetup{justification=centering}
-		\caption{Freebase}
-	\end{subfigure}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Cost versus epoch for the respective KG. The training set cost for the baseline algorithm clearly descends as epochs increase. The training cost for the optimised (hypothesis) algorithm is almost identical to the validation cost after the first epoch, demonstrating the effectiveness of the updates. }
-\end{figure}
+The accuracy results of NTN model trained using the original baseline training algorithm, compared to the optimised training algorithm are presented in Figures 4.8, as well as Table 4.2. The hypothesis outperforms the baseline accuracy across both KGs. It significantly outperforms the baseline on the WordNet KG. Hyperparameter random search seems to be responsible for this improvement, as the hypothesis begins outperforming the baseline from the first epoch. \ All experiments were only able to complete a maximum of $ 12 $ epochs before overwhelming compute resources. The maximum epoch runs are presented in the afore-mentioned figures. \par
 
 \begin{figure}[H]
 	\begin{subfigure}[b]{.5\linewidth}
@@ -193,7 +176,7 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 		\caption{Freebase}
 	\end{subfigure}
 	\captionsetup{justification=centering, name={Figure}}
-	\caption{Accuracy versus epoch for the respective KG. The optimised algorithm accuracy is significantly higher than the baseline algorithm. Once again demonstrating the effectiveness of the updates.}
+	\caption{Training and validation accuracy vs training epochs for the two datasets. The optimised algorithm performs significantly better, especially on WordNet.}
 \end{figure}
 
 \begin{table}[H]
@@ -201,15 +184,14 @@ Optimised NTN training algorithm: \url{https://github.com/xhosaBoy/deep-knowledg
 	\begin{tabular}{lllllllllll}
   		\textbf{Model} & \textbf{WordNet} & \textbf{Freebase} & \textbf{Avg} \\
   		\hline
-  		Distance Model \unskip ~\citep{bordes2011learning} & .683 & .610 & .647 \\
   		Original NTN \unskip ~\citep{socher2013reasoning} & \textbf{.862} & \textbf{.90} & \textbf{.881} \\
-  		Reimplimented NTN Baseline  \unskip ~\citep{Doss2015} & .562 & .535 & .549 \\
+  		Reimplemented NTN baseline  \unskip ~\citep{Doss2015} & .562 & .535 & .549 \\
   		\hline
-  		Optimised NTN (Ours) & .674 & .548 & .611 \\
+  		Optimised NTN (uurs) & .674 & .548 & .611 \\
 		&
 	\end{tabular}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Cost and accuracy on WordNet and Freebase KG test sets. Our reimplimented NTN with optimised training algorithm out performs the baseline NTN across both cost and accuracy measurements. The original NTN algorithm however significantly outperforms all models. This may be due to differences other training algorithm properties such as number of epochs, batch size, and hyperparameter values.}
+	\captionsetup{justification=centering}
+	\caption{Link prediction accuracy on WordNet and Freebase KG test sets. Our reimplemented NTN with optimised training algorithm outperforms the baseline NTN, but the original NTN algorithm significantly outperforms all models. This may be due to differences in other training algorithm properties such as number of epochs and hyperparameter values.}
 \end{table}
 
 
