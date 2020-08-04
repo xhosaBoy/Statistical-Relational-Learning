@@ -87,7 +87,7 @@ Deep learning models have become popular for classification and regression tasks
 
 \noindent MLPs generate an output by executing a number of steps in what is called the forward pass, where each step is represented as a layer. A basic MLP may consist of three layers (as shown in Figure 2.2): an input, hidden and output layer. A hidden layer is comprised of neurons (nodes) that generate an activation (output) per node.\ Each node computes a linear combination of inputs from the previous layer, and then transforms the result using a nonlinear activation function.\ The set of node outputs is a hidden vector representation, which is passed to the following layer as input. The output layer generates a logit, using a linear combination of inputs from the hidden layer. The more hidden layers the model has, the deeper it is said to be.
 
-\begin{figure}[H]
+\begin{figure}
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{multilayer_perceptron}
 	\captionsetup{justification=centering, name={Figure}}
@@ -123,7 +123,6 @@ Deep learning models have become popular for classification and regression tasks
         \end{bmatrix} \; .
 \end{equation}
 
-\medskip
 \noindent Different schemes are used to initialise layer parameters $ W_i $ and $ b_i $. The appropriateness of these schemes depends on the choice of activation function, $ \sigma_i $, used.\ Sigmoid and tanh functions can lead to saturation if parameters are initialised with values that are too large, or to vanishment if initialised with values which are too small, which in turn can lead to exploding and vanishing parameter gradients. In order to overcome this problem Xavier intialisation \unskip ~\citep{glorot2010understanding} is used, which scales the initial parameter values by the number of layer inputs and outputs.\ This limits the variance of layer outputs and helps stabilise gradient updates.\ When the ReLU activation is used He initialisation \unskip ~\citep{he2015delving}, a modification of Xavier initialisation, is commonly applied. \par
 
 \noindent Together the forward pass algorithm and backpropagation implicitly allow the automatic discovery of the most meaningful representations used to generate model output.\ We refer the reader to \unskip ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and backpropagation. 
@@ -152,7 +151,7 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
 
 \noindent The trade-off one makes when using CNs is reduced flexibility in modelling complex decision boundaries.\ To mitigate this trade-off, CNs are often implemented with a final set of fully-connected layers, which enable the expressiveness required for accurate prediction, as illustrated in Figure 2.5. \par
 
-\begin{figure}[H]
+\begin{figure}
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
 	\captionsetup{justification=centering, name={Figure}}
@@ -280,7 +279,7 @@ An IID dataset is order invariant, because the probability of seeing one data po
 
 \begin{figure}[H]
    	\centering
-    	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{recursive_network.png}
+    	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{recursive_network.png}
 	\captionsetup{justification=centering, name={Figure}}
 	\caption{Recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
 \end{figure}
