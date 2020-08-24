@@ -30,7 +30,7 @@
 \begin{figure} [H]
    	\centering
     	\includegraphics[width=0.8\textwidth, height=0.4\textheight]{Entities_and_the_Relationships_Between_Them}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Objects and relationships between them.\ We see Chadwick Boseman starred in the Black Panther film and played the Black Panther character. We also see that the character was played by an actor, and can reason that Chadwick Boseman may thus be an actor.}
 \end{figure}
 
@@ -86,7 +86,7 @@ One of the challenges facing KGQA is that there exists no standard benchmark of 
 
 \noindent The most appropriate paradigm for knowledge discovery is also still an open question. Graph modelling has the advantage of longer sequences with which to build dependencies between entities. Such an advantage allows the modelling of relational correlations between entities that is not possible in latent feature modelling. Latent feature modelling has the advantage of computational efficiency. No matter how large the KG, latent feature modelling approaches remain adept at handling this density. Both of these paradigms are stochastic, however, and in certain scenerios more determinstic approaches may be required, a strength of IPLP. Explainability of logic rules with stochastic primitives \unskip~\citep{yang2017differentiable} may be useful in safety-critical applications, or under decision-making understanding contexts. \par
 
-\noindent Knowledge discovery is currently fulfilled through the task of prediction.\ Two machine learning paradigms have been used to structure approaches to this task; probabilistic modelling and mathematical estimation of generative distributions. Both of these paradigms rely on in-depth a priori structuring of a model used as an approach to prediction, for example Bayesian inference, shallow models and deep models \unskip~\citep{murphy2012machine}. Each paradigm has given rise to a number of models and corresponding training algorithms with inherent strengths and weaknesses. The trend in prediction research however is simple models of ever increasing size, trained on very very large datasets.\ It is unclear whether careful curation of model definitions and training algorithms will be able to continue to compete with this more brute force alternative. Exploring the dissymmetric opposition of these two philosophies should guide the development of the most efficient solutions.
+\noindent Knowledge discovery is currently fulfilled through the task of prediction.\ Two machine learning paradigms have been used to structure approaches to this task: probabilistic modelling and mathematical estimation of generative distributions. Both of these paradigms rely on in-depth a priori structuring of a model used as an approach to prediction, for example Bayesian inference, shallow models and deep models \unskip~\citep{murphy2012machine}. Each paradigm has given rise to a number of models and corresponding training algorithms with inherent strengths and weaknesses. The trend in prediction research however is simple models of ever increasing size, trained on very very large datasets.\ It is unclear whether careful curation of model definitions and training algorithms will be able to continue to compete with this more brute force alternative. Exploring the dissymmetric opposition of these two philosophies should guide the development of the most efficient solutions.
 
 \subsection{Challenges of latent feature modelling} 
 
@@ -105,19 +105,19 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \noindent This thesis aims to extend research that aspires to give machines the capability of human-like reasoning in open-domain question answering \unskip~\citep{hakimov2019evaluating}. Early work in this area focused on using relational data to learn deterministic logical rules based on symbolic representations, which were used for formal reasoning \unskip~\citep{hohenecker2017deep}.\ This approach gave rise to the inductive logic programming paradigm, however due to finite domain utility, scalability issues and poor performance, research in reasoning shifted to statistical methods focused on attribute representation, which were increasingly successful in prediction tasks, particularly in computer vision and natural language processing.\ SRL is the hybridisation of these two approaches, learning statistical correlations between concept dependencies by leveraging structural information in relational data. \par
 
-\noindent SRL is comprised of three paradigms; latent feature modelling, graph modelling and IPLP. The rest of this thesis is concerned with the analysis of latent feature modelling approaches. Tensor factorisation has become one of the most popular approaches to latent feature modelling, where a decomposition of relational data represented as a tensor of relational scores is used to generate a set of constituent vectors, as demonstrated in Figure 1.2, and Figure 1.3. \par
+\noindent SRL is comprised of three paradigms: latent feature modelling, graph modelling and IPLP. The rest of this thesis is concerned with the analysis of latent feature modelling approaches. Tensor factorisation has become one of the most popular approaches to latent feature modelling, where a decomposition of relational data represented as a tensor of relational scores is used to generate a set of constituent vectors, as demonstrated in Figure 1.2 and Figure 1.3. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textheight]{relational_tensor.png}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{KG structured data represented as a relational score tensor of size $ n \times n \times m $ with relational scores $ S $ between nodes, indexed by $ Edge $. $ S_{N1\_N2} $ is the relational score between node $ N1 $ and node $ N2 $ for $ Edge_1 $, in the range $ \in (0, 1] $. If an edge is present between these two nodes in the data, the score is $ 1.0 $.}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.4\textwidth]{relational_tensor_decomposition}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Relational score tensor decomposition into $ 3 $ constituent vectors $ A $, $ B $ and $ C $, where $ A \in \mathbb{R}^m $,  $ B \in \mathbb{R}^n $ and $ C \in \mathbb{R}^p $. The inner product of these vectors generates the relational tensor.}
 \end{figure}
 
@@ -126,7 +126,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.4\textwidth]{relational_tensor_entity_relational_factorisation}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Relational score tensor decomposition into entity matrix $ E  \in \mathbb{R}^{n \times r} $, relational tensor $ R_k \in \mathbb{R}^{r \times r \times m} $ and the transposed entity matrix $ E^T \in \mathbb{R}^{r \times n} $. The product between $ E $, $ R_k $ and $ E^T $ generates the entity-relational tensor.}
 \end{figure}
 
@@ -140,7 +140,7 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 \begin{figure}
    	\centering
     	\includegraphics[width=0.7\textwidth, height=0.3\textwidth]{bilinear_tensor_product}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Computing the bilinear tensor product for a single entry in a relational score matrix, where $ s_{i,k,j} $ is the relational score between entities $ e_i $ and $ e_j$ for relationship $ W_k $. }
 \end{figure}
 
@@ -150,9 +150,9 @@ Tensor factorisation is the most common approach for latent feature modelling ba
 
 \noindent Yang et al. \unskip~\citep{yang2014embedding} proposed DistMult, a bilinear diagonal model which first transforms the subject and object entities into low-dimensional vector representations, and then applies a bilinear tensor product operation using a predicate matrix that is diagonal. This approach effectively models a subset of the entity-relational interactions of RESCAL, and relies on the entity transformations to generate sufficient semantic information. The model's bilinear formulation is extremely parameter efficient but lacks expressiveness. \par
 
-\noindent ComplEx, by Trouillon et al. \unskip~\citep{trouillon2016complex}, is the extension of DistMult into the complex domain. Entities are represented using complex vectors, and relations are represented using a diagonal matrix with complex entries.\ Complex valued embeddings extend the modelling of entity-relational interactions from symmetric, such as when using the predicate "spouse", to include antisymmetric interactions, such as when using the predicate "has part". In the former the subject and object are interchangeable, and in the latter they are not. \par
+\noindent ComplEx, by Trouillon et al. \unskip~\citep{trouillon2016complex}, is the extension of DistMult into the complex domain. Entities are represented using complex vectors, and relations are represented using a diagonal matrix with complex entries.\ Complex valued embeddings extend the modelling of entity-relational interactions from symmetric, such as when using the predicate "spouse of", to include antisymmetric interactions, such as when using the predicate "has part". In the former the subject and object are interchangeable, and in the latter they are not. \par
 
-\noindent All these approaches rely on linear tensor factorisation for latent feature modelling, applying linear operators for entity-relational interaction modelling. These representations scale well with large datasets but are limited in their expressiveness -- capability to represent a variety of complex relationships between entities. Next we discuss nonlinear models. \par
+\noindent All these approaches rely on linear tensor factorisation for latent feature modelling, applying linear operators for entity-relational interaction modelling. These representations scale well with large datasets but are limited in their expressiveness, i.e.\  their capability to represent a variety of complex relationships between entities. Next we discuss nonlinear models. \par
 
 \noindent Neural tensor networks (NTN), by Chen et al. \unskip~\citep{socher2013reasoning}, extend the bilinear tensor product in two ways.\ Firstly, they make use of a recursive network (RCN) \unskip~\citep{socher2012semantic} to construct a composition between two entities and output a compositional score.\ This compositional score is then added to the output of the bilinear tensor product, to produce a relational score. Secondly, the computed relational score is passed through a squashing nonlinearity, before being multiplied by an output parameter which generates a measure of confidence in a potential relationship between the two entities. The NTN model achieves a higher level of expressiveness, significantly increasing relation prediction performance. Chen et al. \unskip~\citep{socher2013reasoning} also assessed the use of pre-trained word vectors on tensor factorisation, and find they outperform random initialisation. \par
 

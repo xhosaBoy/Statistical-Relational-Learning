@@ -930,23 +930,24 @@ wish to left align your text}
 {\usebox{\PHD@Title}} % subtitle is defined
 
 
+% Author
+\vspace{.2\PHD@titlepagespacing}
+{\usebox{\PHD@author}}
+\vspace*{1em}
+
+
 % Crest
 
 \ifPHD@collegeshield%
-	\vspace{.15\PHD@titlepagespacing}
+	% \vspace{.15\PHD@titlepagespacing}
 	{\usebox{\PHD@collegecrest}}
-	\vspace{.1\PHD@titlepagespacing}
+	% \vspace{.1\PHD@titlepagespacing}
 \else
-	\vspace{.25\PHD@titlepagespacing}
+	% \vspace{.25\PHD@titlepagespacing}
 	{\usebox{\PHD@crest}}
-	\vspace{.15\PHD@titlepagespacing}
+	% \vspace{.15\PHD@titlepagespacing}
 \fi
 
-
-
-% Author
-{\usebox{\PHD@author}}
-\vspace*{1em}
 
 % Supervisor
 \ifPHD@supervisor%

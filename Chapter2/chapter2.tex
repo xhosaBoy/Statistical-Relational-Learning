@@ -28,7 +28,7 @@ An ML prediction model takes as input a set of features. These features are attr
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=1.0\textwidth, height=0.4\textwidth]{supervised_learning}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{A machine learning model trained using supervised learning. The task of this model is to map input features to output categories, in this case predicting the type of fruit given an image.}
 \end{figure}
 
@@ -39,7 +39,7 @@ An ML prediction model takes as input a set of features. These features are attr
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{oranges_and_apples_decision_boundary}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{A decision boundary between two classes, apples and oranges. The model constructs this curve by learning discriminative feature characteristics corresponding to each class.}
 \end{figure}
 
@@ -90,7 +90,7 @@ Deep learning models have become popular for classification and regression tasks
 \begin{figure}
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{multilayer_perceptron}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{A basic MLP consisting of an input, hidden and output layer. The model can comprise an arbitrary number of hidden layers, containing an arbitrary number of nodes.}
 \end{figure}
 
@@ -98,11 +98,11 @@ Deep learning models have become popular for classification and regression tasks
 \begin{subequations}
 	\begin{gather}
 		f_0 = x \; , \\
-		f_i=\sigma_i(W_{i}f_{i - 1} + b_{i}) \quad i \in [1, \; N] \; .
+		f_i=\sigma_i(W_{i}f_{i - 1} + b_{i}) \quad i \in [1, \; N] \; ,
 	\end{gather}
 \end{subequations}
 
-\noindent where $ f_0 $ is the input layer, containing the features of input vector $ x \in \mathbb{R}^{m_0} $. $ f_i $ is a hidden layer output vector of size $ m_i $, $ f_{i - 1} $ is the input vector from the previous layer of size $ m_{i-1} $. $ W_{i} \in \mathbb{R}^{m_i \times m_{i - 1}} $ is a matrix of layer parameters, $ b_{i} \in \mathbb{R}^{m_i} $ is a vector of bias parameters. $ \sigma_i $ is the activation function at layer $ i $.
+\noindent where $ f_0 $ is the input layer, containing the features of input vector $ x \in \mathbb{R}^{m_0} $. $ f_i $ is a hidden layer output vector of size $ m_i $, $ f_{i - 1} $ is the input vector from the previous layer of size $ m_{i-1} $. $ W_{i} \in \mathbb{R}^{m_i \times m_{i - 1}} $ is a matrix of layer parameters, $ b_{i} \in \mathbb{R}^{m_i} $ is a vector of bias parameters and $ \sigma_i $ is the activation function at layer $ i $.
 
 \noindent Loss functions are used to train deep models under a supervised learning paradigm.\ The loss function is minimised with gradient descent, which in the case of MLPs makes use of a process called backpropagation.\ This process involves the computation of first-order partial derivatives, and the adjustment of the parameters in a direction and magnitude relating to those derivatives. In a network with $ N $ layers, the gradient for the respective parameter in layer $ i $ is given by:
 \begin{subequations}
@@ -123,7 +123,7 @@ Deep learning models have become popular for classification and regression tasks
         \end{bmatrix} \; .
 \end{equation}
 
-\noindent Different schemes are used to initialise layer parameters $ W_i $ and $ b_i $. The appropriateness of these schemes depends on the choice of activation function, $ \sigma_i $, used.\ Sigmoid and tanh functions can lead to saturation if parameters are initialised with values that are too large, or to vanishment if initialised with values which are too small, which in turn can lead to exploding and vanishing parameter gradients. In order to overcome this problem Xavier intialisation \unskip ~\citep{glorot2010understanding} is used, which scales the initial parameter values by the number of layer inputs and outputs.\ This limits the variance of layer outputs and helps stabilise gradient updates.\ When the ReLU activation is used He initialisation \unskip ~\citep{he2015delving}, a modification of Xavier initialisation, is commonly applied. \par
+\noindent Different schemes are used to initialise layer parameters $ W_i $ and $ b_i $. The appropriateness of these schemes depends on the choice of activation function, $ \sigma_i $, used.\ Sigmoid and tanh functions can lead to saturation if parameters are initialised with values that are too large, or to vanishment if initialised with values which are too small, which in turn can lead to exploding and vanishing parameter gradients. In order to overcome this problem Xavier initialisation \unskip ~\citep{glorot2010understanding} is used, which scales the initial parameter values by the number of layer inputs and outputs.\ This limits the variance of layer outputs and helps stabilise gradient updates.\ When the ReLU activation is used He initialisation \unskip ~\citep{he2015delving}, a modification of Xavier initialisation, is commonly applied. \par
 
 \noindent Together the forward pass algorithm and backpropagation implicitly allow the automatic discovery of the most meaningful representations used to generate model output.\ We refer the reader to \unskip ~\citep{Goodfellow-et-al-2016} for a review on loss functions, as well as a more detailed discussion on the forward pass and backpropagation. 
 
@@ -143,8 +143,8 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution1}\hfill
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution2}\hfill
 	\includegraphics[width=0.33\textwidth, height=0.25\textwidth]{convolution3}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step computes a summary of that location is computed as a single value.}
+	\captionsetup{justification=centering}
+	\caption{A convolutional operation taken between an input image and a filter. The filter slides across the image, and at each step a summary of that location is computed as a single value.}
 \end{figure}
 
 \noindent The convolutional operator allows CNs to capture translation invariance in inputs, due to filter parameter sharing \unskip ~\citep{simonyan2014very}.\ Translation invariance is achieved when a CN layer generates an intermediate representation that is consistent under translational transformations. For example, if a different image of  car is used as input, and the car is located in a different position, that would lead to a consistent feature map representation being generated. This property allows CNs to model the distribution of features using far fewer parameters and smaller datasets. \par 
@@ -154,7 +154,7 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
 \begin{figure}
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{convolutional_network}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{A basic CN consisting of an input, convolutional layer, fully-connected layer and output layer.}
 \end{figure}
 
@@ -181,7 +181,7 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{convolution2}
 		}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Consecutive steps in a convolutional operation with a stride of 1.}
 	
 	\parbox{.5\linewidth}{
@@ -193,14 +193,14 @@ Deep MLPs may suffer from an explosion in the number of model parameters \unskip
    		\centering
     		\includegraphics[width=0.45\textwidth, height=0.2\textwidth]{stride_of_2}
 		}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{Consecutive steps in a convolutional operation with a stride of 2.}
 \end{figure}
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.3\textwidth]{padding_and_dilation}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{An input image with a padding of $ 1 $, convolved with a filter with a dilation of $ 2 $.}
 \end{figure}
 
@@ -243,7 +243,7 @@ An IID dataset is order invariant, because the probability of seeing one data po
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.5\textwidth, height=0.3\textwidth]{recurrent_network}
-	\captionsetup{justification=centering, name={Figure}}
+	\captionsetup{justification=centering}
 	\caption{A basic RN consisting of an input, hidden and output layer. An internal state is added to hidden layer nodes which tracks previous output. This state is summed with the node output.}
 \end{figure}
 
@@ -275,22 +275,24 @@ An IID dataset is order invariant, because the probability of seeing one data po
 
 \noindent This multiplicative operation causes small gradients to become progressively smaller as the sequence window becomes larger, or large gradients to become much larger. It is called the vanishing or exploding gradient problem and has lead to the development of RN variant models such as long short-term memory \unskip ~\citep{hochreiter1997long} and gated recurrent units \unskip ~\citep{cho2014learning}.
 
-\subsection{Recursive and hypernetworks} A number of non-mainstream architectures have also been explored in deep model design. Recursive networks (RCNs) are one such architecture, which construct a composition tree using sequential input, producing composition scores. Figure 2.11 illustrates.\ This approach differs from RNs, which construct a composition chain using sequential input. Composition trees may be able to model more complex structure in input sequences, however require pre-training to first prune them, and may not be as computationally efficient during inference. \par
+\subsection{Recursive networks and hypernetworks}
+
+A number of non-mainstream architectures will also be used in this study. Recursive networks (RCNs) construct a composition tree using sequential input to produce composition scores. Figure 2.11 illustrates.\ This approach differs from RNs, which construct a composition chain using sequential input. Composition trees may be able to model more complex structure in input sequences, however require pre-training to first prune them, and may not be as computationally efficient during inference. \par
 
 \begin{figure}[H]
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{recursive_network.png}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
+	\captionsetup{justification=centering}
+	\caption{A recursive network which constructs a composition tree between inputs. It begins as a full tree and is pruned during training to reach an optimal structure.}
 \end{figure}
 
-\noindent Hypernetworks are meta-networks that generate parameters for a main network.\ An embedding is supplied as input to a hypernetwork, which encodes information about main network layer parameters.\ For example, an embedding may be used as input to an MLP hypernetwork which generates the layer parameters for a CN main network, consisting of a convolutional layer, and a fully-connected output layer, Figure 2.12 illustrates.\ Hypernetworks enable the design of more parameter efficient main networks, by compressing main network parameter information into the embedding input of the hypernetwork.\ They are also useful for a form of relaxed parameter sharing across layers, without suffering from the vanishing and exploding gradients experienced by RNs. 
+\noindent Hypernetworks are meta-networks that generate parameters for a main network.\ An embedding is supplied as input to a hypernetwork, which encodes information about the parameters of a main network's layers.\ For example, an embedding may be used as input to an MLP hypernetwork which generates the layer parameters for a CN main network, consisting of a convolutional layer and a fully-connected output layer. Figure 2.12 illustrates.\ Hypernetworks enable the design of more parameter efficient main networks, by compressing main network parameter information into the embedding input of the hypernetwork.\ They are also useful for a form of relaxed parameter sharing across layers, without suffering from vanishing or exploding gradients experienced by RNs. 
 
 \begin{figure}
    	\centering
     	\includegraphics[width=0.6\textwidth, height=0.4\textwidth]{hypernetwork.png}
-	\captionsetup{justification=centering, name={Figure}}
-	\caption{Hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input, and the main network takes a tensor as input.}
+	\captionsetup{justification=centering}
+	\caption{A hypernetwork generating convolutional filters for a main network. The hypernetwork takes a static embedding vector as input.}
 \end{figure}
 
 
