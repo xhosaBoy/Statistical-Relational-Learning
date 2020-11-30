@@ -37,19 +37,26 @@ For the first set of experiments we use the WordNet \unskip ~\citep{miller1995wo
 	\caption{A sample of RDF triples from the WordNet KG.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.5\textwidth]{Freebase}
 	\captionsetup{justification=centering}
 	\caption{A subset of Freebase facts structured as a KG. Due to the size of Freebase, only a subset of facts related to the subject "Michael Jackson" is presented.}
 \end{figure}
 
-\begin{figure}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.2\textwidth]{freebase_fact_sample}
 	\captionsetup{justification=centering}
 	\caption{A sample of RDF triples from the Freebase KG.}
 \end{figure}
+
+\noindent WordNet is comprised of a set of relation types including similar, opposite, subordinate, part, and entailment. Freebase is comprised of an open-ended collection of relation types, including symmetric, asymmetric, transitive, composition, hierarchy, reflexive, irreflexive and inversion. Freebase also contains more entities, relations between entities, and facts, than WordNet. 
 
 
 %********************************** %Subject **************************************
@@ -189,7 +196,7 @@ The accuracy results of the NTN model trained using the original baseline traini
 		&
 	\end{tabular}
 	\captionsetup{justification=centering}
-	\caption{Link prediction accuracy on WordNet and Freebase KG test sets. Our reimplemented NTN with the optimised training algorithm outperforms the baseline NTN, but the original NTN algorithm significantly outperforms all models. This may be due to differences in other training algorithm properties such as number of epochs and hyperparameter values.}
+	\caption{Link prediction accuracy on WordNet and Freebase KG test sets. Our reimplemented NTN with the optimised training algorithm outperforms the baseline NTN, but the original NTN algorithm significantly outperforms all models. This may be due to differences in the choice of hyperparameters and optimiser, L-BFGS for the Original NTN, and Adam for the Optimised NTN. The difference between the number of iterations may also be having an impact, 500 and < 500 respectively. A slow but steady increase in the baseline and hypothesis validation accuracy can be seen before compute resources are exhausted.}
 \end{table}
 
 
@@ -214,19 +221,26 @@ For the second set of experiments we use the WN18 \citep{bordes2013translating} 
 	\caption{A sample of RDF triples from the WN18 KG.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.6\textwidth]{FB15k_Graph}
 	\captionsetup{justification=centering}
 	\caption{A subset of FB15k facts structured as a KG. Entities are nodes, and relations are edges, where facts are encoded as RDF triples.}
 \end{figure}
 
-\begin{figure}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=1.0\textwidth, height=0.4\textwidth]{fb15k_fact_sample}
 	\captionsetup{justification=centering}
 	\caption{A sample of RDF triples from the FB15k KG.}
 \end{figure}
+
+\noindent WN18 is an intuitively usable dictionary and thesaurus, and supports automatic text analysis, while FB15k is a KG of general facts. FB15k contains more entities, relations between entities, and facts, than WN18.
 
 
 %********************************** %Subject **************************************
@@ -504,19 +518,26 @@ For the third and final set of experiments we use the WN18RR and FB15k-237 bench
 	\caption{A sample of RDF triples from the WN18RR KG.}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=0.9\textwidth, height=0.6\textwidth]{FB15k-237_Graph}
 	\captionsetup{justification=centering}
 	\caption{A subset of FB15k-237 facts structured as a KG. Entities are nodes, and relations are edges, where facts are encoded as RDF triples.}
 \end{figure}
 
-\begin{figure}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+\begin{figure}[H]
    	\centering
     	\includegraphics[width=1.0\textwidth, height=0.3\textwidth]{fb15k_237_fact_sample}
 	\captionsetup{justification=centering}
 	\caption{A sample of RDF triples from the FB15k-237 KG.}
 \end{figure}
+
+\noindent Once again FB15k-237 contains more entities, relations between entities, and facts, than WN18RR.
 
 %********************************** %Subject **************************************
 
