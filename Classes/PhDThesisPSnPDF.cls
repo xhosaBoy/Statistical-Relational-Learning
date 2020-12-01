@@ -1123,6 +1123,45 @@ wish to left align your text}
 \fi
 }
 
+% ********************************Afrikaans Abstract ************************************
+% The abstract environment puts a large, bold, centered "Abstract" label at
+% the top of the page. Defines both abstract and separate abstract environment
+
+% To include only the Title and the abstract pages for submission to BoGS
+\ifPHD@abstract
+    \defineAbstracttrue
+    % Disable the table of contents, figures, tables, index and nomenclature
+    \renewcommand{\tableofcontents}{}
+    \renewcommand{\listoffigures}{}
+    \renewcommand{\listoftables}{}
+    \renewcommand{\printnomencl}{}
+    \renewcommand{\printnomencl}[1][2]{}
+    \renewcommand{\printthesisindex}{}
+    \renewcommand{\bibname}{}
+    \renewcommand{\bibliography}[1]{\thispagestyle{empty}}
+\else
+    \defineAbstractfalse
+\fi
+
+
+\newenvironment{opsomming} {
+\ifPHD@abstract
+% Separate abstract as per Student Registry guidelines
+  \thispagestyle{empty}
+  \setsinglecolumn
+  \begin{center}
+    { \Large {\bfseries {\@title}} \par}
+    {{\large \vspace*{1em} \@author} \par}
+  \end{center}
+\else
+% Normal abstract in the thesis
+  \cleardoublepage
+  \setsinglecolumn
+  \chapter*{\centering \Large Opsomming \vspace{-2em}}
+  \thispagestyle{empty}
+\fi
+}
+
 
 % ******************** To compute empty space in title page *******************
 % Boxes below are used to space different contents on the title page
